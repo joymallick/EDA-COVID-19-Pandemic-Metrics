@@ -9,6 +9,5 @@ The project aims at implementing a data analysis workflow for the dataset ***fil
 ## Contributing
 
 ## License
-For open source projects, say how it is licensed.
 
 
