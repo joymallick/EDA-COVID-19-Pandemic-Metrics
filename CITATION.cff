@@ -1,0 +1,16 @@
+abstract: 
+authors:
+  - family-names: 
+    given-names: 
+cff-version: 1.2.0
+date-released: 
+identifiers:
+    type: doi
+    value: 10.5281/zenodo.123456
+keywords:
+  - research
+  - EDA
+license: MIT 
+message: "If you use this software, please cite it using these metadata."
+repository-code: https://gitup.uni-potsdam.de/corona/rse-project2
+title: 
