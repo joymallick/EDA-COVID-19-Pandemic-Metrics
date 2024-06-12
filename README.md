@@ -10,6 +10,10 @@ The analysis focuses on the following five research questions:
 4. Are the total number of deaths and life expectancy correlated?
 5. How does the population density affect the total number of cases (country level)?
 
+## Component analysis
+|Abstract Workflow Node|Input(s)|Output(s)|Implementation|
+|----------------------|--------|---------|--------------|
+
 ## Usage
 
 ## Contributing
