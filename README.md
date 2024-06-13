@@ -14,26 +14,14 @@ The analysis focuses on the following five research questions:
 ### Research question 3
 |Abstract Workflow Node             |Input(s)        |Output(s)       |Implementation           |
 |-----------------------------------|----------------|----------------|-------------------------|
-|Load data and filter columns       |csv filename    |filtered        |CLI tool (csvkit)        |
-|                                   |                |csv file        |                         |
-|-----------------------------------|----------------|----------------|-------------------------|
-|Data processing                    |csv file        |csv file        |own implementation       |
-|                                   |                |as dataframe    |(use Pandas)             |
-|-----------------------------------|----------------|----------------|-------------------------|
-|Compute % growth                   |growth var,     |% growth  var   |own implementation       |
-|                                   |time period,    |                |                         |
-|                                   |and total var   |                |                         |
-|-----------------------------------|----------------|----------------|-------------------------|
-|Correlation hp test and            |% growth vars   |                |own implementation       |
-|linear regression model            |                |                |                         |
-|-----------------------------------|----------------|----------------|-------------------------|
-|Bar plot                           |var             |plot            |own implementation       |
-|-----------------------------------|----------------|----------------|-------------------------|     
-|Line plot                          |x and y         |plot            |own implementation       |
-|-----------------------------------|----------------|----------------|-------------------------|  
-|Log results                        |results of      |log to .txt file|CLI tool (>)             |
-|                                   |a function      |                |                         |   
-|----------------------------------_|----------------|----------------|-------------------------|
+|Load data and filter columns       |csv filename    |filtered csv file| CLI tool (csvkit)      |
+|Data processing                    |csv file        |csv file as dataframe|own implementation (use Pandas)|
+|Compute % growth                   |growth var, time period, and total var|% growth  var|own implementation|
+|Correlation hp test and linear regression model|% growth vars|                |own implementation|
+|Bar plot                           |var             |plot            |own implementation       |     
+|Line plot                          |x and y         |plot            |own implementation       |  
+|Log results                        |results of a function|log to .txt file|CLI tool (>)|   
+
 ## Usage
 
 ## Contributing
