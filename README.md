@@ -18,7 +18,7 @@ The analysis focuses on the following five research questions:
 |Outcomes utils                     |csv file|outcomes for each RQ|own implementation|
 |Deaths by continent (RQ1)                     |csv file           |plot figure and .txt file      |own implementation       |     
 |Hand washing facilities and tot cases (RQ2)                       |csv file        |plot figure and .txt file           |own implementation|  
-|Deaths and vaccinations (RQ3)|csv file|                      
+|Deaths and vaccinations (RQ3)|csv file|plot figure and .txt file|own implementation|                     
 |Deaths and life expectancy (RQ4)|csv file|plot figure and .txt file|own implementation|
 |Population density and tot cases (RQ5)|csv file|plot figure and .txt file|own implementation|
 
