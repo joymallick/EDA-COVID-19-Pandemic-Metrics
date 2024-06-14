@@ -11,16 +11,16 @@ The analysis focuses on the following five research questions:
 5. How does the population density affect the total number of cases (country level)?
 
 ## Component analysis
-### Research question 3
 |Abstract Workflow Node             |Input(s)        |Output(s)       |Implementation           |
 |-----------------------------------|----------------|----------------|-------------------------|
 |Load data and filter columns       |csv filename    |filtered csv file| CLI tool (csvkit)      |
-|Data processing                    |csv file        |csv file as dataframe|own implementation (use Pandas)|
-|Compute % growth                   |growth var, time period, and total var|% growth  var|own implementation|
-|Correlation hp test and linear regression model|% growth vars|                |own implementation|
-|Bar plot                           |var             |plot            |own implementation       |     
-|Line plot                          |x and y         |plot            |own implementation       |  
-|Log results                        |results of a function|log to .txt file|CLI tool (>)|   
+|Data processing                    |csv file        |csv file as dataframe|own implementation|
+|Outcomes utils                     |csv file|outcomes for each RQ|own implementation|
+|Deaths by continent (RQ1)                     |csv file           |plot figure and .txt file      |own implementation       |     
+|Hand washing facilities and tot cases (RQ2)                       |csv file        |plot figure and .txt file           |own implementation|  
+|Deaths and vaccinations (RQ3)|csv file|                      
+|Deaths and life expectancy (RQ4)|csv file|plot figure and .txt file|own implementation|
+|Population density and tot cases (RQ5)|csv file|plot figure and .txt file|own implementation|
 
 ## Usage
 
