@@ -25,10 +25,10 @@ def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean
     if (df is None):
         message = "Provide a pandas dataframe"
         raise ValueError(message)
-    if (time_period not in ['semester','year']):
-        message = "The time period can be either 'year' or 'semester'"
+    if (time_period not in ['semester','year','month']):
+        message = "The time period can be either 'year', 'month' or 'semester'"
     if (aggr not in ['mean','sum','last']):
-        message = "The time period must be one among 'mean','sum' and 'last'"
+        message = "The aggregation function must be one among 'mean','sum' and 'last'"
         raise ValueError(message)
     # collapse according to the chosen time period and aggregation function
     collapsed_df = df.groupby(time_period).agg(aggr)
