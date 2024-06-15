@@ -32,3 +32,19 @@ To use this project, follow these steps:
 2. Ensure you have all required dependencies installed (you can find these in the `requirements.txt` file).
 3. Run the analysis scripts provided for each research question.
 4. Generated outputs such as plots and text files will be saved in the `results` directory.
+
+## Contributing
+
+We welcome contributions from the community! For detailed guidelines on how to get involved, please refer to our [Contribution Guidelines](CONTRIBUTING.md).
+
+### Code of Conduct
+
+All contributors are expected to follow the project's [Code of Conduct](CONDUCT.md). Please read it carefully before participating.
+
+### Questions and Support
+
+If you have any questions or need assistance, please open an issue on the project's GitHub repository so we can discuss the question together.
+
+## License
+
+This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE.md) file for details.
