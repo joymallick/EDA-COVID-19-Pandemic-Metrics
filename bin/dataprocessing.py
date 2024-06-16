@@ -80,13 +80,13 @@ def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean
     return collapsed_df
 
 
-def main(csvfile: str, geolevel: str, time_period: str, RQ=1):
+def main(csvfile: str, time_period='day', aggr=None):
     logging.basicConfig(filename='dataprocessing.log', level=logging.INFO)
     logger.info('Started processing')
-    df_processed = process_csvfile(csvfile, geolevel)
-    if(time_period != 'day'):
+    df_processed = process_csvfile(csvfile)
+    if ((time_period != 'day') & (aggr is not None)):
         # further processing steps
-        df_processed = collapse_by_time_period(df_processed, time_period) # add aggregation basing on the RQ
+        df_processed = collapse_by_time_period(df_processed, time_period, aggr) # add aggregation basing on the RQ
     logger.info('Ended processing')
     return df_processed
 
@@ -95,10 +95,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="The file  applies initial processing steps to the csv file")
     parser.add_argument("csvfile", help="Path to the csv file")
-    # parser.add_argument("geolevel", help="Geografical level on which the analysis is led (ex. continent, country)")
-    parser.add_argument("time_period", help="Time aggregation to consider for the anlysis: day, semseter or year level")
-    parser.add_argument("--RQ", help="Research question")
+    # optional inputs for time aggregation different from daily level
+    parser.add_argument("--time_period", help="Aggregate time by time_period: month, year or semester")
+    parser.add_argument("--aggr", help="Aggregation function to be used for time aggregation: mean, sum, last (row)")
     args = parser.parse_args()
-    main(args.csvfile, args.geolevel, args.time_period, args.RQ)
-    
+    main(args.csvfile, args.time_period, args.aggr)
+  
     
