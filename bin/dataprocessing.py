@@ -8,7 +8,10 @@ import argparse
 import os
 import datetime
 import logging
+
+
 logger = logging.getLogger(__name__)
+BIN_PATH = os.getcwd()
 
 
 def convert_to_datetime(date, format='%Y-%m-%d'):
@@ -18,7 +21,7 @@ def convert_to_datetime(date, format='%Y-%m-%d'):
     return datetime.datetime.strptime(date, format)
 
 
-def get_day_month_years(date):
+def get_years(date):
     """Helper function for process_csv.
     The function is used for creating month and year columns."""
     return date.month, date.year
@@ -48,10 +51,11 @@ def process_csvfile(filename: str) -> pd.DataFrame:
         message = "Provide a csv file"
         raise ValueError(message)
     df = pd.read_csv(filename)
-    # convert the date to datetime 
+    # convert date to datetime 
     df.date = df.date.apply(convert_to_datetime)   
-    # create the month , year , semester columns
-    df[['month', 'year']] = df.date.apply(get_day_month_years).apply(pd.Series)
+    # create uniquely identified month , year and semester columns
+    df['year'] = df.date.apply(get_years)
+    df['month'] = df.date.dt.to_period('M')
     df['semester'] = df.date.apply(get_semester)
     return df
 
@@ -75,29 +79,41 @@ def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean
     if (aggr not in ['mean','sum','last']):
         message = "The aggregation function must be one among 'mean','sum' and 'last'"
         raise ValueError(message)
+    # identify all the time columns to drop and drop them:
+    time_cols_to_drop = set(df.select_dtypes(include=['datetime', 'int64']).columns)
+    time_cols_to_drop.remove(time_period)
+    df = df.drop(columns=time_cols_to_drop)
+    # identifiy non numerical columns and add time period:
+    non_num_cols = list(df.select_dtypes(exclude=['number']).columns)
+    non_num_cols.append(time_period)
     # collapse according to the chosen time period and aggregation function
-    collapsed_df = df.groupby(time_period).agg(aggr)
+    collapsed_df = df.groupby(non_num_cols).agg(aggr)
     return collapsed_df
 
 
 def main(csvfile: str, time_period='day', aggr=None):
     logging.basicConfig(filename='dataprocessing.log', level=logging.INFO)
     logger.info('Started processing')
+    os.chdir(r"..\data")
     df_processed = process_csvfile(csvfile)
     if ((time_period != 'day') & (aggr is not None)):
         # further processing steps
-        df_processed = collapse_by_time_period(df_processed, time_period, aggr) # add aggregation basing on the RQ
+        logger.info(f'Collapsing by {time_period} aggregating by {aggr}')
+        df_processed = collapse_by_time_period(df_processed, time_period, aggr) 
+    logger.info('Saving processed csv')
+    df_processed.to_csv(csvfile[:-4]+"_processed"+".csv", index=False)
+    os.chdir(BIN_PATH)
     logger.info('Ended processing')
     return df_processed
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="The file  applies initial processing steps to the csv file")
-    parser.add_argument("csvfile", help="Path to the csv file")
+        description='The file  applies initial processing steps to the csv file')
+    parser.add_argument('csvfile', type=str, help='Csv file name')
     # optional inputs for time aggregation different from daily level
-    parser.add_argument("--time_period", help="Aggregate time by time_period: month, year or semester")
-    parser.add_argument("--aggr", help="Aggregation function to be used for time aggregation: mean, sum, last (row)")
+    parser.add_argument('-t','--time_period', type=str, help='Aggregate time by time_period: month, year or semester')
+    parser.add_argument('-a', '--aggr', type=str, help='Aggregation function to be used for time aggregation: mean, sum, last (row)')
     args = parser.parse_args()
     main(args.csvfile, args.time_period, args.aggr)
   
