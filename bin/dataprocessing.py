@@ -91,15 +91,11 @@ def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean
     return collapsed_df
 
 
-def main(csvfile: str, time_period='day', aggr=None)->pd.DataFrame:
+def main(csvfile: str)->pd.DataFrame:
     logging.basicConfig(filename='dataprocessing.log', level=logging.INFO)
     logger.info('Started processing')
     os.chdir(r"..\data")
     df_processed = process_csvfile(csvfile)
-    if ((time_period != 'day') & (aggr is not None)):
-        # further processing steps
-        logger.info(f'Collapsing by {time_period} aggregating by {aggr}')
-        df_processed = collapse_by_time_period(df_processed, time_period, aggr) 
     logger.info('Saving processed csv')
     df_processed.to_csv(csvfile[:-4]+"_processed"+".csv", index=False)
     os.chdir(BIN_PATH)
@@ -112,11 +108,8 @@ if __name__ == "__main__":
     aggr_funs = ['mean', 'sum', 'last']
     parser = argparse.ArgumentParser(
         description='The file  applies initial processing steps to the csv file')
-    parser.add_argument('csvfile', type=str, help='Csv file name')
-    # optional inputs for time aggregation different from daily level
-    parser.add_argument('-t','--time_period', type=str, help='Aggregate time by time_period: month, year or semester', choices=time_periods)
-    parser.add_argument('-a', '--aggr', type=str, help='Aggregation function to be used for time aggregation: mean, sum, last (row)', choices=aggr_funs)
+    parser.add_argument('csvfile', type=str, help='Csv file name', required=True)
     args = parser.parse_args()
-    main(args.csvfile, args.time_period, args.aggr)
+    main(args.csvfile)
   
     
