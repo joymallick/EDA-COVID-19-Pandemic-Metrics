@@ -5,8 +5,8 @@ TIME_COLUMNS = ['semester', 'month', 'year', 'date']
 
 def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean')->pd.DataFrame:
     """"The function creates a collapsed version of the input dataset on
-    either years or semesters by taking sum/mean of the values or last value.
-    The input dataset must contain only numeric columns. 
+    either years, semesters or month by taking sum/mean of the values or last value for each numeric
+    column which is not a time column.
 
     Args:
         df (pd.DataFrame): dataframe to collapse
@@ -22,9 +22,9 @@ def collapse_by_time_period(df: pd.DataFrame, time_period='semester', aggr='mean
     if (aggr not in ['mean','sum','last']):
         message = "The aggregation function must be one among 'mean','sum' and 'last'"
         raise ValueError(message)
+    # drop non needed time columns
     time_cols_to_drop = [tc for tc in TIME_COLUMNS if tc != time_period]
     df = df.drop(columns=time_cols_to_drop)
-    non_num_cols = list(df.select_dtypes(exclude=['number']).columns)
-    non_num_cols.append(time_period)
+    non_num_cols = list(df.select_dtypes(exclude=['float']).columns)
     collapsed_df = df.groupby(non_num_cols).agg(aggr)
     return collapsed_df
