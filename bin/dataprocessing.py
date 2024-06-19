@@ -11,6 +11,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 BIN_PATH = os.getcwd()
 
 
@@ -54,7 +55,7 @@ def process_csvfile(filename: str) -> pd.DataFrame:
     # convert date to datetime 
     df.date = df.date.apply(convert_to_datetime)   
     # create uniquely identified month , year and semester columns
-    logging.debug('adding new time columns')
+    logger.debug('adding new time columns')
     df['year'] = df.date.apply(get_years)
     df['month'] = df.date.dt.to_period('M')
     df['semester'] = df.date.apply(get_semester)
@@ -63,7 +64,7 @@ def process_csvfile(filename: str) -> pd.DataFrame:
 
 
 def main(csvfile: str)->pd.DataFrame:
-    logging.basicConfig(filename='dataprocessing.log', level=logging.INFO)
+    logging.basicConfig(filename='dataprocessing.log')
     logger.info('Started processing')
     os.chdir(r"..\data")
     df_processed = process_csvfile(csvfile)
