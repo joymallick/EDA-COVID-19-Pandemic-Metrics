@@ -4,7 +4,9 @@ The script produces trend (line) plots for RQ 3 using matplotlib.
 """
 import logging
 import matplotlib.pyplot as plt
-
+import os
+import pandas as pd
+import argparse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -61,8 +63,14 @@ def compare_trends(y1:  pd.Series, y2: pd.Series, x: pd.Series):   ## understand
     return fig, ax1, ax2
 
 
-def main(processedcsvfile_rq3: str):
-    data_rq3 = pd.read_cs(processedcsvfile)
+def main(processedcsvfile_rq3: str, out1pngfile:str, out2pngfile:str, out3pngfile: str):
+    os.chdir(r"..\data")
+    data_rq3 = pd.read_cs(processedcsvfile_rq3)
+    os.chdir(BIN_PATH)
+    if('germany' in processedcsvfile_rq3):
+        geolevel = 'Germany'
+    else:
+        geolevel ='Europe'
     logging.basicConfig(filename='trendplots_rq3.log')
     logger.info('Started producing trend plots')
     # create x ticks for the plots
@@ -70,24 +78,26 @@ def main(processedcsvfile_rq3: str):
     # first plot
     logger.debug('Plot trends for new_deaths vs new_cases')
     fig1, ax11, ax21 = compare_trends(data_rq3['new_deaths'], data_rq3['new_cases'],  data_rq3['month'])
-    title1 = "New deaths and cases in Europe (by month)"
+    title1 = f"New deaths and cases in {geolevel} (by month)"
     label_compare_trends(ax11,ax21,'new deaths',
                          'new cases','month', xticks, title1)
     # second plot
     logger.debug('Plot trends for new_deaths vs new_vaccinations')
     fig2, ax12, ax22 = compare_trends(data_rq3['new_deaths'], data_rq3['new_vaccinations'],  data_rq3['month'])
-    title2 = "New deaths and vaccinations in Europe (by month)"
+    title2 = f"New deaths and vaccinations in {geolevel} (by month)"
     label_compare_trends(ax12,ax22,'new deaths',
                          'new vaccinations','month', xticks, title2)
     #third plot
     logger.debug('Plot trends for deaths_vs_cases vs new_vaccinations')
     fig3, ax13, ax23 = compare_trends(data_rq3['deaths_vs_cases'], data_rq3['new_vaccinations'],  data_rq3['month'])
-    title3 = "Ratio between new deaths and cases and new vaccinations in Europe (by month)"
+    title3 = f"Ratio between new deaths and cases and new vaccinations in {geolevel} (by month)"
     label_compare_trends(ax13,ax23,'deaths/cases',
                          'new vaccinations','month', xticks, title3)
     os.chdir(r"..\results\rq3\plots")
     logger.info('Saving plots')
-    # add saving figures 
+    fig1.savefig(out1pngfile+f"_{geolevel}.png")
+    fig2.savefig(out2pngfile+f"_{geolevel}.png")
+    fig3.savefig(out3pngfile+f"_{geolevel}.png")
     os.chdir(BIN_PATH)
     logger.info('Ended producing trend plots')
 
@@ -95,6 +105,9 @@ def main(processedcsvfile_rq3: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='The file produces trend plots for RQ 3')
-    parser.add_argument('processedcsvfile_rq3', type=str, help='csvfile processed for RQ 3')
+    parser.add_argument('-i','processedcsvfile_rq3', type=str, help='csvfile processed for RQ 3')
+    parser.add_argument('-o1', 'out1pngfile', type=str, help='output png file to save first plot')
+    parser.add_argument('-o2', 'out2pngfile', type=str, help='output png file to save second plot')
+    parser.add_argument('-o3', 'out3pngfile', type=str, help='output png file to save third plot')
     args = parser.parse_args()
-    main(args.processedcsvfile_rq3)
+    main(args.processedcsvfile_rq3, args.out1pngfile, args.out2pngfile, args.out3pngfile)
