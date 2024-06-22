@@ -4,12 +4,10 @@ The script produces trend (line) plots for RQ 3 using matplotlib.
 """
 import logging
 import matplotlib.pyplot as plt
-import os
 import pandas as pd
 import argparse
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 def label_compare_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):  ## add xticks for months
