@@ -10,7 +10,6 @@ import argparse
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 SNS_CUSTOM_CONFIG_PARAMS = {"axes.spines.right": False,
                            "axes.spines.top": False}
 sns.set_theme(palette='pastel', style='ticks', rc=SNS_CUSTOM_CONFIG_PARAMS)
