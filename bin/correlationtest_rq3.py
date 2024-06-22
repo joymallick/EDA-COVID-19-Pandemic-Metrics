@@ -9,7 +9,6 @@ from scipy.stats import spearmanr
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 def correlation_hptest(x, y):
