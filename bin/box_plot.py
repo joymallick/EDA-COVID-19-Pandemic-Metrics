@@ -52,4 +52,4 @@ if __name__ == "__main__":
     parser.add_argument('-x', type=str, help='The x variable for the box plot')
     parser.add_argument('-y', type=str, help='The y variable for the box plot')
     args = parser.parse_args()
-    main(args.processedcsvfile, args.x, args.y)
+    main(args.csvfile, args.x, args.y)
