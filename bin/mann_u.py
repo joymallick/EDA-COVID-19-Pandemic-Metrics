@@ -36,9 +36,9 @@ def mann_whitney_u_test(file_path, x_col, y_col, alpha=0.05):
 
     # Interpret the results
     if p_value < alpha:
-        return True  # Reject the null hypothesis
+        return True
     else:
-        return False  # Fail to reject the null hypothesis
+        return False
 
 
 if __name__ == "__main__":
