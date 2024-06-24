@@ -8,6 +8,7 @@ import pandas as pd
 import argparse
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def label_compare_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):  ## add xticks for months
@@ -38,7 +39,7 @@ def label_compare_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):  ##
     plt.title(title)
 
 
-def compare_trends(y1:  pd.Series, y2: pd.Series, x: pd.Series):   ## understand type of x variable
+def compare_trends(y1, y2, x):
     """The function plots in one figure two line plots
     showing the trend of y1 and y2 respectively.
     The x axis is shared.
@@ -61,7 +62,15 @@ def compare_trends(y1:  pd.Series, y2: pd.Series, x: pd.Series):   ## understand
 
 
 def main(processedcsvfile_rq3: str, out1pngfile:str, out2pngfile:str, out3pngfile: str):
-    data_rq3 = pd.read_cs(processedcsvfile_rq3)
+    if (processedcsvfile_rq3[-3:] != 'csv'):
+        message = "Provide a csv file as infile"
+        logger.exception(message)
+        raise OSError(message)
+    if ((out1pngfile[-3:] != 'png') or (out2pngfile[-3:] != 'png') or (out3pngfile[-3:] != 'png')):
+        message = "Provide a png file as outfile"
+        logger.exception(message)
+        raise OSError(message)
+    data_rq3 = pd.read_csv(processedcsvfile_rq3)
     if('germany' in processedcsvfile_rq3):
         geolevel = 'Germany'
     else:
@@ -89,9 +98,9 @@ def main(processedcsvfile_rq3: str, out1pngfile:str, out2pngfile:str, out3pngfil
     label_compare_trends(ax13,ax23,'deaths/cases',
                          'new vaccinations','month', xticks, title3)
     logger.info('Saving plots')
-    fig1.savefig(out1pngfile+f"_{geolevel}.png")
-    fig2.savefig(out2pngfile+f"_{geolevel}.png")
-    fig3.savefig(out3pngfile+f"_{geolevel}.png")
+    fig1.savefig(out1pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
+    fig2.savefig(out2pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
+    fig3.savefig(out3pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
     logger.info('Ended producing trend plots')
 
 
