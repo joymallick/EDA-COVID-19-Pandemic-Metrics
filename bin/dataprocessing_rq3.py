@@ -6,7 +6,6 @@ The second preprocessing focuses in particular on feature engineering for RQ 3.
 
 import pandas as pd
 import argparse
-import os
 import logging
 from processing_utils import collapse_by_time_period
 
