@@ -9,7 +9,6 @@ from scipy.stats import spearmanr
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 def correlation_hptest(x, y):
@@ -31,13 +30,16 @@ def correlation_hptest(x, y):
 
 def save_results(outfile, pvalue, coeff, geolevel):
     """"The function saves the results of correlation_hptest
+        in outfile.
 
     Args:
         outfile (str): output file name
         pvalue (float): result of hp test
         coeff (float): result of hp test
         geolevel (str): either Europe or Germany
-    """
+    
+    Returns:
+        None."""
     logger.debug("Opening outfile for writing")
     with open(outfile, "w") as output:
         output.write(f"\n SPEARMAN CORRELATION HP TEST- new vaccinations and deaths_vs_cases {geolevel}")
@@ -46,6 +48,14 @@ def save_results(outfile, pvalue, coeff, geolevel):
 
 
 def main(processedcsvfile_rq3: str, outfile: str):
+    if (processedcsvfile_rq3[-3:] != 'csv'):
+        message = "Provide a csv file as infile"
+        logger.exception(message)
+        raise OSError(message)
+    if (outfile[-3:] != 'txt'):
+        message = "Provide a txt file as outfile"
+        logger.exception(message)
+        raise OSError(message)
     data_rq3 = pd.read_csv(processedcsvfile_rq3)
     if('germany' in processedcsvfile_rq3):
         geolevel = 'Germany'
@@ -63,6 +73,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='The file performs a correlation hp test for RQ 3')
     parser.add_argument('processedcsvfile_rq3', type=str, help='csvfile processed for RQ 3')
-    parser.add_argument('outfile', type=str, help='output file to save results of hp test')
+    parser.add_argument('outfile', type=str, help='txt output file to save results of hp test')
     args = parser.parse_args()
     main(args.processedcsvfile_rq3, args.outfile)

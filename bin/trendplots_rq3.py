@@ -4,13 +4,11 @@ The script produces trend (line) plots for RQ 3 using matplotlib.
 """
 import logging
 import matplotlib.pyplot as plt
-import os
 import pandas as pd
 import argparse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-BIN_PATH = os.getcwd()
 
 
 def label_compare_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):  ## add xticks for months
@@ -41,7 +39,7 @@ def label_compare_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):  ##
     plt.title(title)
 
 
-def compare_trends(y1:  pd.Series, y2: pd.Series, x: pd.Series):   ## understand type of x variable
+def compare_trends(y1, y2, x):
     """The function plots in one figure two line plots
     showing the trend of y1 and y2 respectively.
     The x axis is shared.
@@ -64,9 +62,15 @@ def compare_trends(y1:  pd.Series, y2: pd.Series, x: pd.Series):   ## understand
 
 
 def main(processedcsvfile_rq3: str, out1pngfile:str, out2pngfile:str, out3pngfile: str):
-    os.chdir(r"..\data")
-    data_rq3 = pd.read_cs(processedcsvfile_rq3)
-    os.chdir(BIN_PATH)
+    if (processedcsvfile_rq3[-3:] != 'csv'):
+        message = "Provide a csv file as infile"
+        logger.exception(message)
+        raise OSError(message)
+    if ((out1pngfile[-3:] != 'png') or (out2pngfile[-3:] != 'png') or (out3pngfile[-3:] != 'png')):
+        message = "Provide a png file as outfile"
+        logger.exception(message)
+        raise OSError(message)
+    data_rq3 = pd.read_csv(processedcsvfile_rq3)
     if('germany' in processedcsvfile_rq3):
         geolevel = 'Germany'
     else:
@@ -93,21 +97,19 @@ def main(processedcsvfile_rq3: str, out1pngfile:str, out2pngfile:str, out3pngfil
     title3 = f"Ratio between new deaths and cases and new vaccinations in {geolevel} (by month)"
     label_compare_trends(ax13,ax23,'deaths/cases',
                          'new vaccinations','month', xticks, title3)
-    os.chdir(r"..\results\rq3\plots")
     logger.info('Saving plots')
-    fig1.savefig(out1pngfile+f"_{geolevel}.png")
-    fig2.savefig(out2pngfile+f"_{geolevel}.png")
-    fig3.savefig(out3pngfile+f"_{geolevel}.png")
-    os.chdir(BIN_PATH)
+    fig1.savefig(out1pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
+    fig2.savefig(out2pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
+    fig3.savefig(out3pngfile[:-4]+f"_{geolevel}.png", bbox_inches='tight')
     logger.info('Ended producing trend plots')
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='The file produces trend plots for RQ 3')
-    parser.add_argument('-i','processedcsvfile_rq3', type=str, help='csvfile processed for RQ 3')
-    parser.add_argument('-o1', 'out1pngfile', type=str, help='output png file to save first plot')
-    parser.add_argument('-o2', 'out2pngfile', type=str, help='output png file to save second plot')
-    parser.add_argument('-o3', 'out3pngfile', type=str, help='output png file to save third plot')
+    parser.add_argument('processedcsvfile_rq3', type=str, help='csvfile processed for RQ 3')
+    parser.add_argument('out1pngfile', type=str, help='output png file to save first plot')
+    parser.add_argument('out2pngfile', type=str, help='output png file to save second plot')
+    parser.add_argument('out3pngfile', type=str, help='output png file to save third plot')
     args = parser.parse_args()
     main(args.processedcsvfile_rq3, args.out1pngfile, args.out2pngfile, args.out3pngfile)
