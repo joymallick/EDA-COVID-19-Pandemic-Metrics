@@ -1,6 +1,0 @@
-INFO:__main__:Started producing trend plots
-DEBUG:__main__:Plot trends for new_deaths vs new_cases
-DEBUG:__main__:Plot trends for new_deaths vs new_vaccinations
-DEBUG:__main__:Plot trends for deaths_vs_cases vs new_vaccinations
-INFO:__main__:Saving plots
-INFO:__main__:Ended producing trend plots

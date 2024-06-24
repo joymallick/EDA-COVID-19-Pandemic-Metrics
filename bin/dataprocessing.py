@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The script processes the input dataset (csv format) according to the specified parameters.
+The script performs a general preprocessing of the input dataset (csv format).
 """
 
 import pandas as pd
