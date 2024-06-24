@@ -1,60 +1,64 @@
+"""
+The script performs a second preprocessing of the input dataset (processed csvfile) for RQ 1.
+The second preprocessing focuses in particular on feature engineering for RQ 1.
+"""
 import pandas as pd
 import argparse
-import os
 import logging
-from processing_utils import collapse_by_time_period
+from outcomes_utils import normalize_column
 
-# Configure logging
+# Configure logging and constants
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-BIN_PATH = os.getcwd()
+COLUMNS_RQ1 = ['continent','location','year','total_cases','total_deaths', 'population']
+YEAR = 2023
 
-def group_by_continent(csv_file_path)->pd.DataFrame:
+def process_csvfile_rq1(csv_file_path, normalize):
+    """The  function processes the provided csv by generating the
+    outcomes of interest for  each continent and by aggregating the data by
+    year. Eventually only data for year 2023 is returned.
+    
+        Args: 
+        csv_file_path (str): path to the csv.
+        normalize (bool): if True outcomes are normalized by population
+    
+        Returns:
+        pd.core.groupby.DataFrameGroupBy: processed df.
     """
-    Groups the provided DataFrame by the 'continent' column.
-    
-    Parameters:
-    dataframe (pd.DataFrame): The DataFrame to group.
-    
-    Returns:
-    pd.core.groupby.DataFrameGroupBy: The grouped DataFrame.
-    """
-    logger.debug("Starting the grouping process.")
-    
-    # Check if 'continent' column exists in the DataFrame
-    if 'continent' not in csv_file_path.columns:
-        logging.error("The DataFrame does not contain a 'continent' column.")
-        raise ValueError("The DataFrame does not contain a 'continent' column.")
-    
-    logger.debug("'continent' column found. Proceeding with grouping.")
-    
-    # Group the DataFrame by 'continent' column
-    grouped_df = csv_file_path.groupby('continent')
-    
-    logging.info("Grouping completed successfully.")
-    
-    collapsed_df = collapse_by_time_period(grouped_df, 'month', 'mean')
-    logging.info(f"Collapsed by month dataset: {collapsed_df.head()}")
-    return collapsed_df
+    df = pd.read_csv(csv_file_path, usecols=COLUMNS_RQ1)
+    if normalize:
+    # normalize outcomes by population
+        df['total_cases'] = normalize_column(df['total_cases'], df['population'])
+        df['total_deaths'] = normalize_column(df['total_deaths'], df['population'])
+    logger.debug(f"Datased with normalized columns: {df.head()}")
+    # Create outcomes for each continent and year
+    logger.debug('Grouping and aggregating by year')
+    df = df.groupby(['continent','year','location']).agg('last')
+    df = df.groupby(['year','continent']).agg('sum')
+    df = df.loc[YEAR,:]
+    logger.debug(f"Final processed dataset: {df.head()}")
+    return df
 
 
-def main(csvfile: str)->pd.DataFrame:
+def main(csvfile: str, outfile: str, normalize=False):
     logging.basicConfig(filename='dataprocessing_rq1.log')
+    if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
+        message = "Provide a csv file"
+        logger.exception(message)
+        raise OSError(message)
     logger.info('Started processing data for RQ 1')
-    os.chdir(r"..\data")
-    df_processed_rq1 = group_by_continent(csvfile)
+    df_processed_rq1 = process_csvfile_rq1(csvfile, normalize)
     logger.info('Saving processed csv')
     df_processed_rq1.to_csv(csvfile[:-4]+"_rq1.csv", index=True)
-    os.chdir(BIN_PATH)
     logger.info('Ended processing for RQ 1')
-    return df_processed_rq1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='The file applies specific preprocessing steps for RQ 1')
-    parser.add_argument('processedcsvfile', type=str, help='First processed csvfile name')
+    parser.add_argument('processedcsvfile', type=str, help='first processed csvfile name')
+    parser.add_argument('outfile', type=str, help='output file')
+    parser.add_argument('--normalize', type=bool, help='if true the outcomes are normalized by population')
     args = parser.parse_args()
-    main(args.processedcsvfile)
+    main(args.processedcsvfile, args.outfile, args.normalize)
 
 
-    
