@@ -1,0 +1,41 @@
+rule all:
+    input:'../data/owid-covid-data_processed.csv',
+        '../data/owid-covid-data_processed_rq3.csv',
+        '../results/plot1.png',
+        '../results/plot2.png',
+        '../results/plot3.png'
+
+
+rule clean:
+    shell: rm ../results/*.png
+
+
+rule dataprocessing:
+    input:
+        cmd='dataprocessing.py',
+        csv='../data/owid-covid-data.csv'
+    output: '../data/owid-covid-data_processed.csv'
+    shell: 'python {input.cmd} {input.csv} {output}'
+
+rule dataprocessingrq3:
+    input:
+        cmd='dataprocessing_rq3.py',
+        csv='../data/owid-covid-data_processed.csv'
+    output: '../data/owid-covid-data_processed_rq3.csv'
+    shell: 'python {input.cmd} {input.csv} {output}'
+
+
+rule correlationtest_rq3:
+    input:
+        cmd='correlationtest_rq3.py',
+        csv='../data/owid-covid-data_processed_rq3.csv'
+    output: '../results/correalationtest.txt'
+    shell: 'python {input.cmd} {input.csv} {output}'
+
+
+rule trendplots_rq:
+    input:
+        cmd='trendplots_rq3.py',
+        csv='../data/owid-covid-data_processed_rq3.csv'
+    output: '../results/plot1.png', '../results/plot2.png', '../results/plot3.png'
+    shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'

@@ -1,0 +1,26 @@
+INFO:__main__:Started processing
+DEBUG:__main__:converting date to datetime
+DEBUG:__main__:adding new time columns
+INFO:__main__:Saving processed csv
+INFO:__main__:Ended processing
+INFO:__main__:Started processing
+INFO:__main__:Started processing
+DEBUG:__main__:converting date to datetime
+DEBUG:__main__:adding new time columns
+INFO:__main__:Saving processed csv
+INFO:__main__:Ended processing
+INFO:__main__:Started processing
+DEBUG:__main__:converting date to datetime
+DEBUG:__main__:adding new time columns
+INFO:__main__:Saving processed csv
+INFO:__main__:Ended processing
+INFO:__main__:Started processing
+DEBUG:__main__:converting date to datetime
+DEBUG:__main__:adding new time columns
+INFO:__main__:Saving processed csv
+INFO:__main__:Ended processing
+INFO:__main__:Started processing
+DEBUG:__main__:converting date to datetime
+DEBUG:__main__:adding new time columns
+INFO:__main__:Saving processed csv
+INFO:__main__:Ended processing
