@@ -9,17 +9,18 @@ from scipy.stats import spearmanr
 
 
 logger = logging.getLogger(__name__)
+THRESHOLDS = {'correlation': 0.85, 'p-value': 0.05}
 
 
 def correlation_hptest(x, y):
     """The function performs an hypothesis test for
-    H_0:  x and y are not correlated using Spearman's
-    correlation coefficient.
+    H_0:  'x and y are not correlated' using Spearman's
+    correlation coefficient. NaN values, if present, are
+    discarded.
 
     Args:
         x (pd.Series): first variable
         y (pd.Series): second variable
-        save (bool): if True results are saved 
 
     Returns:
         tuple : (p-value, corr coefficient)
@@ -40,11 +41,27 @@ def save_results(outfile, pvalue, coeff, geolevel):
     
     Returns:
         None."""
-    logger.debug("Opening outfile for writing")
+    logger.debug("Opening outfile for writing results")
     with open(outfile, "w") as output:
         output.write(f"\n SPEARMAN CORRELATION HP TEST- new vaccinations and deaths_vs_cases {geolevel}")
         output.write(f"\n pvalue: {pvalue}")
         output.write(f"\n Spearman correlation coefficient: {coeff}")
+
+
+def check_results(pvalue, corr_coeff):
+    """The function prints True if pvalue and 
+    corr_coeff are significant basing on THRESHOLDS.
+
+    Args:
+        pvalue (float): pvalue of hp test
+        corr_coeff (float): corr coeff of hp test
+    Returns:
+        None. 
+    """
+    if ((pvalue <= THRESHOLDS['p-value']) and (corr_coeff >= THRESHOLDS['corr_coeff'])):
+        print("True")
+    else:
+        print("False")
 
 
 def main(processedcsvfile_rq3: str, outfile: str):
@@ -66,6 +83,8 @@ def main(processedcsvfile_rq3: str, outfile: str):
     pvalue, corr_coeff = correlation_hptest(data_rq3['new_vaccinations'], data_rq3['deaths_vs_cases'])
     logger.info("Saving results")
     save_results(outfile, pvalue, corr_coeff, geolevel)
+    logger.info("Checking statistical significance of the results")
+    check_results(pvalue, corr_coeff)
     logger.info('End')
 
 
