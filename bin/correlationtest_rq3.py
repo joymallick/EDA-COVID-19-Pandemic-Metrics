@@ -48,8 +48,20 @@ def save_results(outfile, pvalue, coeff, geolevel):
         output.write(f"\n Spearman correlation coefficient: {coeff}")
 
 
-def check_results():
-    pass
+def check_results(pvalue, corr_coeff):
+    """The function prints True if pvalue and 
+    corr_coeff are significant basing on THRESHOLDS.
+
+    Args:
+        pvalue (float): pvalue of hp test
+        corr_coeff (float): corr coeff of hp test
+    Returns:
+        None. 
+    """
+    if ((pvalue <= THRESHOLDS['p-value']) and (corr_coeff >= THRESHOLDS['corr_coeff'])):
+        print("True")
+    else:
+        print("False")
 
 
 def main(processedcsvfile_rq3: str, outfile: str):
