@@ -1,13 +1,25 @@
+# gen outfile names for rule trendplots:
+TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
+OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}.png', trendplots_names=TRENDPLOTS_NAMES)
+# gen outfile names for rule correlationtest:
+SIGNIFICANCE = ['', '_significance']
+OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}.txt', significance =SIGNIFICANCE)
+
+def check_results_correlationtest(file):
+    with open(file, "r") as file:
+        result = file.read()
+    if (result == 'True'):
+        return True
+    else:
+        return False
+
+
 rule all:
     input:'../data/owid-covid-data_processed.csv',
         '../data/owid-covid-data_processed_rq3.csv',
-        '../results/plot1.png',
-        '../results/plot2.png',
-        '../results/plot3.png'
-
-
-rule clean:
-    shell: rm ../results/*.png
+        OUTPUTS_CORRTEST,
+        '../results/regplot_deaths_over_cases_vaccinations.png',
+        OUTPUTS_TRENDPLOTS
 
 
 rule dataprocessing:
@@ -17,7 +29,8 @@ rule dataprocessing:
     output: '../data/owid-covid-data_processed.csv'
     shell: 'python {input.cmd} {input.csv} {output}'
 
-rule dataprocessingrq3:
+
+rule dataprocessing_specific:
     input:
         cmd='dataprocessing_rq3.py',
         csv='../data/owid-covid-data_processed.csv'
@@ -25,17 +38,32 @@ rule dataprocessingrq3:
     shell: 'python {input.cmd} {input.csv} {output}'
 
 
-rule correlationtest_rq3:
+rule correlationtest:
     input:
         cmd='correlationtest_rq3.py',
         csv='../data/owid-covid-data_processed_rq3.csv'
-    output: '../results/correalationtest.txt'
-    shell: 'python {input.cmd} {input.csv} {output}'
+    output: OUTPUTS_CORRTEST
+    shell: 'python {input.cmd} {input.csv} {output[0]} > {output[1]}'
 
 
-rule trendplots_rq:
+rule regplot:
+    input:
+        cmd='regressionplot_rq3.py',
+        csv='../data/owid-covid-data_processed_rq3.csv',
+        correalationtest_res= '../results/correlationtest_results_significance.txt'
+    output: '../results/regplot_deaths_over_cases_vaccinations.png'
+    run:
+        if check_results_correlationtest(input.correalationtest_res):
+            # Proceed with plotting action using a shell command
+            shell_command = f"python {input.cmd} {input.csv} {output}"
+            subprocess.run(shell_command, shell=True)
+        else:
+            print("Condtion for regression plot was not met.")
+
+
+rule trendplots:
     input:
         cmd='trendplots_rq3.py',
         csv='../data/owid-covid-data_processed_rq3.csv'
-    output: '../results/plot1.png', '../results/plot2.png', '../results/plot3.png'
-    shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'
+    output: OUTPUTS_TRENDPLOTS
+    shell: 'python {input.cmd} {input.csv} {output}'
