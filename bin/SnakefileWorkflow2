@@ -1,6 +1,6 @@
 rule all:
     input:'../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_rq3.csv',
+        '../data/owid-covid-data_processed_rq1.csv',
         '../results/plot-1.png'
 
 
