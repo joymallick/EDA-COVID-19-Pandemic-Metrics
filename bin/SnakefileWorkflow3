@@ -22,6 +22,10 @@ rule all:
         OUTPUTS_TRENDPLOTS
 
 
+rule clean:
+    shell: 'del  ..\\results\\*.png ..\\results\\*.txt  ..\\data\\*_processed*.csv'
+
+
 rule dataprocessing:
     input:
         cmd='dataprocessing.py',
