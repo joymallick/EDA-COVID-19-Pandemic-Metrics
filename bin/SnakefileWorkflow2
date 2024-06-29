@@ -1,9 +1,7 @@
 rule all:
     input:'../data/owid-covid-data_processed.csv',
         '../data/owid-covid-data_processed_rq3.csv',
-        '../results/plot1.png',
-        '../results/plot2.png',
-        '../results/plot3.png'
+        '../results/plot-1.png'
 
 
 rule clean:
@@ -17,25 +15,19 @@ rule dataprocessing:
     output: '../data/owid-covid-data_processed.csv'
     shell: 'python {input.cmd} {input.csv} {output}'
 
-rule dataprocessingrq3:
+rule dataprocessingrq1:
     input:
-        cmd='dataprocessing_rq3.py',
+        cmd='dataprocessing_rq1.py',
         csv='../data/owid-covid-data_processed.csv'
-    output: '../data/owid-covid-data_processed_rq3.csv'
+    output: '../data/owid-covid-data_processed_rq1.csv'
     shell: 'python {input.cmd} {input.csv} {output}'
 
 
-rule correlationtest_rq3:
+rule plot_deathcases_rq1:
     input:
-        cmd='correlationtest_rq3.py',
-        csv='../data/owid-covid-data_processed_rq3.csv'
-    output: '../results/correalationtest.txt'
+        cmd='plotdeathcases_rq1.py',
+        csv='../data/owid-covid-data_processed_rq1.csv'
+    output: '../results/plot-1.png'
     shell: 'python {input.cmd} {input.csv} {output}'
 
 
-rule trendplots_rq:
-    input:
-        cmd='trendplots_rq3.py',
-        csv='../data/owid-covid-data_processed_rq3.csv'
-    output: '../results/plot1.png', '../results/plot2.png', '../results/plot3.png'
-    shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'
