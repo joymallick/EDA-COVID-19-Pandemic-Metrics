@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""
+'''
 The script performs a general preprocessing of the input dataset (csv format).
-"""
+'''
 
 import pandas as pd
 import argparse
@@ -14,22 +14,22 @@ logger.setLevel(logging.DEBUG)
 
 
 def convert_to_datetime(date, format='%Y-%m-%d'):
-    """Helper function for process_csvfile.
+    '''Helper function for process_csvfile.
     The function convertes string dates as datetime dates
-    according to the specified format."""
+    according to the specified format.'''
     return datetime.datetime.strptime(date, format)
 
 
 def get_years(date):
-    """Helper function for process_csvcile.
-    The function is used for creating month and year columns."""
+    '''Helper function for process_csvcile.
+    The function is used for creating month and year columns.'''
     return date.year
 
 
 def get_semester(date):
-    """Helper function for process_csvfile.
+    '''Helper function for process_csvfile.
     The function is used for creating a column of uniquely
-    identified semesters."""
+    identified semesters.'''
     year = date.year
     month = date.month
     if month <= 6:
@@ -41,15 +41,15 @@ def get_semester(date):
 
 
 def process_csvfile(filename):
-    """
+    '''
     Args:
        filename (str): the path to the file
 
     Returns:
-       pd.DataFrame"""
+       pd.DataFrame'''
 
     if (filename is None or filename[-3:] != 'csv'):
-        message = "Provide a csv file"
+        message = 'Provide a csv file'
         logger.exception(message)
         raise OSError(message)
     df = pd.read_csv(filename)
@@ -69,10 +69,10 @@ def main(csvfile: str, outfile: str):
     df_processed = process_csvfile(csvfile)
     logger.info('Saving processed csv')
     df_processed.to_csv(outfile, index=False)
-    logger.info('Ended processing')
+    logger.info('End')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='The file applies initial processing steps to the csv file')
     parser.add_argument('-i', '--csvfile',
