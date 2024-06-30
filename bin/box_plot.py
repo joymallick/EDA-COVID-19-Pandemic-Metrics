@@ -26,7 +26,7 @@ def draw_boxplot(csv_file_path, x_variable, y_variable):
     # Create the box plot
     logging.debug("Creating box plot")
     plt.figure(figsize=(10, 6))
-    df.boxplot(column=y_variable, by=x_variable)
+    df.boxplot(column=x_variable, by=y_variable)
 
     # Add labels and title
     logging.debug("Adding labels and title")
