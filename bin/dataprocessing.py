@@ -42,11 +42,11 @@ def get_semester(date):
 
 def process_csvfile(filename):
     """
-    Args:   
-        filename (str): the path to the file
-    
+    Args:
+       filename (str): the path to the file
+
     Returns:
-        pd.DataFrame"""
+       pd.DataFrame"""
 
     if (filename is None or filename[-3:] != 'csv'):
         message = "Provide a csv file"
@@ -54,8 +54,8 @@ def process_csvfile(filename):
         raise OSError(message)
     df = pd.read_csv(filename)
     logger.debug('converting date to datetime')
-    df.date = df.date.apply(convert_to_datetime)   
-    # create uniquely identified month , year and semester columns
+    df.date = df.date.apply(convert_to_datetime)
+    # create uniquely identified month, year and semester columns
     logger.debug('adding new time columns')
     df['year'] = df.date.apply(get_years)
     df['month'] = df.date.dt.to_period('M')
@@ -63,9 +63,8 @@ def process_csvfile(filename):
     return df
 
 
-
 def main(csvfile: str, outfile: str):
-    logging.basicConfig(filename='dataprocessing.log')
+    logging.basicConfig(filename='../data/logs/dataprocessing.log', filemode='w')
     logger.info('Started processing')
     df_processed = process_csvfile(csvfile)
     logger.info('Saving processed csv')
@@ -75,8 +74,10 @@ def main(csvfile: str, outfile: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='The file  applies initial processing steps to the csv file')
-    parser.add_argument('csvfile', type=str, help='csv file name')
-    parser.add_argument('outfile', type=str, help='output file name')
+        description='The file applies initial processing steps to the csv file')
+    parser.add_argument('-i', '--csvfile',
+                        required=True, type=str, help='csv file name')
+    parser.add_argument('-o', '--outfile',
+                        required=True, type=str, help='output file name (csv)')
     args = parser.parse_args()
     main(args.csvfile, args.outfile)

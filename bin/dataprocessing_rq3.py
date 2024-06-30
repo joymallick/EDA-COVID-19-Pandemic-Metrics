@@ -12,30 +12,26 @@ from processing_utils import collapse_by_time_period
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-COLUMNS_RQ3 = ['date', 'semester', 'month', 'year', 'continent', 'location','new_deaths', 'new_cases', 'new_vaccinations']
 
 
-def process_csvfile_rq3(filename, germany=False):
+def process_csvfile_w3(filename, germany=False):
     """The function performs a second preprocessing for RQ 3.
     
     Args:   
-          filename (str): the path to the processed csv file 
-          germany (bool): if True restrict RQ 3 to Germany, 
+         filename (str): the path to the first
+                        processed csv file
+         germany (bool): if True consider just Germany,
                           else consider whole Europe
-    Returns:
+   Returns:
         pd.DataFrame
     """
-    # check that the file is provided and that it's  a csv
-    if (filename is None or filename[-3:] != 'csv'):
-        message = "Provide a csv file"
-        raise OSError(message)
-    # check for the first preprocessing:
+    # check that the file has first preprocessing:
     if ('processed' not in filename):
-        message = "The csv must contain the first preprocessing of the data"
+        message = "The csv must contain the first preprocessed data"
         raise ValueError(message)
     # start processing
     logger.debug('Reading first preprocessed csv')
-    df = pd.read_csv(filename, usecols=COLUMNS_RQ3)
+    df = pd.read_csv(filename)
     df.dropna(inplace=True)
     sub_df = df[df.continent == 'Europe']
     if (germany):
@@ -56,26 +52,29 @@ def process_csvfile_rq3(filename, germany=False):
 
 def main(csvfile: str, outfile: str, germany=False):
     logging.basicConfig(filename='dataprocessing_rq3.log')
+    # check correct format of in and out files
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
         message = "Provide a csv file"
         logger.exception(message)
         raise OSError(message)
-    logger.info('Started processing data for RQ 3')
-    df_processed_rq3 = process_csvfile_rq3(csvfile, germany)
+    logger.info('Started processing data')
+    df_processed_w3 = process_csvfile_w3(csvfile, germany)
     logger.info('Saving processed csv')
     if (germany):
-        df_processed_rq3.to_csv(outfile[:-4]+f"_germany.csv", index=True)
+        df_processed_w3.to_csv(outfile[:-4]+f"_germany.csv", index=True)
     else:
-        df_processed_rq3.to_csv(outfile, index=True)
-    logger.info('Ended processing for RQ 3')
+        df_processed_w3.to_csv(outfile, index=True)
+    logger.info('Ended processing')
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='The file applies specific preprocessing steps for RQ 3')
-    parser.add_argument('processedcsvfile', type=str, help='First processed csvfile name')
-    parser.add_argument('outfile', type=str, help='output file')
-    parser.add_argument('--germany', type=bool, help='If True RQ 3 is restricted to Germany')
+        description='The file applies specific preprocessing steps for RQ 3 (Workflow 3)')
+    parser.add_argument('i', '--processedcsvfile',
+                        required=True, type=str, help='First processed csvfile name')
+    parser.add_argument('o', '--outfile',
+                        required=True, type=str, help='output file')
+    parser.add_argument('--germany', type=bool, help='If True analysis is restricted to Germany')
     args = parser.parse_args()
     main(args.processedcsvfile, args.outfile, args.germany)
 
