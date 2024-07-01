@@ -64,7 +64,7 @@ def process_csvfile(filename):
 
 
 def main(csvfile: str, outfile: str):
-    logging.basicConfig(filename='../data/logs/dataprocessing.log', filemode='w')
+    logging.basicConfig(filename='data/logs/dataprocessing.log', filemode='w')
     logger.info('Started processing')
     df_processed = process_csvfile(csvfile)
     logger.info('Saving processed csv')
