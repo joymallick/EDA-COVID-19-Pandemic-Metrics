@@ -6,15 +6,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import pandas as pd
+from utils import set_plot_params
 import argparse
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-SNS_CUSTOM_CONFIG_PARAMS = {'axes.spines.right': False,
-                           'axes.spines.top': False}
-sns.set_theme(palette='pastel', style='ticks', rc=SNS_CUSTOM_CONFIG_PARAMS)
-
+# set plot params
+set_plot_params("configuration_plots.yaml")
 
 def reg_plot(x, y, data, xlabel, ylabel, title):
     '''The function produces a regression+scatter plot
