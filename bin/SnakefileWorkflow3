@@ -1,5 +1,3 @@
-#log file for the whole pipeline
-LOG_FILE = '../results/SnakefileWorkflow3_logs.log'
 # gen outfile names for rule trendplots:
 TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
 ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}.png', trendplots_names=TRENDPLOTS_NAMES)
@@ -11,13 +9,15 @@ ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}.
 def check_results_correlationtest(file):
     """Helper function for rule correlationtest.
     The function reads file, that
-    contains either 'True' or 'False', and returns
+    contains either 'True' (= significant results) or 'False'
+     and returns
     the corresponding boolean value.
     Args:
         file (str): .txt filename
     
     Returns:
-        bool"""
+        bool.
+        """
     with open(file, "r") as file:
         result = file.read()
     if (result == 'True'):
@@ -29,7 +29,7 @@ def check_results_correlationtest(file):
 rule all:
     input:
         '../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_rq3.csv',
+        '../data/owid-covid-data_processed_w3.csv',
         ALL_OUTPUTS_CORRTEST,
         '../results/regplot_deaths_over_cases_vaccinations.png',
         ALL_OUTPUTS_TRENDPLOTS
@@ -44,7 +44,6 @@ rule dataprocessing:
         cmd='dataprocessing.py',
         csv= '../data/owid-covid-data.csv'
     output: '../data/owid-covid-data_processed.csv'
-    log:'../results/SnakefileWorkflow3_logs.log'
     shell:
         '''
         python {input.cmd} {input.csv} {output}
@@ -57,16 +56,15 @@ rule filtercols:
     output: '../data/owid-covid-data_processed.csv'
     shell:
         '''
-        csvcut -c date,month,continent,location,new_deaths,new_cases,new_vaccinations {input} > {output}
+        csvcut -c date,month,continent,location,new_deaths,new_cases,new_vaccinations {input.csv} | sed 's/,$//' > {output}
         '''
 
 
-rule dataprocessing_specific:
+rule dataprocessing_w3:
     input:
-        cmd='dataprocessing_rq3.py',
+        cmd='dataprocessing_w3.py',
         csv='../data/owid-covid-data_processed.csv'
-    output: '../data/owid-covid-data_processed_rq3.csv'
-    log: '../results/SnakefileWorkflow3_logs.log'
+    output: '../data/owid-covid-data_processed_w3.csv'
     shell: 
         '''
         python {input.cmd} {input.csv} {output}
@@ -75,11 +73,10 @@ rule dataprocessing_specific:
 
 rule correlationtest:
     input:
-        cmd='correlationtest_rq3.py',
-        csv='../data/owid-covid-data_processed_rq3.csv'
+        cmd='correlationtest_w3.py',
+        csv='../data/owid-covid-data_processed_w3.csv'
     output: ALL_OUTPUTS_CORRTEST
-    log: '../results/SnakefileWorkflow3_logs.log'
-    shell: 
+    shell:
         '''
         python {input.cmd} {input.csv} {output[0]} > {output[1]}
         '''
@@ -87,29 +84,25 @@ rule correlationtest:
 
 rule regplot:
     input:
-        cmd='regressionplot_rq3.py',
-        csv='../data/owid-covid-data_processed_rq3.csv',
-        correalationtest_res= '../results/correlationtest_results_significance.txt'
+        cmd='regressionplot_w3.py',
+        csv='../data/owid-covid-data_processed_w3.csv',
+        correalationtest_res='../results/correlationtest_results_significance.txt'
     output: '../results/regplot_deaths_over_cases_vaccinations.png'
-    log: LOG_FILE
     run:
         if check_results_correlationtest(input.correalationtest_res):
             # proceed with plotting action using a shell command
             shell_command = f"python {input.cmd} {input.csv} {output}"
             subprocess.run(shell_command, shell=True)
         else:
-            shell_command = 'echo "Condtion for regression plot was not met."'
+            print("Condtion for regression plot was not met")
 
 
 rule trendplots:
     input:
-        cmd='trendplots_rq3.py',
-        csv='../data/owid-covid-data_processed_rq3.csv'
+        cmd='trendplots_w3.py',
+        csv='../data/owid-covid-data_processed_w3.csv'
     output: ALL_OUTPUTS_TRENDPLOTS
-    log: LOG_FILE
     shell:
         '''
         python {input.cmd} {input.csv} {output} 
         '''
-# echo "Running {input.cmd} on {input.csv}." > {log}
-# python {input.cmd} {input.csv} {output} >> {log} 2>&1
