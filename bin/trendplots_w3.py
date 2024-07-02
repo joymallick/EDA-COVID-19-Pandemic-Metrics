@@ -9,10 +9,12 @@ Overall 3 plots are produced with the following comparison:
 import logging
 import matplotlib.pyplot as plt
 import pandas as pd
+from utils import set_plot_params
 import argparse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+PLOT_PARAMS =set_plot_params("configuration_plots.yaml")
 
 
 def label_plot_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):
