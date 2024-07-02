@@ -14,7 +14,8 @@ import argparse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-PLOT_PARAMS =set_plot_params("configuration_plots.yaml")
+# set plot params
+set_plot_params("configuration_plots.yaml")
 
 
 def label_plot_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):
