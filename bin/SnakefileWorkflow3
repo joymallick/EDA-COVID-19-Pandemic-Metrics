@@ -36,7 +36,7 @@ rule all:
 
 
 rule clean:
-    shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv'
+    shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv ..\\data\\*.tmp' 
 
 
 rule dataprocessing:
@@ -46,17 +46,8 @@ rule dataprocessing:
     output: '../data/owid-covid-data_processed.csv'
     shell:
         '''
-        python {input.cmd} {input.csv} {output}
-        '''
-
-
-rule filtercols:
-    input:
-        csv='../data/owid-covid-data_processed.csv'
-    output: '../data/owid-covid-data_processed.csv'
-    shell:
-        '''
-        csvcut -c date,month,continent,location,new_deaths,new_cases,new_vaccinations {input.csv} | sed 's/,$//' > {output}
+        python {input.cmd} -i {input.csv} -o {output}.tmp && \
+        csvcut -c date,month,continent,location,new_deaths,new_cases,new_vaccinations {output}.tmp > {output}
         '''
 
 
@@ -67,7 +58,7 @@ rule dataprocessing_w3:
     output: '../data/owid-covid-data_processed_w3.csv'
     shell: 
         '''
-        python {input.cmd} {input.csv} {output}
+        python {input.cmd} -i {input.csv} -o {output}
         '''
 
 
@@ -78,7 +69,7 @@ rule correlationtest:
     output: ALL_OUTPUTS_CORRTEST
     shell:
         '''
-        python {input.cmd} {input.csv} {output[0]} > {output[1]}
+        python {input.cmd} -i {input.csv} -o {output[0]} > {output[1]}
         '''
 
 
@@ -91,10 +82,10 @@ rule regplot:
     run:
         if check_results_correlationtest(input.correalationtest_res):
             # proceed with plotting action using a shell command
-            shell_command = f"python {input.cmd} {input.csv} {output}"
+            shell_command = f"python {input.cmd} {input.csv} {output[0]}"
             subprocess.run(shell_command, shell=True)
         else:
-            print("Condtion for regression plot was not met")
+            print('Condtion for regression plot was not met')
 
 
 rule trendplots:
@@ -104,5 +95,6 @@ rule trendplots:
     output: ALL_OUTPUTS_TRENDPLOTS
     shell:
         '''
-        python {input.cmd} {input.csv} {output} 
+        python {input.cmd} -i {input.csv} {output} 
         '''
+
