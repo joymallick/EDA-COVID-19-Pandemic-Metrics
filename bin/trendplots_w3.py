@@ -12,14 +12,17 @@ import pandas as pd
 from utils import set_plot_params
 import argparse
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+
+# set logging
+logging.basicConfig(filename='trendplots_rq3.log')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
 
 def label_plot_trends(ax1, ax2, y1label, y2label, xlabel, xticks, title):
-    '''Helper function of compare_trends.
+    '''Helper function of plot_trends.
     The function labels the axis and titles the plot
     for trend comparison.
 
@@ -72,54 +75,62 @@ def plot_trends(y1, y2, x, y1label, y2label, xlabel, xticks, title):
     return fig
 
 
+def create_plots(df, outfiles, titles, xys, xticks, geolevel):
+    """The function creates trend plots using the above
+    functions and provided titles, xticks as well as variables, 
+    which are columns of df.
+    The plots are saved in outfiles.
+
+    Args:
+        df (pd.DataFrame): dataframe containing vars
+        outfiles (list): outfiles names
+        titles (list): titles for the plots
+        xys (list): couples of x,y vars
+        xticks (list): ticks for x axis
+        geolevel(str): either 'Europe' or 'Germany'
+    
+    Raises:
+        OSError: when outfiles are not png files
+    
+    Returns:
+        None.
+    """
+    if any(outfiles[i][-3:] != 'png' for i in range(3)):
+        message = 'Provide a png file as outfile'
+        LOGGER.exception(message)
+        raise OSError(message)
+    for xy, title, outfile in zip(xys, titles, outfiles):
+        fig = plot_trends(df[xy[0]], df[xy[1]], df['month'],
+                       xy[0], xy[1],
+                       'month', xticks, title)
+        fig.savefig(outfile[:-4]+f'_{geolevel}.png', bbox_inches='tight')
+
+
 def main(processedcsvfile_w3: str, out1pngfile: str, out2pngfile: str,
          out3pngfile: str):
     if (processedcsvfile_w3[-3:] != 'csv'):
         message = 'Provide a csv file as infile'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise OSError(message)
-    if ((out1pngfile[-3:] != 'png') or (out2pngfile[-3:] != 'png') or (out3pngfile[-3:] != 'png')):
-        message = 'Provide a png file as outfile'
-        logger.exception(message)
-        raise OSError(message)
-    logging.basicConfig(filename='../results/logs/trendplots_w3.log',
-                        filemode='w')
-    logger.info('Reading data')
+    LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
     # identify geographical level of the analysis
     if ('germany' in processedcsvfile_w3):
         geolevel = 'Germany'
     else:
         geolevel = 'Europe'
-    logging.basicConfig(filename='trendplots_rq3.log')
-    logger.info('Started producing trend plots')
-    # create x ticks for the plots
+    # create elements for the plots
     xticks = {i: str(df_w3['month'].iloc[i])
               for i in range(1, len(df_w3['month']), 6)}
-    # first plot
-    logger.debug('Plot trends for new_deaths vs new_cases')
-    title1 = f'New deaths and cases in {geolevel} (by month)'
-    fig1 = plot_trends(df_w3['new_deaths'], df_w3['new_cases'], df_w3['month'],
-                       'new deaths', 'new cases',
-                       'month', xticks, title1)
-    # second plot
-    logger.debug('Plot trends for new_deaths vs new_vaccinations')
-    title2 = f'New deaths and vaccinations in {geolevel} (by month)'
-    fig2 = plot_trends(df_w3['new_deaths'], df_w3['new_vaccinations'],
-                       df_w3['month'], 'new deaths', 'new vaccinations',
-                       'month', xticks, title2)
-    # third plot
-    logger.debug('Plot trends for deaths_vs_cases vs new_vaccinations')
-    title3 = f'Ratio between new deaths and cases and new vaccinations in {geolevel} (by month)'
-    fig3 = plot_trends(df_w3['deaths_vs_cases'], df_w3['new_vaccinations'],
-                       df_w3['month'], 'deaths/cases', 'new vaccinations',
-                       'month', xticks, title3)
-    # save figs
-    logger.info('Saving plots')
-    fig1.savefig(out1pngfile[:-4]+f'_{geolevel}.png', bbox_inches='tight')
-    fig2.savefig(out2pngfile[:-4]+f'_{geolevel}.png', bbox_inches='tight')
-    fig3.savefig(out3pngfile[:-4]+f'_{geolevel}.png', bbox_inches='tight')
-    logger.info('End')
+    outfiles = [out1pngfile, out2pngfile, out3pngfile]
+    titles = [ f'New deaths and cases in {geolevel} (by month)',
+              f'New deaths and vaccinations in {geolevel} (by month)',
+              f'Ratio between new deaths and cases and new vaccinations in {geolevel} (by month)']
+    xys = [['new_deaths', 'new_cases'], ['new_deaths', 'new_vaccinations'],
+           ['deaths_vs_cases', 'new_vaccinations']]
+    LOGGER.info('Started producing trend plots')
+    create_plots(df_w3, outfiles, titles, xys, xticks, geolevel)
+    LOGGER.info('End')
 
 
 if __name__ == '__main__':
@@ -127,11 +138,11 @@ if __name__ == '__main__':
         description='The file produces trend plots for Workflow 3 (RQ 3)')
     parser.add_argument('-i', '--processedcsvfile_w3', required=True,
                         type=str, help='csvfile processed for RQ 3')
-    parser.add_argument('-o1', '--out1pngfile', required=True,
+    parser.add_argument('out1pngfile',
                         type=str, help='output png file to save first plot')
-    parser.add_argument('-o2', '--out2pngfile',  required=True,
+    parser.add_argument('out2pngfile',
                         type=str, help='output png file to save second plot')
-    parser.add_argument('-o3', '--out3pngfile',  required=True,
+    parser.add_argument('out3pngfile',
                         type=str, help='output png file to save third plot')
     args = parser.parse_args()
     main(args.processedcsvfile_w3,

@@ -10,11 +10,11 @@ import pandas as pd
 import argparse
 import logging
 from utils import load_config
-from processing_utils import collapse_by_time_period
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+# set logging
+logging.basicConfig(filename='../data/logs/dataprocessing_w3.log', filemode='w')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 # load configuration for workflow 3:
 CONFIG = load_config("configuration_w3.yaml")
 
@@ -27,31 +27,37 @@ def process_csvfile_w3(filename, germany=False):
                         processed csv file
          germany (bool): if True consider just Germany,
                           else consider whole Europe
-   Returns:
+
+    Raises:
+        ValueError: error when csv hasn't general preprocessing
+
+    Returns:
         pd.DataFrame
     '''
     # check that the file has first preprocessing:
     if ('processed' not in filename):
         message = 'The csv must contain the first preprocessed data'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise ValueError(message)
     # start processing
-    logger.debug('Reading first preprocessed csv')
-    df = pd.read_csv(filename)
+    LOGGER.debug('Reading first preprocessed csv')
+    df = pd.read_csv(filename, engine='python')
     df.dropna(inplace=True)
     sub_df = df[df.continent == 'Europe']
+    sub_df.drop(columns=['continent','location'])
+    # check wehther restrict to Germany or not
     if (germany):
         sub_df = sub_df[sub_df.location == 'Germany']
-    logger.debug(f'Filtered dataset: {sub_df.head()}')
-    collapsed_sub_df = collapse_by_time_period(sub_df, 'month', 'sum')
-    logger.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
-    if (germany):
-        collapsed_sub_df = collapsed_sub_df.loc['Europe','Germany',:]
+        LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
+        collapsed_sub_df = sub_df.groupby('month').agg(sum)
+        LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
     else:
-        collapsed_sub_df = collapsed_sub_df.loc['Europe',:,:]
-        collapsed_sub_df = collapsed_sub_df.groupby(['month']).agg('sum')
-    logger.debug('Adding column for ratio between deaths and cases')
+        LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
+        collapsed_sub_df = sub_df.groupby(['month']).agg(sum)
+        LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
+    # create new outcome
     collapsed_sub_df['deaths_vs_cases'] = collapsed_sub_df['new_deaths']/collapsed_sub_df['new_cases']
+    LOGGER.debug(f'Final processed dataset: {collapsed_sub_df.head()} ')
     return collapsed_sub_df
     
     
@@ -60,17 +66,16 @@ def main(csvfile: str, outfile: str):
     # check correct format of in and out files
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
         message = 'Provide a csv file'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise OSError(message)
-    logging.basicConfig(filename='../data/logs/dataprocessing_w3.log', filemode='w')
-    logger.info(f'Started processing data with configuration: {CONFIG}')
+    LOGGER.info(f'Started processing data with configuration: {CONFIG}')
     df_processed_w3 = process_csvfile_w3(csvfile, CONFIG['germany'])
-    logger.info('Saving processed csv')
+    LOGGER.info('Saving processed csv')
     if (CONFIG['germany']):
         df_processed_w3.to_csv(outfile[:-4]+f'_germany.csv', index=True)
     else:
         df_processed_w3.to_csv(outfile, index=True)
-    logger.info('End')
+    LOGGER.info('End')
 
 
 if __name__ == '__main__':
