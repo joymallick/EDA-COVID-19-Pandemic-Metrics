@@ -5,11 +5,11 @@ The second preprocessing focuses in particular on feature engineering for RQ 3.
 The analysis restircts to Europe, however it is possibile to restrict it further to germany by setting
 the corresponding parameter to True in configuration_w3.yaml
 '''
-
 import pandas as pd
 import argparse
 import logging
 from utils import load_config
+
 
 # set logging
 logging.basicConfig(filename='./logs/dataprocessing_w3.log', filemode='w')
@@ -59,8 +59,7 @@ def process_csvfile_w3(filename, germany=False):
     collapsed_sub_df['deaths_vs_cases'] = collapsed_sub_df['new_deaths']/collapsed_sub_df['new_cases']
     LOGGER.debug(f'Final processed dataset: {collapsed_sub_df.head()} ')
     return collapsed_sub_df
-    
-    
+   
 
 def main(csvfile: str, outfile: str):
     # check correct format of in and out files
@@ -80,7 +79,7 @@ def main(csvfile: str, outfile: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='The file applies specific preprocessing steps for RQ 3 (Workflow 3)')
+        description='The file applies specific preprocessing steps for Workflow 3 (RQ 3)')
     parser.add_argument('-i', '--processedcsvfile',
                         required=True, type=str, help='First processed csvfile name')
     parser.add_argument('-o', '--outfile',

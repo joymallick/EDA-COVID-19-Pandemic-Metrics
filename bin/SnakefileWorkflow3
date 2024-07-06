@@ -36,7 +36,10 @@ rule all:
 
 
 rule clean:
-    shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv ..\\data\\*.tmp' 
+# windows:
+    shell: 'del  ..\\results\\*.png ..\\results\\*.txt .\\*.log  ..\\data\\*_processed*.csv ..\\data\\*.tmp' 
+# linux:
+    # shell: 'rm  ..\results\{*.png,*.txt} .\logs\*.log  ..\data\{*_processed*.csv,*.tmp}'
 
 
 rule dataprocessing:
