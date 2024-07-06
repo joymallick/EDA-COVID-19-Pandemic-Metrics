@@ -85,7 +85,7 @@ def main(processedcsvfile_w3: str, outfile: str):
     LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
     # identify geographical level of the analysis
-    if('germany' in processedcsvfile_w3):
+    if(CONFIG['germany']):
         geolevel = 'Germany'
     else:
         geolevel ='Europe'

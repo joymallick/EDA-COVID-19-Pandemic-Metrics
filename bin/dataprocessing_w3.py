@@ -44,15 +44,16 @@ def process_csvfile_w3(filename, germany=False):
     df = pd.read_csv(filename, engine='python')
     df.dropna(inplace=True)
     sub_df = df[df.continent == 'Europe']
-    sub_df.drop(columns=['continent','location'])
     # check wehther restrict to Germany or not
     if (germany):
         sub_df = sub_df[sub_df.location == 'Germany']
         LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
+        sub_df.drop(columns=['continent','location','date'], inplace=True)
         collapsed_sub_df = sub_df.groupby('month').agg(sum)
         LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
     else:
         LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
+        sub_df.drop(columns=['continent','location','date'], inplace=True)
         collapsed_sub_df = sub_df.groupby(['month']).agg(sum)
         LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
     # create new outcome
@@ -70,10 +71,7 @@ def main(csvfile: str, outfile: str):
     LOGGER.info(f'Started processing data with configuration: {CONFIG}')
     df_processed_w3 = process_csvfile_w3(csvfile, CONFIG['germany'])
     LOGGER.info('Saving processed csv')
-    if (CONFIG['germany']):
-        df_processed_w3.to_csv(outfile[:-4]+f'_germany.csv', index=True)
-    else:
-        df_processed_w3.to_csv(outfile, index=True)
+    df_processed_w3.to_csv(outfile, index=True)
     LOGGER.info('End')
 
 

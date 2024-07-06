@@ -9,7 +9,7 @@ Overall 3 plots are produced with the following comparison:
 import logging
 import matplotlib.pyplot as plt
 import pandas as pd
-from utils import set_plot_params
+from utils import set_plot_params, load_config
 import argparse
 
 
@@ -17,6 +17,8 @@ import argparse
 logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
+# load configuration for workflow 3:
+CONFIG = load_config("configuration_w3.yaml")
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
@@ -115,7 +117,7 @@ def main(processedcsvfile_w3: str, out1pngfile: str, out2pngfile: str,
     LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
     # identify geographical level of the analysis
-    if ('germany' in processedcsvfile_w3):
+    if (CONFIG['germany']):
         geolevel = 'Germany'
     else:
         geolevel = 'Europe'
