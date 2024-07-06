@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-The script produces scatter and regression line plots for RQ 3.
+The script produces scatter and regression line for Workflow 3 (RQ 3).
 '''
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -10,10 +10,12 @@ from utils import set_plot_params
 import argparse
 
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 # set plot params
 set_plot_params("configuration_plots.yaml")
+
 
 def reg_plot(x, y, data, xlabel, ylabel, title):
     '''The function produces a regression+scatter plot
@@ -40,27 +42,26 @@ def reg_plot(x, y, data, xlabel, ylabel, title):
 def main(processedcsvfile_w3: str, outpngfile: str):
     if (processedcsvfile_w3[-3:] != 'csv'):
         message = 'Provide a csv file as infile'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise OSError(message)
     if (outpngfile[-3:] != 'png'):
         message = 'Provide a png file as outfile'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise OSError(message)
-    logging.basicConfig(filename='../results/logs/regressionplot_w3.log', filemode='w')
-    logger.info('Reading data')
+    LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
     # identify geographical level of the analysis
     if('germany' in processedcsvfile_w3):
         geolevel = 'Germany'
     else:
         geolevel ='Europe'
-    logger.info('Started producing reg plot')
+    LOGGER.info('Started producing reg plot')
     fig = reg_plot(x='new_vaccinations', y='deaths_vs_cases', data=df_w3,
                   xlabel='new vaccinations', ylabel='deaths/cases',
                   title=f'OLS for new vaccinations and deaths over cases- {geolevel} (by month)')
-    logger.info('Saving plots')
+    LOGGER.info('Saving plots')
     fig.savefig(outpngfile[:-4]+f'_{geolevel}.png')
-    logger.info('Ended producing reg plot')
+    LOGGER.info('End')
 
 
 if __name__ == '__main__':

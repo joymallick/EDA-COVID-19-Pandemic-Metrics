@@ -1,2 +1,5 @@
 # to restrict the analysis to germany:
 'germany': False
+# thresholds for correlation hp test
+'thr_correlation': 0.85
+'thr_p-value': 0.0
