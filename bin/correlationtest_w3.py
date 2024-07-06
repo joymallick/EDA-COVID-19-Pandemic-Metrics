@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 '''
-The script performs a correlation hypothesis test for RQ 3.
+The script performs a correlation hypothesis test for for Workflow 3 (RQ 3).
 '''
 import pandas as pd
 import logging
 import argparse
 from scipy.stats import spearmanr
+from utils import load_config
+
 
 logging.basicConfig(filename='./logs/correlationtest_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
-THRESHOLDS = {'correlation': 0.85, 'p-value': 0.05}
+# load configuration for workflow 3:
+CONFIG = load_config("configuration_w3.yaml")
 
 
 def correlation_hptest(x, y):
@@ -67,7 +70,7 @@ def check_results(pvalue, corr_coeff):
     Returns:
         None. 
     '''
-    if ((pvalue <= THRESHOLDS['p-value']) and (corr_coeff >= THRESHOLDS['corr_coeff'])):
+    if ((pvalue <= CONFIG['thr_p-value']) and (corr_coeff >= CONFIG['thr_corr_coeff'])):
         print('True')
     else:
         print('False')
