@@ -1,13 +1,10 @@
 rule all:
     input:'../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_rq3.csv',
-        '../results/plot1.png',
-        '../results/plot2.png',
-        '../results/plot3.png'
+        '../data/owid-covid-data_processed_w1.csv',
 
 
 rule clean:
-    shell: rm ../results/*.png
+    shell: 'rm ../results/*.png'
 
 
 rule dataprocessing:
@@ -47,7 +44,7 @@ rule boxplotw1:
     output: '../results/boxplot1.png', '../results/boxplot2.png', '../results/boxplot3.png'
     shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'
 
-   rule plot:
+rule plot:
     input:
         mannwhitneyu_test = '../results/mannwhitneyu.txt'
     output:
