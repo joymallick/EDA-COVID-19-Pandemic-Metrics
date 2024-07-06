@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-The script produces scatter and regression line plots for RQ 3.
+The script produces scatter and regression line for Workflow 3 (RQ 3).
 '''
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ def main(processedcsvfile_w3: str, outpngfile: str):
                   title=f'OLS for new vaccinations and deaths over cases- {geolevel} (by month)')
     LOGGER.info('Saving plots')
     fig.savefig(outpngfile[:-4]+f'_{geolevel}.png')
-    LOGGER.info('Ended producing reg plot')
+    LOGGER.info('End')
 
 
 if __name__ == '__main__':
