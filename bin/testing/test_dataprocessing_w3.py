@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The script contains tests for the functions in bin/dataprocessing.py.
+The script tests the component bin/dataprocessing_w3.py.
 """
 import pandas as pd
 import numpy as np
