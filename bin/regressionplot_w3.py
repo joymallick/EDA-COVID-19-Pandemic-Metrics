@@ -10,6 +10,7 @@ from utils import set_plot_params
 import argparse
 
 
+logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params
@@ -47,7 +48,6 @@ def main(processedcsvfile_w3: str, outpngfile: str):
         message = 'Provide a png file as outfile'
         LOGGER.exception(message)
         raise OSError(message)
-    logging.basicConfig(filename='../results/logs/regressionplot_w3.log', filemode='w')
     LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
     # identify geographical level of the analysis

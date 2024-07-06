@@ -12,7 +12,7 @@ import logging
 from utils import load_config
 
 # set logging
-logging.basicConfig(filename='../data/logs/dataprocessing_w3.log', filemode='w')
+logging.basicConfig(filename='./logs/dataprocessing_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # load configuration for workflow 3:

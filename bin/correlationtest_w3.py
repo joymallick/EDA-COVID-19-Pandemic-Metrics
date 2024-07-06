@@ -7,7 +7,7 @@ import logging
 import argparse
 from scipy.stats import spearmanr
 
-logging.basicConfig(filename='../results/logs/correlationtest_w3.log', filemode='w')
+logging.basicConfig(filename='./logs/correlationtest_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 THRESHOLDS = {'correlation': 0.85, 'p-value': 0.05}
