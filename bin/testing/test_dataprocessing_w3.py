@@ -17,7 +17,7 @@ def test_process_csvfile_w3():
     from dataprocessing_w3.py. The test considers all 
     possible cases: create a df for Europe, create a
     df only for Germany."""
-    # load data:
+    # data path:
     filename = "../../data/owid-covid-data_processed.csv"
     # create fixtures (hand calculations):
     expected_df_eu = pd.DataFrame({
@@ -44,7 +44,6 @@ def test_process_csvfile_w3():
     }).set_index('month')
     # create actual results:
     actual_df_eu = process_csvfile_w3(filename, germany=False)
-    print(expected_df_eu.head())
     actual_df_de = process_csvfile_w3(filename, germany=True)
     # check
     assert_frame_equal(expected_df_eu,actual_df_eu.iloc[:3], rtol=1e-3)
