@@ -1,0 +1,29 @@
+INFO:__main__:Started processing data with configuration: {'germany': False, 'thr_correlation': 0.85, 'thr_p-value': 0.0}
+DEBUG:__main__:Reading first preprocessed csv
+DEBUG:__main__:Filtered dataset
+:             date    month continent location  new_deaths  new_cases  new_vaccinations
+3568  2021-01-13  2021-01    Europe  Albania         0.0        0.0              60.0
+3569  2021-01-14  2021-01    Europe  Albania         0.0        0.0              78.0
+3570  2021-01-15  2021-01    Europe  Albania         0.0        0.0              42.0
+3571  2021-01-16  2021-01    Europe  Albania         0.0        0.0              61.0
+3572  2021-01-17  2021-01    Europe  Albania        35.0     4257.0              36.0
+DEBUG:__main__:Collapsed by month dataset:                                                       date  ... new_vaccinations
+month                                                       ...                 
+2020-12  2020-12-292020-12-302020-12-312020-12-302020-1...  ...         314069.0
+2021-01  2021-01-132021-01-142021-01-152021-01-162021-0...  ...       18163220.0
+2021-02  2021-02-182021-02-192021-02-012021-02-022021-0...  ...       28072652.0
+2021-03  2021-03-232021-03-242021-03-252021-03-262021-0...  ...       52450911.0
+2021-04  2021-04-012021-04-022021-04-032021-04-042021-0...  ...       82818990.0
+
+[5 rows x 6 columns]
+DEBUG:__main__:Final processed dataset:                                                       date  ... deaths_vs_cases
+month                                                       ...                
+2020-12  2020-12-292020-12-302020-12-312020-12-302020-1...  ...        0.014071
+2021-01  2021-01-132021-01-142021-01-152021-01-162021-0...  ...        0.032676
+2021-02  2021-02-182021-02-192021-02-012021-02-022021-0...  ...        0.028579
+2021-03  2021-03-232021-03-242021-03-252021-03-262021-0...  ...        0.017442
+2021-04  2021-04-012021-04-022021-04-032021-04-042021-0...  ...        0.021167
+
+[5 rows x 7 columns] 
+INFO:__main__:Saving processed csv
+INFO:__main__:End
