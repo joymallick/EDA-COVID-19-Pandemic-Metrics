@@ -49,12 +49,12 @@ def process_csvfile_w3(filename, germany=False):
         sub_df = sub_df[sub_df.location == 'Germany']
         LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
         sub_df.drop(columns=['continent','location','date'], inplace=True)
-        collapsed_sub_df = sub_df.groupby('month').agg(sum)
+        collapsed_sub_df = sub_df.groupby('month').agg('sum')
         LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
     else:
         LOGGER.debug(f'Filtered dataset\n: {sub_df.head()}')
         sub_df.drop(columns=['continent','location','date'], inplace=True)
-        collapsed_sub_df = sub_df.groupby(['month']).agg(sum)
+        collapsed_sub_df = sub_df.groupby(['month']).agg('sum')
         LOGGER.debug(f'Collapsed by month dataset: {collapsed_sub_df.head()}')
     # create new outcome
     collapsed_sub_df['deaths_vs_cases'] = collapsed_sub_df['new_deaths']/collapsed_sub_df['new_cases']
