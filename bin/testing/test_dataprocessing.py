@@ -20,7 +20,9 @@ def test_regression():
     filename = "../../data/owid-covid-data.csv"
     filename_expected = "../../data/owid-covid-data_processed.csv"
     # expected data frame
-    expected_df = pd.read_csv(filename_expected, engine='python')
+    expected_df = pd.read_csv(filename_expected, engine='python',
+                              parse_dates=['month', 'date'])
+    expected_df['month'] =  expected_df['month'].dt.to_period('M')
     # actual df
     actual_df = process_csvfile(filename)
     # check
