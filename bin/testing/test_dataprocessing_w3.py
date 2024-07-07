@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 The script contains a unit test for  the component bin/dataprocessing_w3.py
-and an integration test for the components bin/dataprocessing.py and bin/dataprocessing_w3.py.
+and an integration test for the components bin/dataprocessing.py, filter columns
+and bin/dataprocessing_w3.py.
 """
 import pandas as pd
 import numpy as np
 from pandas.testing import assert_frame_equal
 import  sys
 import os
+import subprocess
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 from dataprocessing_w3 import process_csvfile_w3
@@ -61,7 +63,7 @@ def test_integration():
     of workflow 3"""
     # data paths:
     filename = "../../data/owid-covid-data.csv"
-    filename_processed = "../../data/owid-covid-data_processed.csv"
+    filename_processed = "./owid-covid-data_processed_test.csv"
     # create fixtures (hand calculations):
     expected_df_eu = pd.DataFrame({
         'month': ['2020-12', '2021-01', '2021-02'],
@@ -88,7 +90,7 @@ def test_integration():
     # create actual results:
     # first processing
     actual_df_first = process_csvfile(filename)
-    # filter columns
+     # filter columns
     actual_df_first = actual_df_first[COLUMNS]
     actual_df_first.to_csv(filename_processed, index=False)
     # processing for w3
