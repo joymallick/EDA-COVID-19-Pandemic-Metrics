@@ -46,11 +46,11 @@ def main(csvfile: str, outfile: str, normalize=False):
         message = "Provide a csv file"
         logger.exception(message)
         raise OSError(message)
-    logger.info('Started processing data for RQ 1')
+    logger.info('Started processing data for W2')
     df_processed_rq1 = process_csvfile_rq1(csvfile, normalize)
     logger.info('Saving processed csv')
-    df_processed_rq1.to_csv(csvfile[:-4]+"_rq1.csv", index=True)
-    logger.info('Ended processing for RQ 1')
+    df_processed_rq1.to_csv(csvfile[:-4]+"_w2.csv", index=True)
+    logger.info('Ended processing for W2')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
