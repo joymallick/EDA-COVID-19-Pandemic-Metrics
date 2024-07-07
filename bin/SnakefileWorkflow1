@@ -1,0 +1,48 @@
+# Define the variable from the configuration file
+var = config["variable"]
+
+# Rule to specify the expected output files for the chosen variable
+rule all:
+    input:
+        '../data/owid-covid-data_processed.csv',
+        f'../data/owid-covid-data_processed_{var}.csv',
+        f'../results/mannwhitneyu_{var}.txt',
+        f'../results/plot_{var}.png',
+
+rule clean:
+    shell: 'rm -f ../results/*.png ../results/*.txt'
+
+rule dataprocessing:
+    input:
+        cmd='dataprocessing.py',
+        csv='../data/owid-covid-data.csv'
+    output: '../data/owid-covid-data_processed.csv'
+    shell: 'python {input.cmd} -i {input.csv} -o {output}'
+
+rule dataprocessingw1:
+    input:
+        cmd='dataprocessing_w1.py',
+        csv='../data/owid-covid-data_processed.csv'
+    output: f'../data/owid-covid-data_processed_{var}.csv'
+    shell: 'python {input.cmd} -i {input.csv} -c "{var}" -o {output}'
+
+rule mannwhitneyu:
+    input:
+        cmd='mann_whitney_u.py',
+        csv=f'../data/owid-covid-data_processed_{var}.csv'
+    output: f'../results/mannwhitneyu_{var}.txt'
+    shell: 'python {input.cmd} {input.csv} -c "{var}_cat" -o {output}'
+
+rule plot:
+    input:
+        mannwhitneyu_test = f'../results/mannwhitneyu_{var}.txt',
+        csv=f'../data/owid-covid-data_processed_{var}.csv'
+    output:
+        plot = f'../results/plot_{var}.png'
+    run:
+        with open(input.mannwhitneyu_test, 'r') as f:
+            result = f.read().strip()
+        if result == 'True':
+            shell('python box_plot_w1.py {input.csv} -c "{var}_cat" -o {output.plot}')
+        else:
+            shell('python line_plot_w1.py {input.csv} -c "{var}_cat" -o {output.plot}')

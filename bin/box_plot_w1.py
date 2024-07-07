@@ -4,7 +4,7 @@ import logging
 import argparse
 
 
-def draw_boxplot(csv_file_path, x_variable, y_variable):
+def draw_boxplot(csv_file_path, x_variable, y_variable, output):
     """
     Draws a box plot from the data in a CSV file.
 
@@ -25,8 +25,9 @@ def draw_boxplot(csv_file_path, x_variable, y_variable):
 
     # Create the box plot
     logging.debug("Creating box plot")
-    plt.figure(figsize=(10, 6))
-    df.boxplot(column=x_variable, by=y_variable)
+    #plt.figure(figsize=(10, 6))
+    df.boxplot(column=y_variable, by=x_variable)
+
 
     # Add labels and title
     logging.debug("Adding labels and title")
@@ -34,22 +35,26 @@ def draw_boxplot(csv_file_path, x_variable, y_variable):
     plt.ylabel(y_variable)
     plt.title('Box Plot')
 
+    #Saving the plot
+    logging.debug("Saving the plot")
+    plt.savefig("../results/" + output)
+
     # Display the plot
     logging.debug("Showing box plot")
     plt.show()
 
-def main(csvfile: str, x, y)->pd.DataFrame:
-    logging.basicConfig(filename='box_plot_wf1.log')
+def main(csvfile: str, x, y, output)->pd.DataFrame:
+    logging.basicConfig(filename='logs/box_plot_wf1.log')
     logging.info('Drawing box plot')
-    draw_boxplot(csvfile, x_variable=x, y_variable=y)
+    draw_boxplot(csvfile, x_variable=x, y_variable=y, output=output)
     logging.info('Box plot finished')
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='The file draws the box plot for Workflow 1')
+    parser = argparse.ArgumentParser(description='The file draws the box plot for Workflow 1')
     parser.add_argument('csvfile', type=str, help='Path to the final processed csv file')
-    parser.add_argument('-x', type=str, help='The x variable for the box plot')
-    parser.add_argument('-y', type=str, help='The y variable for the box plot')
+    parser.add_argument('-c', '--categorical', type=str, help='The categorical variable for the box plot')
+    parser.add_argument('-y', '--y_variable', default='new_cases', type=str, help='The y variable for the box plot')
+    parser.add_argument('-o', '--output', type=str, help='The name of the output file')
     args = parser.parse_args()
-    main(args.csvfile, args.x, args.y)
+    main(args.csvfile, args.categorical, args.y_variable, args.output)
