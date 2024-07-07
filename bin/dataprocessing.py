@@ -8,9 +8,10 @@ import argparse
 import datetime
 import logging
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+# set logging
+logging.basicConfig(filename='./logs/dataprocessing.log', filemode='w')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 
 
 def convert_to_datetime(date, format='%Y-%m-%d'):
@@ -45,31 +46,33 @@ def process_csvfile(filename):
     Args:
        filename (str): the path to the file
 
+    Raises:
+        OSError: error when file is  not a csv
+
     Returns:
        pd.DataFrame'''
 
     if (filename is None or filename[-3:] != 'csv'):
         message = 'Provide a csv file'
-        logger.exception(message)
+        LOGGER.exception(message)
         raise OSError(message)
-    df = pd.read_csv(filename)
-    logger.debug('converting date to datetime')
+    df = pd.read_csv(filename, engine='python')
+    LOGGER.debug('converting date to datetime')
     df.date = df.date.apply(convert_to_datetime)
     # create uniquely identified month, year and semester columns
-    logger.debug('adding new time columns')
     df['year'] = df.date.apply(get_years)
     df['month'] = df.date.dt.to_period('M')
     df['semester'] = df.date.apply(get_semester)
+    LOGGER.debug(f'final processed dataset: {df.head()}')
     return df
 
 
 def main(csvfile: str, outfile: str):
-    logging.basicConfig(filename='logs/dataprocessing.log', filemode='w')
-    logger.info('Started processing')
+    LOGGER.info('Started processing')
     df_processed = process_csvfile(csvfile)
-    logger.info('Saving processed csv')
+    LOGGER.info('Saving processed csv')
     df_processed.to_csv(outfile, index=False)
-    logger.info('End')
+    LOGGER.info('End')
 
 
 if __name__ == '__main__':
