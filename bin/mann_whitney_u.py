@@ -26,7 +26,8 @@ def mann_whitney_u_test(file_path, x_variable, y_variable, output):
     logging.debug("Extracting values from DataFrame")
     group1 = df[df[x_variable] == 1][y_variable]
     group0 = df[df[x_variable] == 0][y_variable]
-
+    print("X:" + x_variable)
+    print(y_variable)
     u_statistic, p_value = mannwhitneyu(group1, group0)
     logging.debug(f"U-statistic: {u_statistic:.2f}")
     logging.debug(f"p-value: {p_value:.4f}")
@@ -45,7 +46,7 @@ def mann_whitney_u_test(file_path, x_variable, y_variable, output):
 
 
 def main(csvfile: str, x_col: str, y_col: str, output: str):
-    logging.basicConfig(filename='mann_whitney_u_test.log')
+    logging.basicConfig(filename='logs/mann_whitney_u_test.log')
     logging.info('Performing Mann-Whitney U test')
     result = mann_whitney_u_test(csvfile, x_col, y_col, output)
     logging.info(f'Mann-Whitney U test result: {result}')

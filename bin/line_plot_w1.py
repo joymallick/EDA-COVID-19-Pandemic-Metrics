@@ -1,9 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 import logging
 import argparse
-
+from matplotlib.ticker import MaxNLocator
 
 def draw_lineplot(csv_file_path, x_variable, y_variable, output):
     """
@@ -24,13 +23,13 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
     x = df[x_variable]
     y = df["month"]
 
-    grouped_data = df.groupby(['month', 'life_expectancy_cat'])['new_cases'].sum().unstack()
+    grouped_data = df.groupby(['month', x_variable])['new_cases'].sum().unstack()
 
     # Create the line plot
     logging.debug("Creating line plot")
     plt.figure(figsize=(10, 6))
-    plt.plot(grouped_data.index, grouped_data[1], label='Life expectancy above median')
-    plt.plot(grouped_data.index, grouped_data[0], label='Life expectancy below median')
+    plt.plot(grouped_data.index, grouped_data[1], label= x_variable + ' above median')
+    plt.plot(grouped_data.index, grouped_data[0], label= x_variable + ' below median')
 
     # Add labels and title
     logging.debug("Adding labels and title")
@@ -38,12 +37,12 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
     plt.ylabel(y_variable)
     plt.legend()
     plt.grid(True)
-    plt.title('Temporal Trend of New COVID-19 Cases by Life Expectancy Groups')
+    plt.title('Temporal Trend of New COVID-19 Cases by ' + x_variable + ' Groups')
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
 
     #Saving the plot
     logging.debug("Saving the plot")
-    plt.savefig("results/" + output + ".png")
+    plt.savefig("../results/" + output)
 
     # Display the plot
     logging.debug("Showing Line Plot")
@@ -51,7 +50,7 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
 
 
 def main(csvfile: str, categorical, y_variable, output)-> pd.DataFrame:
-    logging.basicConfig(filename='line_plot_wf1.log')
+    logging.basicConfig(filename='logs/line_plot_wf1.log')
     logging.info('Drawing line plot')
     draw_lineplot(csvfile, x_variable=categorical, y_variable=y_variable, output= output)
     logging.info('Line plot finished')
