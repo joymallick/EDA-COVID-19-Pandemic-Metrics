@@ -1,28 +1,39 @@
-# Cornavirus (COVID-19) Cases EDA
+# Exploratory Data Analysis of COVID-19 Pandemic Metrics
 
 ## Project Description
 
-The project aims at implementing an exploratory data analysis (EDA) workflow based on the dataset [Coronavirus (COVID-19) Cases](https://ourworldindata.org/covid-cases). <br>
-The analysis focuses on the following five research questions:
+### Project Objective:
+The primary objective of this project is to conduct an in-depth exploratory data analysis of the COVID-19 pandemic metrics using the data available from the Our World in Data website. The goal is to uncover insights and relationships that can help better understand the progression and impact of the pandemic across different countries.
 
-1. In which continent were the highest number of cases and deaths recorded?
-2. Has the implementation of hand washing facilities helped to reduce the number of total cases?
-3. Restricting to Germany, how is the number of deaths related to number of people vaccinated?
-4. Are the total number of deaths and life expectancy correlated?
-5. How does the population density affect the total number of cases (country level)?
+### Data Source:
+The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic.
+
+### Workflow 1: Exploring Correlations Between Categorical Variables and COVID-19 Metrics
+
+This workflow involves using the Mann-Whitney U test to identify correlations between categorical variables and COVID-19 metrics like cases or deaths.
+
+1. Process the data to create a dataset with relevant categorical variables (e.g., country income level, population density, etc.) and COVID-19 metrics.
+2. Apply the Mann-Whitney U test to each categorical variable, comparing the COVID-19 metric values between the different categories.
+3. For categorical variables with p-values below 0.05, create box plots to visualize the difference in the COVID-19 metric between the categories.
+4. For categorical variables with p-values above 0.05, create line plots to show the trend in the COVID-19 metric over time, broken down by different categories.
+5. Analyze the results to identify any significant relationships between the categorical variables and the COVID-19 metrics.
 
 ## Component analysis
 
-| Abstract Workflow Node                                  | Input(s)     | Output(s)                 | Implementation     |
-| ------------------------------------------------------- | ------------ | ------------------------- | ------------------ |
-| Load data and filter columns                            | csv filename | filtered csv file         | CLI tool (csvkit)  |
-| Data processing                                         | csv file     | csv file as dataframe     | own implementation |
-| Outcomes utils                                          | csv file     | outcomes for each RQ      | own implementation |
-| Deaths trend by continent (RQ1)                         | csv file     | plot figure and .txt file | own implementation |
-| Hand washing facilities and tot cases correlation (RQ2) | csv file     | plot figure and .txt file | own implementation |
-| Deaths and vaccinations trend(RQ3)                      | csv file     | plot figure and .txt file | own implementation |
-| Deaths and life expectancy correlation(RQ4)             | csv file     | plot figure and .txt file | own implementation |
-| Population density and tot cases correlation(RQ5)       | csv file     | plot figure and .txt file | own implementation |
+| Abstract Workflow Node                  | Input(s)     | Output(s)                 | Implementation     |
+|-----------------------------------------|--------------|---------------------------|--------------------|
+| Load data and filter columns            | csv filename | filtered csv file         | CLI tool (csvkit)  |
+| General data processing                 | csv file     | csv file as dataframe     | own implementation |
+| Specific data processing for workflow 1 | csv file     | csv file as dataframe     | own implementation |
+| Specific data processing for Workflow 2 | csv file     | csv file as dataframe     | own implementation |
+| Specific data processing for Workflow 3 | csv file     | csv file as dataframe     | own implementation |
+| Outcomes utils                          | csv file     | outcomes for each RQ      | own implementation |
+| Correlation test                        | csv file     | plot figure and .txt file | own implementation |
+| Mann-Whitney U test                     | csv file     | .txt file                 | own implementation |
+| Regression plot                         | csv file     | plot figure and .txt file | own implementation |
+| Workflow 2 plot                         | csv file     | plot figure and .txt file | own implementation |
+| Box plot                                | csv file     | plot figure and .txt file | own implementation |
+| Line plot                               | csv file     | plot figure and .txt file | own implementation |
 
 ## Usage
 
