@@ -17,6 +17,8 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # load configuration for workflow 3:
 CONFIG = load_config("configuration_w3.yaml")
+COLUMNS_W3 = ['date', 'month' ,'continent' ,'location',
+           'new_deaths' ,'new_cases', 'new_vaccinations']
 
 
 def process_csvfile_w3(filename, germany=False):
@@ -41,7 +43,7 @@ def process_csvfile_w3(filename, germany=False):
         raise ValueError(message)
     # start processing
     LOGGER.debug('Reading first preprocessed csv')
-    df = pd.read_csv(filename, engine='python')
+    df = pd.read_csv(filename, engine='python', usecols=COLUMNS_W3)
     df.dropna(inplace=True)
     sub_df = df[df.continent == 'Europe']
     # check wehther restrict to Germany or not
