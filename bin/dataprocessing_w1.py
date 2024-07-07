@@ -73,7 +73,7 @@ def process_csvfile_w1(filename: str, cat_column: str) -> pd.DataFrame:
 def main(csvfile: str, outfile: str, cat_column: str):
     if not csvfile.endswith('.csv'):
         raise OSError("Provide a CSV file")
-    logging.basicConfig(filename='data/logs/dataprocessing_w1.log', filemode='w')
+    logging.basicConfig(filename='logs/dataprocessing_w1.log', filemode='w')
     logger.info('Started processing')
     df_processed = process_csvfile_w1(csvfile, cat_column)
     logger.info('Saving processed CSV')

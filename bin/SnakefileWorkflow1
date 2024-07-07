@@ -1,6 +1,9 @@
 rule all:
     input:'../data/owid-covid-data_processed.csv',
         '../data/owid-covid-data_processed_w1.csv',
+        '../results/mannwhitneyu.txt',
+        '../results/plot_w1.png',
+
 
 
 rule clean:
@@ -12,14 +15,15 @@ rule dataprocessing:
         cmd='dataprocessing.py',
         csv='../data/owid-covid-data.csv'
     output: '../data/owid-covid-data_processed.csv'
-    shell: 'python {input.cmd} {input.csv} {output}'
+    shell: 'python {input.cmd} -i {input.csv} -o {output}'
+
 
 rule dataprocessingw1:
     input:
         cmd='dataprocessing_w1.py',
         csv='../data/owid-covid-data_processed.csv'
     output: '../data/owid-covid-data_processed_w1.csv'
-    shell: 'python {input.cmd} {input.csv} {output}'
+    shell: 'python {input.cmd} -i {input.csv} -c "life_expectancy" -o {output}'
 
 
 rule mannwhitneyu:
@@ -27,34 +31,19 @@ rule mannwhitneyu:
         cmd='mann_whitney_u.py',
         csv='../data/owid-covid-data_processed_w1.csv'
     output: '../results/mannwhitneyu.txt'
-    shell: 'python {input.cmd} {input.csv} {output}'
-
-
-rule lineplotw1:
-    input:
-        cmd='line_plot.py',
-        csv='../data/owid-covid-data_processed_w1.csv'
-    output: '../results/lineplot1.png', '../results/lineplot2.png', '../results/lineplot3.png'
-    shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'
-
-rule boxplotw1:
-    input:
-        cmd='box_plot.py',
-        csv='../data/owid-covid-data_processed_w1.csv'
-    output: '../results/boxplot1.png', '../results/boxplot2.png', '../results/boxplot3.png'
-    shell: 'python {input.cmd} {input.csv} {output[0]} {output[1]} {output[2]}'
+    shell: 'python {input.cmd} {input.csv} -c "life_expectancy_cat" -o {output}'
 
 rule plot:
     input:
-        mannwhitneyu_test = '../results/mannwhitneyu.txt'
+        mannwhitneyu_test = '../results/mannwhitneyu.txt',
+        csv='../data/owid-covid-data_processed_w1.csv'
     output:
-        boxplot = '../results/boxplot.png',
-        lineplot = '../results/lineplot.png'
+        plot = '../results/plot_w1.png',
     run:
-        with open(input.mannwhitney_test, 'r') as f:
+        with open(input.mannwhitneyu_test, 'r') as f:
             result = f.read().strip()
         if result == 'True':
-            shell('python box_plot.py ../data/owid-covid-data_processed_w1.csv {output.boxplot}')
+            shell('python box_plot_w1.py {input.csv} -c "life_expectancy_cat" -o {output.plot}')
         else:
-            shell('python line_plot.py ../data/owid-covid-data_processed_w1.csv {output.lineplot}')
+            shell('python line_plot_w1.py {input.csv} -c "life_expectancy_cat" -o {output.plot}')
 

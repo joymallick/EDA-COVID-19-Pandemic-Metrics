@@ -33,11 +33,11 @@ def mann_whitney_u_test(file_path, x_variable, y_variable, output):
 
     if p_value < 0.05:
         # Open a file in write mode
-        with open("results/" + output + ".txt", "w") as file:
+        with open("../results/" + output, "w") as file:
             # Write the entry "True" to the file
             file.write("True")
     else:
-        with open("results/" + output + ".txt", "w") as file:
+        with open("../results/" + output, "w") as file:
             # Write the entry "True" to the file
             file.write("False")
 
