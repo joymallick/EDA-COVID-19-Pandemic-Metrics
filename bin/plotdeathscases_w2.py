@@ -60,7 +60,7 @@ def main(csvfile: str, outcome:str, outfile: str):
         message = "Provide a png file"
         logger.exception(message)
         raise OSError(message)
-    logging.basicConfig(filename=f'barplot_{outcome}_rq1.log')
+    logging.basicConfig(filename=f'barplot_{outcome}_w2.log')
     logger.info("Started producing bar plot")
     data_rq1 = pd.read_csv(csvfile)
     barplot_outcome = bar_plot(data_rq1, "continent", f"{outcome}",
@@ -72,12 +72,12 @@ def main(csvfile: str, outcome:str, outfile: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='The file plots either tot cases or tot deaths for each continent up to 2023 (RQ 1)')
+        description='The file plots either tot cases or tot deaths for each continent up to 2023 (W2)')
     outcomes = ['total_cases', 'total_deaths']
-    parser.add_argument('processedcsvfile_rq1', type=str, help='first processed csvfile name')
+    parser.add_argument('processedcsvfile_w2', type=str, help='first processed csvfile name')
     parser.add_argument('outcome', type=str, choices=outcomes, help='outcome to plot')
     parser.add_argument('outfile', type=str, help='output png file')
     args = parser.parse_args()
-    main(args.processedcsvfile_rq1, args.outcome, args.outfile)
+    main(args.processedcsvfile_w2, args.outcome, args.outfile)
 
 

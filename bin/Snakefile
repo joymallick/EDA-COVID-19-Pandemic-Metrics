@@ -1,0 +1,37 @@
+BARPLOT_NAMES = ['total_cases','total_deaths']
+ALL_OUTPUTS_BAR = expand('../results/barplot_{barplot_names}.png', barplot_names=BARPLOT_NAMES)
+
+
+rule all:
+    input:'../data/owid-covid-data_processed.csv',
+        '../data/owid-covid-data_processed_rq1.csv',
+        ALL_OUTPUTS_BAR
+
+
+rule clean:
+#windows
+    #shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv'
+# linux:
+    shell: 'rm  ..\results\{*.png,*.txt} .\logs\*.log  ..\data\{*_processed*.csv,*.tmp}'
+
+rule dataprocessing:
+    input:
+        cmd='dataprocessing.py',
+        csv='../data/owid-covid-data.csv'
+    output: '../data/owid-covid-data_processed.csv'
+    shell: 'python {input.cmd} {input.csv} {output}'
+
+rule dataprocessing_w2:
+    input:
+        cmd='dataprocessing_w2.py',
+        csv='../data/owid-covid-data_processed.csv'
+    output: '../data/owid-covid-data_processed_w2.csv'
+    shell: 'python {input.cmd} {input.csv} {output}'
+
+
+rule plotdeathscases_w2:
+    input:
+        cmd='plotdeathscases_w2.py',
+        csv='../data/owid-covid-data_processed_w2.csv'
+    output: ALL_OUTPUTS_BAR
+    shell: 'python {input.cmd} {input.csv} {output}'
