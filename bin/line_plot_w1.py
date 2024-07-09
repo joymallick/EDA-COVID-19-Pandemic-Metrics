@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import logging
 import argparse
 from matplotlib.ticker import MaxNLocator
+from utils import set_plot_params
+
+# set plot params
+set_plot_params("configuration_plots.yaml")
 
 def draw_lineplot(csv_file_path, x_variable, y_variable, output):
     """

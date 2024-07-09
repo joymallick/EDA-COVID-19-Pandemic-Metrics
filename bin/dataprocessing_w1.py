@@ -14,9 +14,6 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 COLUMNS = ['month', 'year', 'continent', 'location', 'total_cases', 'total_deaths', 'median_age', 'gdp_per_capita', 'life_expectancy', 'population_density']
-CONTINENT = 'Europe'
-YEAR = 2021
-
 
 def create_categorical_variable(df, column):
     """The function creates a binary categorical variable
@@ -34,7 +31,7 @@ def create_categorical_variable(df, column):
     df[f'{column}_cat'] = (df[column] > threshold).astype(int)
     return df
 
-def process_csvfile_w1(filename: str, cat_column: str) -> pd.DataFrame:
+def process_csvfile_w1(filename: str, cat_column: str, year: int, continent: str) -> pd.DataFrame:
     """The function performs specific preprocessing steps  for workflow 1.
 
     Args:
@@ -55,7 +52,7 @@ def process_csvfile_w1(filename: str, cat_column: str) -> pd.DataFrame:
     df.dropna(inplace=True)
     
     # Filter by continent and year
-    df = df[(df.continent == CONTINENT) & (df.year == YEAR)]
+    df = df[(df.continent == continent) & (df.year == year)]
     df = df.drop(columns=['continent', 'year'])
     logger.debug(f'df filtered by continent and year: {df.head()}')
     # Collapse by month
@@ -70,12 +67,12 @@ def process_csvfile_w1(filename: str, cat_column: str) -> pd.DataFrame:
     return df_collapsed
 
 
-def main(csvfile: str, outfile: str, cat_column: str):
+def main(csvfile: str, outfile: str, cat_column: str, year: int, continent: str):
     if not csvfile.endswith('.csv'):
         raise OSError("Provide a CSV file")
     logging.basicConfig(filename='logs/dataprocessing_w1.log', filemode='w')
     logger.info('Started processing')
-    df_processed = process_csvfile_w1(csvfile, cat_column)
+    df_processed = process_csvfile_w1(csvfile, cat_column, year, continent)
     logger.info('Saving processed CSV')
     df_processed.to_csv(outfile, index=True)
     logger.info('End')
@@ -89,6 +86,7 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--processedcsvfile', type=str, help='first processed csv file name')
     parser.add_argument('-o', '--outfile', type=str, help ='csv outfilename')
     parser.add_argument('-c', '--cat_column', type=str, choices= cat_columns, help='variable that will be turned into a categorical variable')
-    
+    parser.add_argument('-y', '--year', type=int, help='the year for which the test will be done. Starting from 2020.')
+    parser.add_argument('--continent', type=str, help='the continent to which the test will be restricted.')
     args = parser.parse_args()
-    main(args.processedcsvfile, args.outfile, args.cat_column)
+    main(args.processedcsvfile, args.outfile, args.cat_column, args.year, args.continent)

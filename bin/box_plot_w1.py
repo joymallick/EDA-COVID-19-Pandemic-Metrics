@@ -2,7 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import logging
 import argparse
+from utils import set_plot_params
 
+
+# set plot params
+set_plot_params("configuration_plots.yaml")
 
 def draw_boxplot(csv_file_path, x_variable, y_variable, output):
     """
