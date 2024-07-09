@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-The script performs a general preprocessing of the input dataset (csv format).
+The script performs a general processing of the input dataset (covid-19 dataset).
 In partiular, new time columns are created.
 '''
 

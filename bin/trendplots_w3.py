@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
-The script produces trend plots using matplotlib.
-Overall 3 plots are produced with the following comparison:
+This component is tailored for covid-19 dataset.
+The script produces 3 trend plots with the following comparison:
 1) new deaths vs new cases
 2) new deaths vs new vaccinations
 3) new deaths/new cases vs new vaccinations.
@@ -10,7 +10,7 @@ The xvariable can be either month or semseter.
 import logging
 import matplotlib.pyplot as plt
 import pandas as pd
-from utils import set_plot_params, load_config
+from utils import set_plot_params
 import argparse
 
 
@@ -18,8 +18,6 @@ import argparse
 logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
-# load configuration for workflow 3:
-CONFIG = load_config("configuration_w3.yaml")
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
@@ -132,7 +130,7 @@ def main(processedcsvfile_w3: str, out1pngfile: str, out2pngfile: str,
     titles = ['New deaths and cases', 'New deaths and vaccinations',
               'Ratio between new deaths and cases and new vaccinations']
     y1y2s = [['new_deaths', 'new_cases'], ['new_deaths', 'new_vaccinations'],
-             ['deaths_vs_cases', 'new_vaccinations']]
+             ['deaths_over_cases', 'new_vaccinations']]
     LOGGER.info('Started producing trend plots')
     create_plots(df_w3, outfiles, titles, y1y2s, xvar, xticks)
     LOGGER.info('End')
