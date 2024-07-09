@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 '''
-The script produces trend plots over time (months) for RQ 3 using matplotlib.
+The script produces trend plots using matplotlib.
 Overall 3 plots are produced with the following comparison:
 1) new deaths vs new cases
 2) new deaths vs new vaccinations
 3) new deaths/new cases vs new vaccinations.
+The xvariable can be either month or semseter.
 '''
 import logging
 import matplotlib.pyplot as plt
@@ -77,7 +78,7 @@ def plot_trends(y1, y2, x, y1label, y2label, xlabel, xticks, title):
 
 def create_plots(df, outfiles, titles, y1y2s, xvar, xticks):
     """The function creates trend plots using the above
-    functions and provided titles, xticks as well as variables, 
+    functions and provided titles, xticks as well as variables,
     which are columns of df.
     The plots are saved in outfiles.
 
@@ -88,7 +89,7 @@ def create_plots(df, outfiles, titles, y1y2s, xvar, xticks):
         y1y2s (list): couples of y1, y2 vars
         xvar (str): x variable
         xticks (list): ticks for x axis
-    
+
     Raises:
         OSError: when outfiles are not png files
 
@@ -101,8 +102,8 @@ def create_plots(df, outfiles, titles, y1y2s, xvar, xticks):
         raise OSError(message)
     for y1y2, title, outfile in zip(y1y2s, titles, outfiles):
         fig = plot_trends(df[y1y2[0]], df[y1y2[1]], df[xvar],
-                       y1y2[0], y1y2[1],
-                     xvar, xticks, title)
+                          y1y2[0], y1y2[1], xvar, xticks,
+                          title)
         fig.savefig(outfile, bbox_inches='tight')
 
 
@@ -119,18 +120,17 @@ def main(processedcsvfile_w3: str, out1pngfile: str, out2pngfile: str,
         LOGGER.exception(message)
         raise ValueError(message)
     # create elements for the plots
-    if (xvar =='semester'):
+    if (xvar == 'semester'):
         ticks_delta = 2
     else:
         ticks_delta = 6
     xticks = {i: str(df_w3[xvar].iloc[i])
               for i in range(1, len(df_w3[xvar]), ticks_delta)}
     outfiles = [out1pngfile, out2pngfile, out3pngfile]
-    titles = [ f'New deaths and cases',
-              f'New deaths and vaccinations',
-              f'Ratio between new deaths and cases and new vaccinations']
+    titles = ['New deaths and cases', 'New deaths and vaccinations',
+              'Ratio between new deaths and cases and new vaccinations']
     y1y2s = [['new_deaths', 'new_cases'], ['new_deaths', 'new_vaccinations'],
-           ['deaths_vs_cases', 'new_vaccinations']]
+             ['deaths_vs_cases', 'new_vaccinations']]
     LOGGER.info('Started producing trend plots')
     create_plots(df_w3, outfiles, titles, y1y2s, xvar, xticks)
     LOGGER.info('End')
@@ -148,8 +148,8 @@ if __name__ == '__main__':
                         type=str, help='output png file to save second plot')
     parser.add_argument('out3pngfile',
                         type=str, help='output png file to save third plot')
-    parser.add_argument('xvar',
-                        type=str,  choices=choices_xvar, help='x variable of the plot')
+    parser.add_argument('xvar', type=str,
+                        choices=choices_xvar, help='x variable of the plot')
     args = parser.parse_args()
     main(args.processedcsvfile_w3,
          args.out1pngfile, args.out2pngfile, args.out3pngfile, args.xvar)

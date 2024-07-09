@@ -78,7 +78,7 @@ def main(csvfile: str, outfile: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='The file applies initial processing steps to the csv file')
+        description='Initial processing steps to the input csv file')
     parser.add_argument('-i', '--csvfile',
                         required=True, type=str, help='csv file name')
     parser.add_argument('-o', '--outfile',

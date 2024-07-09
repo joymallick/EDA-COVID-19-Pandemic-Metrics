@@ -52,8 +52,8 @@ def main(processedcsvfile_w3: str, outpngfile: str):
     df_w3 = pd.read_csv(processedcsvfile_w3)
     LOGGER.info('Started producing reg plot')
     fig = reg_plot(x='new_vaccinations', y='deaths_vs_cases', data=df_w3,
-                  xlabel='new vaccinations', ylabel='deaths/cases',
-                  title=f'OLS for new vaccinations and deaths over cases')
+                   xlabel='new vaccinations', ylabel='deaths/cases',
+                   title=f'OLS for new vaccinations and deaths over cases')
     LOGGER.info('Saving plot')
     fig.savefig(outpngfile)
     LOGGER.info('End')
@@ -61,10 +61,11 @@ def main(processedcsvfile_w3: str, outpngfile: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='The file produces a regression plot for Workflow 3 (RQ 3)')
+        description='The file produces a regression plot \
+            for Workflow 3 (RQ 3)')
     parser.add_argument('-i', '--processedcsvfile_w3', required=True,
                         type=str, help='processed csvfile')
-    parser.add_argument('-o','--outpngfile', required=True,
+    parser.add_argument('-o', '--outpngfile', required=True,
                         type=str, help='output png file to save the plot')
     args = parser.parse_args()
     main(args.processedcsvfile_w3, args.outpngfile)
