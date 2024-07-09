@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''
 The script performs a general preprocessing of the input dataset (csv format).
+In partiular, new time columns are created.
 '''
 
 import pandas as pd
