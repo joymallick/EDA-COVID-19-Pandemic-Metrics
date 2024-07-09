@@ -1,5 +1,8 @@
 # Define the variable from the configuration file
-var = config["variable"]
+var = config["categorical"]
+continent = config["continent"]
+year = config["year"]
+
 
 # Rule to specify the expected output files for the chosen variable
 rule all:
@@ -24,7 +27,7 @@ rule dataprocessingw1:
         cmd='dataprocessing_w1.py',
         csv='../data/owid-covid-data_processed.csv'
     output: f'../data/owid-covid-data_processed_{var}.csv'
-    shell: 'python {input.cmd} -i {input.csv} -c "{var}" -o {output}'
+    shell: 'python {input.cmd} -i {input.csv} -c "{var}" -o {output} -y {year} --continent "{continent}"'
 
 rule mannwhitneyu:
     input:
