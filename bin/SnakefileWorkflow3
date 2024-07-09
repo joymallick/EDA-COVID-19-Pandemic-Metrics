@@ -1,9 +1,6 @@
-# get geolevel of the analysis
-GERMANY = config["germany"]
-TIME = config["time"]
-TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
 # gen outfile names:
-if (GERMANY):
+TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
+if (config['germany']):
     ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}_germany.png', trendplots_names=TRENDPLOTS_NAMES)
     OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_germany.png'
     ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
@@ -18,7 +15,7 @@ def corrtest_significance(file):
     The function reads file, that
     contains either 'True' (= significant correlation hp test results
     and regplot is produced) or 'False', and returns the corresponding boolean value.
-    Args:
+    params:
         file (str): .txt filename
     
     Returns:
@@ -64,9 +61,12 @@ rule dataprocessing_w3:
         cmd='dataprocessing_w3.py',
         csv='../data/owid-covid-data_processed.csv'
     output: '../data/owid-covid-data_processed_w3.csv'
+    params: 
+        time = config['time'],
+        germany = config['germany']
     shell: 
         '''
-        python {input.cmd} -i {input.csv} -o {output} --time {TIME} --germany {GERMANY}
+        python {input.cmd} -i {input.csv} -o {output} --time {params.time} --germany {params.germany}
         '''
 
 
@@ -75,9 +75,12 @@ rule corrtest:
         cmd='correlationtest_w3.py',
         csv= '../data/owid-covid-data_processed_w3.csv'
     output: ALL_OUTPUTS_CORRTEST
+    params: 
+        v1 = config['x'],
+        v2 = config['y']
     shell:
         '''
-        python {input.cmd} -i {input.csv} -o {output[0]} > {output[1]}
+        python {input.cmd} -i {input.csv} -o {output[0]} -v1 {params.v1} -v2 {params.v2} > {output[1]}
         '''
 
 
@@ -87,10 +90,13 @@ rule regplot:
         csv= '../data/owid-covid-data_processed_w3.csv',
         correalationtest_res=ALL_OUTPUTS_CORRTEST[1] 
     output: OUTPUT_REGPLOT
+    params: 
+        x = config['x'],
+        y = config['y']
     run:
         if corrtest_significance(input.correalationtest_res):
             # proceed with plotting
-            shell("python {input.cmd} {input.csv} {output}")
+            shell("python {input.cmd} -i {input.csv} -o {output} -x {params.x} -y {params.y}")
         else:
             # create empty .png
             shell("echo . > {output}")
@@ -101,8 +107,10 @@ rule trendplots:
         cmd='trendplots_w3.py',
         csv='../data/owid-covid-data_processed_w3.csv'
     output: ALL_OUTPUTS_TRENDPLOTS
+    params: 
+        time = config['time']
     shell:
         '''
-        python {input.cmd} -i {input.csv} {output} {TIME}
+        python {input.cmd} -i {input.csv} {output} {params.time}
         '''
 
