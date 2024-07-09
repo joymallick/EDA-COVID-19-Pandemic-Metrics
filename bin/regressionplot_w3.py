@@ -6,13 +6,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import pandas as pd
-from utils import set_plot_params
+from utils import set_plot_params, load_config
 import argparse
 
 
 logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
+# load configuration for workflow 3:
+CONFIG = load_config("configuration_w3.yaml")
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
