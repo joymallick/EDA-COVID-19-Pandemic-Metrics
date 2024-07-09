@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 '''
-The script produces trend plots over time (months) for RQ 3 using matplotlib.
+The script produces trend plots using matplotlib.
 Overall 3 plots are produced with the following comparison:
 1) new deaths vs new cases
 2) new deaths vs new vaccinations
 3) new deaths/new cases vs new vaccinations.
+The xvariable can be either month or semseter.
 '''
 import logging
 import matplotlib.pyplot as plt
@@ -77,9 +78,9 @@ def plot_trends(y1, y2, x, y1label, y2label, xlabel, xticks, title):
     return fig
 
 
-def create_plots(df, outfiles, titles, xys, xticks, geolevel):
+def create_plots(df, outfiles, titles, y1y2s, xvar, xticks):
     """The function creates trend plots using the above
-    functions and provided titles, xticks as well as variables, 
+    functions and provided titles, xticks as well as variables,
     which are columns of df.
     The plots are saved in outfiles.
 
@@ -87,13 +88,13 @@ def create_plots(df, outfiles, titles, xys, xticks, geolevel):
         df (pd.DataFrame): dataframe containing vars
         outfiles (list): outfiles names
         titles (list): titles for the plots
-        xys (list): couples of x,y vars
+        y1y2s (list): couples of y1, y2 vars
+        xvar (str): x variable
         xticks (list): ticks for x axis
-        geolevel(str): either 'Europe' or 'Germany'
-    
+
     Raises:
         OSError: when outfiles are not png files
-    
+
     Returns:
         None.
     """
@@ -101,51 +102,56 @@ def create_plots(df, outfiles, titles, xys, xticks, geolevel):
         message = 'Provide a png file as outfile'
         LOGGER.exception(message)
         raise OSError(message)
-    for xy, title, outfile in zip(xys, titles, outfiles):
-        fig = plot_trends(df[xy[0]], df[xy[1]], df['month'],
-                       xy[0], xy[1],
-                       'month', xticks, title)
-        fig.savefig(outfile[:-4]+f'_{geolevel}.png', bbox_inches='tight')
+    for y1y2, title, outfile in zip(y1y2s, titles, outfiles):
+        fig = plot_trends(df[y1y2[0]], df[y1y2[1]], df[xvar],
+                          y1y2[0], y1y2[1], xvar, xticks,
+                          title)
+        fig.savefig(outfile, bbox_inches='tight')
 
 
 def main(processedcsvfile_w3: str, out1pngfile: str, out2pngfile: str,
-         out3pngfile: str):
+         out3pngfile: str, xvar: str):
     if (processedcsvfile_w3[-3:] != 'csv'):
         message = 'Provide a csv file as infile'
         LOGGER.exception(message)
         raise OSError(message)
     LOGGER.info('Reading data')
     df_w3 = pd.read_csv(processedcsvfile_w3)
-    # identify geographical level of the analysis
-    if (CONFIG['germany']):
-        geolevel = 'Germany'
-    else:
-        geolevel = 'Europe'
+    if (xvar not in df_w3.columns):
+        message = 'Invalid x variable'
+        LOGGER.exception(message)
+        raise ValueError(message)
     # create elements for the plots
-    xticks = {i: str(df_w3['month'].iloc[i])
-              for i in range(1, len(df_w3['month']), 6)}
+    if (xvar == 'semester'):
+        ticks_delta = 2
+    else:
+        ticks_delta = 6
+    xticks = {i: str(df_w3[xvar].iloc[i])
+              for i in range(1, len(df_w3[xvar]), ticks_delta)}
     outfiles = [out1pngfile, out2pngfile, out3pngfile]
-    titles = [ f'New deaths and cases in {geolevel} (by month)',
-              f'New deaths and vaccinations in {geolevel} (by month)',
-              f'Ratio between new deaths and cases and new vaccinations in {geolevel} (by month)']
-    xys = [['new_deaths', 'new_cases'], ['new_deaths', 'new_vaccinations'],
-           ['deaths_vs_cases', 'new_vaccinations']]
+    titles = ['New deaths and cases', 'New deaths and vaccinations',
+              'Ratio between new deaths and cases and new vaccinations']
+    y1y2s = [['new_deaths', 'new_cases'], ['new_deaths', 'new_vaccinations'],
+             ['deaths_vs_cases', 'new_vaccinations']]
     LOGGER.info('Started producing trend plots')
-    create_plots(df_w3, outfiles, titles, xys, xticks, geolevel)
+    create_plots(df_w3, outfiles, titles, y1y2s, xvar, xticks)
     LOGGER.info('End')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='The file produces trend plots for Workflow 3 (RQ 3)')
+    choices_xvar = ['month', 'semester']
     parser.add_argument('-i', '--processedcsvfile_w3', required=True,
-                        type=str, help='csvfile processed for RQ 3')
+                        type=str, help='csvfile processed for worfkflow 3')
     parser.add_argument('out1pngfile',
                         type=str, help='output png file to save first plot')
     parser.add_argument('out2pngfile',
                         type=str, help='output png file to save second plot')
     parser.add_argument('out3pngfile',
                         type=str, help='output png file to save third plot')
+    parser.add_argument('xvar', type=str,
+                        choices=choices_xvar, help='x variable of the plot')
     args = parser.parse_args()
     main(args.processedcsvfile_w3,
-         args.out1pngfile, args.out2pngfile, args.out3pngfile)
+         args.out1pngfile, args.out2pngfile, args.out3pngfile, args.xvar)
