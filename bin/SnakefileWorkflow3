@@ -1,17 +1,23 @@
-# gen outfile names for rule trendplots:
+# get geolevel of the analysis
+GERMANY = config["germany"]
+TIME = config["time"]
 TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
-ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}.png', trendplots_names=TRENDPLOTS_NAMES)
-# gen outfile names for rule correlationtest:
-SIGNIFICANCE = ['', '_significance']
-ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}.txt', significance =SIGNIFICANCE)
+# gen outfile names:
+if (GERMANY):
+    ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}_germany.png', trendplots_names=TRENDPLOTS_NAMES)
+    OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_germany.png'
+    ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
+else:
+    ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}_europe.png', trendplots_names=TRENDPLOTS_NAMES)
+    OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_europe.png'
+    ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
 
 
-def check_results_correlationtest(file):
-    """Helper function for rule correlationtest.
+def corrtest_significance(file):
+    """Helper function for rule regplot.
     The function reads file, that
-    contains either 'True' (= significant results) or 'False'
-     and returns
-    the corresponding boolean value.
+    contains either 'True' (= significant correlation hp test results
+    and regplot is produced) or 'False', and returns the corresponding boolean value.
     Args:
         file (str): .txt filename
     
@@ -26,20 +32,20 @@ def check_results_correlationtest(file):
         return False
 
 
-rule all:
-    input:
-        '../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_w3.csv',
-        ALL_OUTPUTS_CORRTEST,
-        '../results/regplot_deaths_over_cases_vaccinations.png',
-        ALL_OUTPUTS_TRENDPLOTS
-
-
 rule clean:
 # windows:
     shell: 'del  ..\\results\\*.png ..\\results\\*.txt .\\*.log  ..\\data\\*_processed*.csv'
 # linux:
     # shell: 'rm  ..\results\{*.png,*.txt} .\logs\*.log  ..\data\{*_processed*.csv}'
+
+
+rule all:
+    input:
+        '../data/owid-covid-data_processed.csv',
+        '../data/owid-covid-data_processed_w3.csv',
+        ALL_OUTPUTS_CORRTEST,
+        OUTPUT_REGPLOT,
+        ALL_OUTPUTS_TRENDPLOTS
 
 
 rule dataprocessing:
@@ -60,14 +66,14 @@ rule dataprocessing_w3:
     output: '../data/owid-covid-data_processed_w3.csv'
     shell: 
         '''
-        python {input.cmd} -i {input.csv} -o {output}
+        python {input.cmd} -i {input.csv} -o {output} --time {TIME} --germany {GERMANY}
         '''
 
 
-rule correlationtest:
+rule corrtest:
     input:
         cmd='correlationtest_w3.py',
-        csv='../data/owid-covid-data_processed_w3.csv'
+        csv= '../data/owid-covid-data_processed_w3.csv'
     output: ALL_OUTPUTS_CORRTEST
     shell:
         '''
@@ -78,16 +84,16 @@ rule correlationtest:
 rule regplot:
     input:
         cmd='regressionplot_w3.py',
-        csv='../data/owid-covid-data_processed_w3.csv',
-        correalationtest_res='../results/correlationtest_results_significance.txt'
-    output: '../results/regplot_deaths_over_cases_vaccinations.png'
+        csv= '../data/owid-covid-data_processed_w3.csv',
+        correalationtest_res=ALL_OUTPUTS_CORRTEST[1] 
+    output: OUTPUT_REGPLOT
     run:
-        if check_results_correlationtest(input.correalationtest_res):
-            # proceed with plotting action using a shell command
-            shell_command = f"python {input.cmd} {input.csv} {output[0]}"
-            subprocess.run(shell_command, shell=True)
+        if corrtest_significance(input.correalationtest_res):
+            # proceed with plotting
+            shell("python {input.cmd} {input.csv} {output}")
         else:
-            print('Condtion for regression plot was not met')
+            # create empty .png
+            shell("echo . > {output}")
 
 
 rule trendplots:
@@ -97,6 +103,6 @@ rule trendplots:
     output: ALL_OUTPUTS_TRENDPLOTS
     shell:
         '''
-        python {input.cmd} -i {input.csv} {output} 
+        python {input.cmd} -i {input.csv} {output} {TIME}
         '''
 
