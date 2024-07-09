@@ -1,6 +1,6 @@
 """
-The script performs a second preprocessing of the input dataset (processed csvfile) for RQ 1.
-The second preprocessing focuses in particular on feature engineering for RQ 1.
+The script performs a second preprocessing of the input dataset (processed csvfile) for W 2.
+The second preprocessing focuses in particular on feature engineering for W 2.
 """
 import pandas as pd
 import argparse
@@ -10,7 +10,7 @@ from outcomes_utils import normalize_column
 # Configure logging and constants
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-COLUMNS_RQ1 = ['continent','location','year','total_cases','total_deaths', 'population']
+COLUMNS_W2 = ['continent','location','year','total_cases','total_deaths', 'population']
 YEAR = 2023
 
 def process_csvfile_rq1(csv_file_path, normalize):
@@ -25,7 +25,7 @@ def process_csvfile_rq1(csv_file_path, normalize):
         Returns:
         pd.core.groupby.DataFrameGroupBy: processed df.
     """
-    df = pd.read_csv(csv_file_path, usecols=COLUMNS_RQ1)
+    df = pd.read_csv(csv_file_path, usecols=COLUMNS_W2)
     if normalize:
     # normalize outcomes by population
         df['total_cases'] = normalize_column(df['total_cases'], df['population'])
@@ -41,7 +41,7 @@ def process_csvfile_rq1(csv_file_path, normalize):
 
 
 def main(csvfile: str, outfile: str, normalize=False):
-    logging.basicConfig(filename='dataprocessing_rq1.log')
+    logging.basicConfig(filename='dataprocessing_w2.log')
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
         message = "Provide a csv file"
         logger.exception(message)
@@ -54,7 +54,7 @@ def main(csvfile: str, outfile: str, normalize=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='The file applies specific preprocessing steps for RQ 1')
+        description='The file applies specific preprocessing steps for W 2')
     parser.add_argument('processedcsvfile', type=str, help='first processed csvfile name')
     parser.add_argument('outfile', type=str, help='output file')
     parser.add_argument('--normalize', type=bool, help='if true the outcomes are normalized by population')
