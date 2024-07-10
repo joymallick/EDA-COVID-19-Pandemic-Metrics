@@ -34,7 +34,7 @@ def correlation_hptest(var1, var2):
 
 def save_results(outfile, pvalue, coeff, var1, var2):
     ''''The function saves the results of correlation_hptest
-        in outfile.
+        in outfile (.txt).
 
     Args:
         outfile (str): output file name
@@ -90,6 +90,7 @@ def main(csvfile: str, outfile: str,
         raise OSError(message)
     LOGGER.info('Reading data')
     df = pd.read_csv(csvfile)
+    # check that var1 and var2 are columns of df
     if (var1 not in df.columns or var2 not in df.columns):
         message = 'Variables must be columns of the provided df'
         LOGGER.exception(message)
