@@ -1,8 +1,18 @@
-Project Objective:
-The primary objective of this project is to conduct an in-depth exploratory data analysis of the COVID-19 pandemic metrics using the data available from the Our World in Data website. The goal is to uncover insights and relationships that can help better understand the progression and impact of the pandemic across different countries.
-
 Data Source:
-The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic.
+The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic. Cases, deaths, and vaccinations are recorded on a daily level.
+
+Project Objective:
+The primary objective of this project is to build a data analysis workflow/s for the COVID-19 dataset.
+The research goal is to investigate the following 3 main points:
+1. Understand how the number of cases and deaths differ across continents on a yearly level.
+2. Explore the influence of factors such as life expectancy, GDP per capita, and population density on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
+3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
+For points 2. and 3., due to missing values reasons, we restrict the analysis to Europe.
+
+The workflows:
+Given the research aim of the project, we have thought about implementing 3 workflows, each targeting one of the research questions.
+All the workflows have configurable parameters that allow to get insights on different declinations of the research points. For additional and detailed information see the readme and the requirements.md files.
+
 
 Workflow 1: Exploring Correlations Between Categorical Variables and COVID-19 Metrics
 
