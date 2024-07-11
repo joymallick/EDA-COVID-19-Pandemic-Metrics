@@ -1,11 +1,16 @@
+# gen combinations of y variables (y1, y2) for rule trendplot
+Y1Y2 = [('new_deaths', 'new_cases'), ('new_deaths', 'new_vaccinations'), ('deaths_over_cases', 'new_vaccinations')]
 # gen outfile names:
-TRENDPLOTS_NAMES = ['deaths_cases', 'deaths_vaccinations', 'deaths_over_cases_vaccinations']
 if (config['germany']):
-    ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}_germany.png', trendplots_names=TRENDPLOTS_NAMES)
+    ALL_OUTPUTS_TRENDPLOT = expand('../results/trendplot_{y1}__{y2}_germany.png', zip, 
+               y1=[y1y2[0] for y1y2 in Y1Y2], 
+               y2=[y1y2[1] for y1y2 in Y1Y2])
     OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_germany.png'
     ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
 else:
-    ALL_OUTPUTS_TRENDPLOTS = expand('../results/trendplot_{trendplots_names}_europe.png', trendplots_names=TRENDPLOTS_NAMES)
+    ALL_OUTPUTS_TRENDPLOT =  expand('../results/trendplot_{y1}__{y2}_europe.png', zip, 
+               y1=[y1y2[0] for y1y2 in Y1Y2], 
+               y2=[y1y2[1] for y1y2 in Y1Y2])
     OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_europe.png'
     ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
 
@@ -42,7 +47,7 @@ rule all:
         '../data/owid-covid-data_processed_w3.csv',
         ALL_OUTPUTS_CORRTEST,
         OUTPUT_REGPLOT,
-        ALL_OUTPUTS_TRENDPLOTS
+        ALL_OUTPUTS_TRENDPLOT
 
 
 rule dataprocessing:
@@ -102,15 +107,17 @@ rule regplot:
             shell("echo . > {output}")
 
 
-rule trendplots:
+rule trendplot:
     input:
-        cmd='trendplots_w3.py',
+        cmd='trendplot_w3.py',
         csv='../data/owid-covid-data_processed_w3.csv'
-    output: ALL_OUTPUTS_TRENDPLOTS
+    output: '../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../results/trendplot__{y1}__{y2}_europe.png'
     params: 
-        time = config['time']
+        time = config['time'],
+        y1 = '{y1}',
+        y2 = '{y2}'
     shell:
         '''
-        python {input.cmd} -i {input.csv} {output} {params.time}
+        python {input.cmd} -i {input.csv} -o {output} -y1 {params.y1} -y2 {params.y2} -x {params.time}
         '''
 
