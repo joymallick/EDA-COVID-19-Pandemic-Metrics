@@ -1,6 +1,6 @@
 # Workflow 3: exploring relationship between deaths, cases and vaccinations for Covid-19.
 The results of this workflow allow to get an overview of the relationship between number of new cases, deaths and vaccinations by month or semester. The analysis can be
-performed either considering whole Euorpe or the specific case of Germany. The workflow has 5 components, among which 3 are tailored to the covid-19 dataset (components 1, 2 and 5).
+performed either considering whole Europe or the specific case of Germany. The workflow has 5 components, among which 3 are tailored to the covid-19 dataset (components 1, 2 and 5).
 ## Abstract workflow
 ### Uml activity diagram
 ![Alt text](./Workflow3ActivityDiagram.png)
