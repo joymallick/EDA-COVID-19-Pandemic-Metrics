@@ -3,3 +3,4 @@ axes.labelsize: 'x-large'
 xtick.labelsize: 'large'
 ytick.labelsize: 'large'
 'style':  'seaborn-v0_8-pastel'
+axes.grid: True

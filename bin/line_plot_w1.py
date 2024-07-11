@@ -8,14 +8,16 @@ from utils import set_plot_params
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
-def draw_lineplot(csv_file_path, x_variable, y_variable, output):
+def draw_lineplot(csv_file_path, group, x_variable, y_variable, output):
     """
     Draws a line plot from the data in a CSV file.
 
     Args:
         csv_file_path (str): The path to the CSV file.
+        group (str): The name of the column to be used as the binary grouped variable.
         x_variable (str): The name of the column to be used as the x-axis variable.
         y_variable (str): The name of the column to be used as the y-axis variable.
+        output (str): The name of the output file.
     """
     logging.debug(f"Drawing line plot from file: {csv_file_path}")
     # Load the data from the CSV file into a pandas DataFrame
@@ -24,24 +26,21 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
 
     # Extract the x and y values from the DataFrame
     logging.debug("Extracting x and y values from DataFrame")
-    x = df[x_variable]
-    y = df["month"]
 
-    grouped_data = df.groupby(['month', x_variable])['new_cases'].sum().unstack()
+    grouped_data = df.groupby([x_variable, group])[y_variable].sum().unstack()
 
     # Create the line plot
     logging.debug("Creating line plot")
     plt.figure(figsize=(10, 6))
-    plt.plot(grouped_data.index, grouped_data[1], label= x_variable + ' above median')
-    plt.plot(grouped_data.index, grouped_data[0], label= x_variable + ' below median')
+    plt.plot(grouped_data.index, grouped_data[1], label=group + ' above median')
+    plt.plot(grouped_data.index, grouped_data[0], label=group + ' below median')
 
     # Add labels and title
     logging.debug("Adding labels and title")
-    plt.xlabel('Date')
+    plt.xlabel(x_variable)
     plt.ylabel(y_variable)
     plt.legend()
-    plt.grid(True)
-    plt.title('Temporal Trend of New COVID-19 Cases by ' + x_variable + ' Groups')
+    plt.title('Temporal Trend of New COVID-19 Cases by ' + group)
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
 
     #Saving the plot
@@ -53,18 +52,19 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
     plt.show()
 
 
-def main(csvfile: str, categorical, y_variable, output)-> pd.DataFrame:
+def main(csvfile: str, group, x_variable, y_variable, output) -> pd.DataFrame:
     logging.basicConfig(filename='logs/line_plot_wf1.log')
     logging.info('Drawing line plot')
-    draw_lineplot(csvfile, x_variable=categorical, y_variable=y_variable, output= output)
+    draw_lineplot(csvfile, group=group, x_variable=x_variable, y_variable=y_variable, output=output)
     logging.info('Line plot finished')
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='The file draws the line plot for Workflow 1')
-    parser.add_argument('csvfile', type=str, help='Path to the final processed csv file')
-    parser.add_argument('-c', '--categorical', type=str, help='The categorical variable for the line plot')
-    parser.add_argument('-y', '--y_variable', default='new_cases', type=str, help='The y variable for the line plot')
-    parser.add_argument('-o', '--output', type=str, help='The y variable for the line plot')
+    parser = argparse.ArgumentParser(description='The file draws a line plot for a binary grouped variable')
+    parser.add_argument('csvfile', type=str, help='Path of the dataset')
+    parser.add_argument('-g', '--group', type=str, help='The binary grouped variable for the line plot')
+    parser.add_argument('-x', '--x_variable', type=str, help='The x variable for the line plot')
+    parser.add_argument('-y', '--y_variable', type=str, help='The y variable for the line plot')
+    parser.add_argument('-o', '--output', type=str, help='The output name for the line plot')
     args = parser.parse_args()
-    main(args.csvfile, args.categorical, args.y_variable, args.output)
+    main(args.csvfile, args.group, args.x_variable, args.y_variable, args.output)
