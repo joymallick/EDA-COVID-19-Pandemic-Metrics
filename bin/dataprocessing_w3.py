@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 '''
-The script performs a second preprocessing of the input dataset
-(processedcsvfile) for Workflow 3.
-The second preprocessing focuses in particular on feature engineering.
+The script performs a second processing of the input dataset
+(first processed covid 19 dataset) for Workflow 3.
+The second processing focuses in particular on feature engineering.
 The data can be aggregated either by month or semester.
 The analysis restricts to Europe,
 however it is possibile to restrict it further to Germany.
@@ -60,7 +60,7 @@ def process_csvfile_w3(filename, time='month', germany=False):
         collapsed_df = df.groupby([time]).agg('sum')
     LOGGER.debug(f'Collapsed by {time} dataset: {collapsed_df.head()}')
     # create new outcome
-    collapsed_df['deaths_vs_cases'] = \
+    collapsed_df['deaths_over_cases'] = \
         collapsed_df['new_deaths']/collapsed_df['new_cases']
     LOGGER.debug(f'Final processed dataset: {collapsed_df.head()} ')
     return collapsed_df
@@ -83,7 +83,7 @@ def main(csvfile: str, outfile: str, time: 'str', germany: bool):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='The file applies specific preprocessing \
-            steps for Workflow 3 (RQ 3)')
+            steps for Workflow 3')
     choices_time = ['month', 'semester']
     parser.add_argument('-i', '--processedcsvfile', required=True,
                         type=str, help='first processed csvfile name')
