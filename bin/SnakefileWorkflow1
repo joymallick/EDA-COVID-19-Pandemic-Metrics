@@ -1,16 +1,14 @@
 # Define the variable from the configuration file
-var = config["categorical"]
-continent = config["continent"]
-year = config["year"]
-
+configfile: "configuration_w1.yaml"
+GROUP = config['group']
 
 # Rule to specify the expected output files for the chosen variable
 rule all:
     input:
         '../data/owid-covid-data_processed.csv',
-        f'../data/owid-covid-data_processed_{var}.csv',
-        f'../results/mannwhitneyu_{var}.txt',
-        f'../results/plot_{var}.png',
+        f'../data/owid-covid-data_processed_{GROUP}.csv',
+        f'../results/mannwhitneyu_{GROUP}.txt',
+        f'../results/plot_{GROUP}.png',
 
 rule clean:
     shell: 'rm -f ../results/*.png ../results/*.txt'
@@ -26,26 +24,32 @@ rule dataprocessingw1:
     input:
         cmd='dataprocessing_w1.py',
         csv='../data/owid-covid-data_processed.csv'
-    output: f'../data/owid-covid-data_processed_{var}.csv'
-    shell: 'python {input.cmd} -i {input.csv} -c "{var}" -o {output} -y {year} --continent "{continent}"'
+    output: f'../data/owid-covid-data_processed_{GROUP}.csv'
+    params:
+        continent = config['continent'],
+        year = config['year'],
+    shell: 'python {input.cmd} -i {input.csv} -c "{GROUP}" -o {output} -y {params.year} --continent "{params.continent}"'
 
 rule mannwhitneyu:
     input:
         cmd='mann_whitney_u.py',
-        csv=f'../data/owid-covid-data_processed_{var}.csv'
-    output: f'../results/mannwhitneyu_{var}.txt'
-    shell: 'python {input.cmd} {input.csv} -c "{var}_cat" -o {output}'
+        csv=f'../data/owid-covid-data_processed_{GROUP}.csv'
+    output: f'../results/mannwhitneyu_{GROUP}.txt'
+    shell: 'python {input.cmd} {input.csv} -c "{GROUP}_cat" -o {output}'
 
 rule plot:
     input:
-        mannwhitneyu_test = f'../results/mannwhitneyu_{var}.txt',
-        csv=f'../data/owid-covid-data_processed_{var}.csv'
+        mannwhitneyu_test = f'../results/mannwhitneyu_{GROUP}.txt',
+        csv=f'../data/owid-covid-data_processed_{GROUP}.csv'
     output:
-        plot = f'../results/plot_{var}.png'
+        plot = f'../results/plot_{GROUP}.png'
+    params:
+        x = config['x'],
+        y = config['y']
     run:
         with open(input.mannwhitneyu_test, 'r') as f:
             result = f.read().strip()
         if result == 'True':
-            shell('python box_plot_w1.py {input.csv} -c "{var}_cat" -o {output.plot}')
+            shell('python box_plot_w1.py {input.csv} -g "{GROUP}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
         else:
-            shell('python line_plot_w1.py {input.csv} -c "{var}_cat" -o {output.plot}')
+            shell('python line_plot_w1.py {input.csv} -g "{GROUP}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
