@@ -83,7 +83,7 @@ def main(csvfile: str, outfile: str, time: 'str', germany: bool):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='The file applies specific preprocessing \
-            steps for Workflow 3 (RQ 3)')
+            steps for Workflow 3')
     choices_time = ['month', 'semester']
     parser.add_argument('-i', '--processedcsvfile', required=True,
                         type=str, help='first processed csvfile name')

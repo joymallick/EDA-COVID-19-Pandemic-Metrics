@@ -39,6 +39,7 @@ def reg_plot(x, y, data, title):
 
 
 def main(csvfile: str, outpngfile: str, x: str, y: str):
+    # check correct format of in and out files
     if (csvfile[-3:] != 'csv'):
         message = 'Provide a csv file as infile'
         LOGGER.exception(message)
@@ -49,11 +50,12 @@ def main(csvfile: str, outpngfile: str, x: str, y: str):
         raise OSError(message)
     LOGGER.info('Reading data')
     df = pd.read_csv(csvfile)
+    # check that x and y are existing columns of the input
     if (x not in df.columns or y not in df.columns):
         message = 'x and y must be columns of the provided df'
         LOGGER.exception(message)
         raise ValueError(message)
-    LOGGER.info(f'Started producing reg plot with var 1 and 2: {x}, {y}')
+    LOGGER.info(f'Started producing reg plot with x and y: {x}, {y}')
     fig = reg_plot(x=x, y=y, data=df,
                    xlabel=x, ylabel=y,
                    title=f'OLS for {x} and {y}')
@@ -67,12 +69,12 @@ if __name__ == '__main__':
         description='The file produces a regression plot between \
         x and y columns of csvfile')
     parser.add_argument('-i', '--csvfile', required=True,
-                        type=str, help='processed csvfile')
+                        type=str, help='csvfile')
     parser.add_argument('-o', '--outpngfile', required=True,
                         type=str, help='output png file to save the plot')
-    parser.add_argument('-x', 'x', required=True, default='new_vaccinations',
+    parser.add_argument('-x', 'x', required=True,
                         type=str, help='independent var')
-    parser.add_argument('-y', 'y', required=True, default='deaths_over_cases',
+    parser.add_argument('-y', 'y', required=True,
                         type=str, help='dependent var')
     args = parser.parse_args()
     main(args.csvfile, args.outpngfile, args.x, args.y)
