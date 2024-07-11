@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 COLUMNS_W2 = ['continent','location','year','total_cases','total_deaths', 'population']
 YEAR = 2023
 
-def process_csvfile_rq1(csv_file_path, normalize):
+def process_csvfile_w2(csv_file_path, normalize):
     """The  function processes the provided csv by generating the
     outcomes of interest for  each continent and by aggregating the data by
     year. Eventually only data for year 2023 is returned.
@@ -47,7 +47,7 @@ def main(csvfile: str, outfile: str, normalize=False):
         logger.exception(message)
         raise OSError(message)
     logger.info('Started processing data for W2')
-    df_processed_rq1 = process_csvfile_rq1(csvfile, normalize)
+    df_processed_rq1 = process_csvfile_w2(csvfile, normalize)
     logger.info('Saving processed csv')
     df_processed_rq1.to_csv(csvfile[:-4]+"_w2.csv", index=True)
     logger.info('Ended processing for W2')
