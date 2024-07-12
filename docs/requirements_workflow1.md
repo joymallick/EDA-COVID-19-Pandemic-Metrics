@@ -3,8 +3,7 @@
 This workflow involves using the Mann-Whitney U test to identify statistical similarities between categorical variables based COVID-19 metrics like cases or deaths.
 The used metric can be chosen with running this workflow with either 'new_cases' or 'new_deaths' as parameters. The categorical variables that are currently running in this workflow are adjustable with the parameters 'median_age', 'gdp_per_capita', 'life_expectancy' or 'population_density'.
 Furthermore, this workflow needs a specific year (from 2020 to 2024) and a continent as input. All parameters can be adjusted in the respective configuration file. 
-
-The workflow has 5 components, among which 2 are tailored to the covid-19 dataset (components 1 and 2). 
+It has 5 components, among which 2 are tailored to the covid-19 dataset (components 1 and 2). 
 ### Uml activity diagram
 ![Alt text](./Workflow1ActivityDiagram.png)
 ### Explanation
