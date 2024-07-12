@@ -1,6 +1,6 @@
 # Define the variable from the configuration file
 configfile: "configuration_w1.yaml"
-GROUP = config['group']
+GROUP =  ["life_expectancy", "gdp_per_capita", "median_age", "population_density"]
 
 # Rule to specify the expected output files for the chosen variable
 rule all:
