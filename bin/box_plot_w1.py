@@ -8,14 +8,16 @@ from utils import set_plot_params
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
-def draw_boxplot(csv_file_path, x_variable, y_variable, output):
+def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
     """
     Draws a box plot from the data in a CSV file.
 
     Args:
         csv_file_path (str): The path to the CSV file.
+        group (str): The name of the column to be used as the binary grouped variable.
         x_variable (str): The name of the column to be used as the x-axis variable.
         y_variable (str): The name of the column to be used as the y-axis variable.
+        output (str): The name of the output file.
     """
     logging.debug(f"Drawing box plot from file: {csv_file_path}")
     # Load the data from the CSV file into a pandas DataFrame
@@ -24,13 +26,10 @@ def draw_boxplot(csv_file_path, x_variable, y_variable, output):
 
     # Extract the x and y values from the DataFrame
     logging.debug("Extracting values from the DataFrame")
-    x = df[x_variable]
-    y = df[y_variable]
 
     # Create the box plot
     logging.debug("Creating box plot")
-    #plt.figure(figsize=(10, 6))
-    df.boxplot(column=y_variable, by=x_variable)
+    df.boxplot(column=y_variable, by=group)
 
 
     # Add labels and title
@@ -47,18 +46,19 @@ def draw_boxplot(csv_file_path, x_variable, y_variable, output):
     logging.debug("Showing box plot")
     plt.show()
 
-def main(csvfile: str, x, y, output)->pd.DataFrame:
+def main(csvfile: str, group, x_variable, y_variable, output)->pd.DataFrame:
     logging.basicConfig(filename='logs/box_plot_wf1.log')
     logging.info('Drawing box plot')
-    draw_boxplot(csvfile, x_variable=x, y_variable=y, output=output)
+    draw_boxplot(csvfile, group=group, x_variable=x_variable, y_variable=y_variable, output=output)
     logging.info('Box plot finished')
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='The file draws the box plot for Workflow 1')
-    parser.add_argument('csvfile', type=str, help='Path to the final processed csv file')
-    parser.add_argument('-c', '--categorical', type=str, help='The categorical variable for the box plot')
-    parser.add_argument('-y', '--y_variable', default='new_cases', type=str, help='The y variable for the box plot')
-    parser.add_argument('-o', '--output', type=str, help='The name of the output file')
+    parser = argparse.ArgumentParser(description='The file draws a box plot for a binary grouped variable')
+    parser.add_argument('csvfile', type=str, help='Path of the dataset')
+    parser.add_argument('-g', '--group', type=str, help='The binary grouped variable for the box plot')
+    parser.add_argument('-x', '--x_variable', type=str, help='The x variable for the box plot')
+    parser.add_argument('-y', '--y_variable', type=str, help='The y variable for the box plot')
+    parser.add_argument('-o', '--output', type=str, help='The output name for the box plot')
     args = parser.parse_args()
-    main(args.csvfile, args.categorical, args.y_variable, args.output)
+    main(args.csvfile, args.group, args.x_variable, args.y_variable, args.output)
