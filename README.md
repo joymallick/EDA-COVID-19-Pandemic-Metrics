@@ -1,48 +1,41 @@
 # Exploratory Data Analysis of COVID-19 Pandemic Metrics
 
 ## Project Description
-
-### Project Objective:
-The primary objective of this project is to conduct an in-depth exploratory data analysis of the COVID-19 pandemic metrics using the data available from the Our World in Data website. The goal is to uncover insights and relationships that can help better understand the progression and impact of the pandemic across different countries.
-
+The primary objective of this project is to conduct an automated exploratory data analysis of the [COVID-19 dataset](https://ourworldindata.org/coronavirus) from Our World in Data.
+The analysis focuses on the following 3 main research point:
+1. Understand how the number of cases and deaths differ across continents on a yearly level.
+2. Explore the influence of factors such as life expectancy, GDP per capita, and population density on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
+3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
+For point 3., due to missing values reasons, we restrict the analysis to Europe. <br>
+For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. <br>
+For detailed information on the structure refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refere to the [Usage](Usage) section below.
+All the workflows are based on the workflow management system [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 ### Data Source:
-The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic.
-
-### Workflow 1: Exploring Correlations Between Categorical Variables and COVID-19 Metrics
-
-This workflow involves using the Mann-Whitney U test to identify correlations between categorical variables and COVID-19 metrics like cases or deaths.
-
-1. Process the data to create a dataset with relevant categorical variables (e.g., country income level, population density, etc.) and COVID-19 metrics.
-2. Apply the Mann-Whitney U test to each categorical variable, comparing the COVID-19 metric values between the different categories.
-3. For categorical variables with p-values below 0.05, create box plots to visualize the difference in the COVID-19 metric between the categories.
-4. For categorical variables with p-values above 0.05, create line plots to show the trend in the COVID-19 metric over time, broken down by different categories.
-5. Analyze the results to identify any significant relationships between the categorical variables and the COVID-19 metrics.
-
-## Component analysis
-
-| Abstract Workflow Node                  | Input(s)     | Output(s)                 | Implementation     |
-|-----------------------------------------|--------------|---------------------------|--------------------|
-| Load data and filter columns            | csv filename | filtered csv file         | CLI tool (csvkit)  |
-| General data processing                 | csv file     | csv file as dataframe     | own implementation |
-| Specific data processing for workflow 1 | csv file     | csv file as dataframe     | own implementation |
-| Specific data processing for Workflow 2 | csv file     | csv file as dataframe     | own implementation |
-| Specific data processing for Workflow 3 | csv file     | csv file as dataframe     | own implementation |
-| Outcomes utils                          | csv file     | outcomes for each RQ      | own implementation |
-| Correlation test                        | csv file     | plot figure and .txt file | own implementation |
-| Mann-Whitney U test                     | csv file     | .txt file                 | own implementation |
-| Regression plot                         | csv file     | plot figure and .txt file | own implementation |
-| Workflow 2 plot                         | csv file     | plot figure and .txt file | own implementation |
-| Box plot                                | csv file     | plot figure and .txt file | own implementation |
-| Line plot                               | csv file     | plot figure and .txt file | own implementation |
+The project will utilize the [COVID-19 dataset](https://ourworldindata.org/coronavirus) provided by "Our World in Data". This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic. 
 
 ## Usage
 
 To use this project, follow these steps:
 
 1. Clone the repository to your local machine.
-2. Ensure you have all required dependencies installed (you can find these in the `requirements.txt` file).
-3. Run the analysis scripts provided for each research question.
-4. Generated outputs such as plots and text files will be saved in the `results` directory.
+2. Ensure you have all required dependencies installed (you can find these in the `docs/requirements.txt` file).
+3. Activate snakemake environment
+4. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below).
+5. Check the results in the `results` in directory. When running all the 3 workflows, the `results` directory (with the default configuration for all the workflows) will have the following structure:
+**add tree for results with all the results inside**.
+### Workflow 3
+Workflow 3 refers to research question 3 and it allows to configure the following parameters:
+- germany : can be either True (= restrict the analysis to Germany) or False (= cpnsider whole Europe). The default option is False.
+- time: choose the time period by which the data is aggregated, can be either 'month' or 'semester'. The default option is 'month'.
+- x  and y: the variables for which the correlation is tested and for which the regression plot is produced (**only if** the hypothesis test results are significant). We used x='new_vaccinations' and y='deaths_over_cases'. Both x an y can be changed by choosing in the set ['new_vaccinations', 'new_deaths', 'new_cases', deaths_over_cases', 'month'], but keep in mind that other couples probably won't make a lot of sense (for example: it's obvious that new cases and new deaths are positively correlated).
+All the above parameters can be edited in the file `configuration_w3.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or mispelling you will receive an error. 
+After choosing the desired configuration run `SnakefileWorkflow3` this way to get **all** the outputs:
+`snakemake -s SnakefileWorkflow3 --cores all all --configfile configuration_w3.yaml`
+The produced files will be stored in  `results\results_w3`, except for the processed datasets that will be stored in `data`. <br>
+To **delete** all the outputs run:
+`snakemake -s SnakefileWorkflow3 --cores all clean --configfile configuration_w3.yaml`
+To produce just a single output run the above code with the name of the output file instead of the rule name.
+
 
 ## Contributing
 
@@ -54,7 +47,11 @@ All contributors are expected to follow the project's [Code of Conduct](CONDUCT.
 
 ### Questions and Support
 
-If you have any questions or need assistance, please open an issue on the project's GitHub repository so we can discuss the question together.
+If you have any questions or need assistance, please open an issue on the project's GitHub repository so we can discuss the question together. Otherwise 
+
+### Contact information
+
+Email addresses: [corona@uni-potsdam.de](mailto:corona@uni-potsdam.de), [nick.thomas@uni-potsdam.de](mailto:nick.thomas@uni-potsdam.de), [joy.md@uni-potsdam.de](mailto:joy.md@uni-potsdam.de), [omar.shindy@uni-potsdam.de](mailto:omar.shindy@uni-potsdam.de) .
 
 ## License
 
