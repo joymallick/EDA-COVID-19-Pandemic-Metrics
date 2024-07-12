@@ -54,7 +54,7 @@ def draw_lineplot(csv_file_path, x_variable, y_variable, output):
 
 
 def main(csvfile: str, categorical, y_variable, output)-> pd.DataFrame:
-    logging.basicConfig(filename='logs/line_plot_wf1.log')
+    logging.basicConfig(filename='../logs/line_plot_wf1.log')
     logging.info('Drawing line plot')
     draw_lineplot(csvfile, x_variable=categorical, y_variable=y_variable, output= output)
     logging.info('Line plot finished')
