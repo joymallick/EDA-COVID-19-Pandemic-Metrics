@@ -13,7 +13,7 @@ import argparse
 
 
 # set logging
-logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
+logging.basicConfig(filename='../logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params

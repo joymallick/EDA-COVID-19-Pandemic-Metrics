@@ -10,7 +10,7 @@ import argparse
 from scipy.stats import spearmanr
 
 
-logging.basicConfig(filename='./logs/correlationtest_w3.log', filemode='w')
+logging.basicConfig(filename='../logs/correlationtest_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 

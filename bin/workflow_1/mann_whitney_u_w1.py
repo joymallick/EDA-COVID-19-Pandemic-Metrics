@@ -46,7 +46,7 @@ def mann_whitney_u_test(file_path, x_variable, y_variable, output):
 
 
 def main(csvfile: str, x_col: str, y_col: str, output: str):
-    logging.basicConfig(filename='logs/mann_whitney_u_test.log')
+    logging.basicConfig(filename='../logs/mann_whitney_u_test.log')
     logging.info('Performing Mann-Whitney U test')
     result = mann_whitney_u_test(csvfile, x_col, y_col, output)
     logging.info(f'Mann-Whitney U test result: {result}')
