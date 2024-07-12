@@ -20,10 +20,22 @@ def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
         output (str): The name of the output file.
     """
     logging.debug(f"Drawing box plot from file: {csv_file_path}")
-    # Load the data from the CSV file into a pandas DataFrame
-    logging.debug("Loading data from CSV file")
-    df = pd.read_csv(csv_file_path)
+    try:
+        # Load the data from the CSV file into a pandas DataFrame
+        logging.debug("Loading data from CSV file")
+        df = pd.read_csv(csv_file_path)
+    except pd.errors.EmptyDataError:
+        logging.error(f"CSV file is empty: {csv_file_path}")
+        raise ValueError(f"CSV file is empty: {csv_file_path}")
+    except pd.errors.ParserError:
+        logging.error(f"Error parsing CSV file: {csv_file_path}")
+        raise ValueError(f"Error parsing CSV file: {csv_file_path}")
 
+    # Check if the necessary columns exist in the DataFrame
+    if not all(col in df.columns for col in [x_variable, y_variable, group]):
+        missing_cols = [col for col in [x_variable, y_variable, group] if col not in df.columns]
+        logging.error(f"Missing columns in CSV file: {missing_cols}")
+        raise KeyError(f"Missing columns in CSV file: {missing_cols}")
     # Extract the x and y values from the DataFrame
     logging.debug("Extracting values from the DataFrame")
 
