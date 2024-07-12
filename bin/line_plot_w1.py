@@ -8,6 +8,11 @@ from utils import set_plot_params
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
+# set logging
+logging.basicConfig(filename='./logs/line_plot_wf1.log', filemode='w')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+
 def draw_lineplot(csv_file_path, group, x_variable, y_variable, output):
     """
     Draws a line plot from the data in a CSV file.
@@ -65,7 +70,6 @@ def draw_lineplot(csv_file_path, group, x_variable, y_variable, output):
 
 
 def main(csvfile: str, group, x_variable, y_variable, output) -> pd.DataFrame:
-    logging.basicConfig(filename='logs/line_plot_wf1.log')
     logging.info('Drawing line plot')
     draw_lineplot(csvfile, group=group, x_variable=x_variable, y_variable=y_variable, output=output)
     logging.info('Line plot finished')
