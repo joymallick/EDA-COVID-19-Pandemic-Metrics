@@ -37,13 +37,17 @@ All the above parameters can be edited in the file `configuration_w3.yaml`. Cons
 
 After choosing the desired configuration run `SnakefileWorkflow3` this way to **get all** the outputs:
 
-```shell snakemake -s SnakefileWorkflow3 --cores all all --configfile configuration_w3.yaml```
+```shell
+snakemake -s SnakefileWorkflow3 --cores all all --configfile configuration_w3.yaml
+```
 
 The produced files will be stored in  `results\results_w3`, except for the processed datasets that will be stored in `data`.
 
 To **delete all** the outputs run:
 
-```shell snakemake -s SnakefileWorkflow3 --cores all clean --configfile configuration_w3.yaml```
+```shell
+ snakemake -s SnakefileWorkflow3 --cores all clean --configfile configuration_w3.yaml
+ ```
 
 To produce just a single output run the above code with the name of the output file instead of the rule name.
 
