@@ -6,7 +6,7 @@ Furthermore, this workflow needs a specific year (from 2020 to 2024) and a conti
 
 The workflow has 5 components, among which 2 are tailored to the covid-19 dataset (components 1 and 2). 
 ### Uml activity diagram
-![Alt text](./Workflow3ActivityDiagram.png)
+![Alt text](./Workflow1ActivityDiagram.png)
 ### Explanation
 1. Perform a general processing of the covid-19 dataset, in particular create new time columns: year, semester and month.
 2. Process the data to create a dataset with relevant categorical variables (e.g., GDP per capita, life expectancy, etc.) and COVID-19 metrics.
