@@ -7,7 +7,7 @@ The research goal is to investigate the following 3 main points:
 1. Understand how the number of cases and deaths differ across continents on a yearly level.
 2. Explore the influence of factors such as life expectancy, GDP per capita, and population density on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
 3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
-For points 2. and 3., due to missing values reasons, we restrict the analysis to Europe.
+For point 3., due to missing values reasons, we restrict the analysis to Europe.
 
 The workflows:
 Given the research aim of the project, we have thought about implementing 3 workflows, each targeting one of the research questions.
