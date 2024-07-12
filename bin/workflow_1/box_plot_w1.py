@@ -48,7 +48,7 @@ def draw_boxplot(csv_file_path, x_variable, y_variable, output):
     plt.show()
 
 def main(csvfile: str, x, y, output)->pd.DataFrame:
-    logging.basicConfig(filename='logs/box_plot_wf1.log')
+    logging.basicConfig(filename='../logs/box_plot_wf1.log')
     logging.info('Drawing box plot')
     draw_boxplot(csvfile, x_variable=x, y_variable=y, output=output)
     logging.info('Box plot finished')
