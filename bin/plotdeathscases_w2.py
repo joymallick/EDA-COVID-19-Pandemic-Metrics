@@ -64,7 +64,7 @@ def main(csvfile: str, outcome:str, outfile: str):
     logger.info("Started producing bar plot")
     data_rq1 = pd.read_csv(csvfile)
     barplot_outcome = bar_plot(data_rq1, "continent", f"{outcome}",
-                               f"{outcome} by continent (2023)", color="tab:blue")
+                               f"{outcome} by_continent (2023)", color="tab:blue")
     logger.info("Saving plot")
     barplot_outcome.savefig(outfile, bbox_inches='tight')
     logger.info("Finished producing bar plot")
@@ -75,9 +75,8 @@ if __name__ == "__main__":
         description='The file plots either tot cases or tot deaths for each continent up to 2023 (W2)')
     outcomes = ['total_cases', 'total_deaths']
     parser.add_argument('processedcsvfile_w2', type=str, help='first processed csvfile name')
-    parser.add_argument('--outcome', type=str, choices=outcomes, help='outcome to plot')
     parser.add_argument('outfile', type=str, help='output png file')
-
+    parser.add_argument('--outcome', type=str, choices=outcomes, help='outcome to plot')
     args = parser.parse_args()
     main(args.processedcsvfile_w2, args.outcome, args.outfile)
 

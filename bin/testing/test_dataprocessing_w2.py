@@ -5,13 +5,8 @@ and an integration test for the components bin/dataprocessing.py
 and bin/dataprocessing_w2.py.
 """
 import pandas as pd
-import numpy as np
 from pandas.testing import assert_frame_equal
-import sys
-import os
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
-from dataprocessing_w2 import process_csvfile_w2
+from bin.dataprocessing_w2 import process_csvfile_w2
 
 
 
@@ -40,7 +35,5 @@ def test_process_csvfile_w2():
     assert_frame_equal(expected_df, actual_df.iloc[:3], rtol=1e-3)
 
 
-if __name__ == '__main__':
-    test_process_csvfile_w2()
-    print("All tests passed.")
+
 
