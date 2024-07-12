@@ -1,14 +1,14 @@
 # Define the variable from the configuration file
 configfile: "configuration_w1.yaml"
-GROUP =  ["life_expectancy", "gdp_per_capita", "median_age", "population_density"]
+GROUPS =  ["life_expectancy", "gdp_per_capita", "median_age", "population_density"]
 
 # Rule to specify the expected output files for the chosen variable
 rule all:
     input:
         '../data/owid-covid-data_processed.csv',
-        f'../data/owid-covid-data_processed_{GROUP}.csv',
-        f'../results/mannwhitneyu_{GROUP}.txt',
-        f'../results/plot_{GROUP}.png',
+        expand('../data/owid-covid-data_processed_{group}.csv', group=GROUPS),
+        expand('../results/mannwhitneyu_{group}.txt', group=GROUPS),
+        expand('../results/plot_{group}.png', group=GROUPS)
 
 rule clean:
     shell: 'rm -f ../results/*.png ../results/*.txt'
@@ -24,25 +24,25 @@ rule dataprocessingw1:
     input:
         cmd='dataprocessing_w1.py',
         csv='../data/owid-covid-data_processed.csv'
-    output: f'../data/owid-covid-data_processed_{GROUP}.csv'
+    output: '../data/owid-covid-data_processed_{group}.csv'
     params:
         continent = config['continent'],
         year = config['year'],
-    shell: 'python {input.cmd} -i {input.csv} -c "{GROUP}" -o {output} -y {params.year} --continent "{params.continent}"'
+    shell: 'python {input.cmd} -i {input.csv} -c "{wildcards.group}" -o {output} -y {params.year} --continent "{params.continent}"'
 
 rule mannwhitneyu:
     input:
         cmd='mann_whitney_u.py',
-        csv=f'../data/owid-covid-data_processed_{GROUP}.csv'
-    output: f'../results/mannwhitneyu_{GROUP}.txt'
-    shell: 'python {input.cmd} {input.csv} -c "{GROUP}_cat" -o {output}'
+        csv='../data/owid-covid-data_processed_{group}.csv'
+    output: '../results/mannwhitneyu_{group}.txt'
+    shell: 'python {input.cmd} {input.csv} -c "{wildcards.group}_cat" -o {output}'
 
 rule plot:
     input:
-        mannwhitneyu_test = f'../results/mannwhitneyu_{GROUP}.txt',
-        csv=f'../data/owid-covid-data_processed_{GROUP}.csv'
+        mannwhitneyu_test = '../results/mannwhitneyu_{group}.txt',
+        csv='../data/owid-covid-data_processed_{group}.csv'
     output:
-        plot = f'../results/plot_{GROUP}.png'
+        plot = '../results/plot_{group}.png'
     params:
         x = config['x'],
         y = config['y']
@@ -50,6 +50,6 @@ rule plot:
         with open(input.mannwhitneyu_test, 'r') as f:
             result = f.read().strip()
         if result == 'True':
-            shell('python box_plot_w1.py {input.csv} -g "{GROUP}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python box_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
         else:
-            shell('python line_plot_w1.py {input.csv} -g "{GROUP}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python line_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
