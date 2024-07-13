@@ -14,7 +14,7 @@ from outcomes_utils import normalize_column
 
 
 # set logging and constants
-logging.basicConfig(filename='logs/dataprocessing_w2.log')
+logging.basicConfig(filename='./logs/dataprocessing_w2.log')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 COLUMNS_W2 = ['continent','location','year','total_cases','total_deaths', 'population']
