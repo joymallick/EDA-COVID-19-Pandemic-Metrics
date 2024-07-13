@@ -8,10 +8,10 @@ from utils import set_plot_params
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
-# set logging
-logging.basicConfig(filename='./logs/box_plot_wf1.log', filemode='w')
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+def setup_logger(group):
+    log_filename = f'./logs/box_plot_wf1_{group}.log'
+    logging.basicConfig(filename=log_filename, filemode='w', level=logging.DEBUG,)
+    return logging.getLogger(__name__)
 
 def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
     """
@@ -24,49 +24,49 @@ def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
         y_variable (str): The name of the column to be used as the y-axis variable.
         output (str): The name of the output file.
     """
-    logging.debug(f"Drawing box plot from file: {csv_file_path}")
+    LOGGER.debug(f"Drawing box plot from file: {csv_file_path}")
     try:
         # Load the data from the CSV file into a pandas DataFrame
-        logging.debug("Loading data from CSV file")
+        LOGGER.debug("Loading data from CSV file")
         df = pd.read_csv(csv_file_path)
     except pd.errors.EmptyDataError:
-        logging.error(f"CSV file is empty: {csv_file_path}")
+        LOGGER.error(f"CSV file is empty: {csv_file_path}")
         raise ValueError(f"CSV file is empty: {csv_file_path}")
     except pd.errors.ParserError:
-        logging.error(f"Error parsing CSV file: {csv_file_path}")
+        LOGGER.error(f"Error parsing CSV file: {csv_file_path}")
         raise ValueError(f"Error parsing CSV file: {csv_file_path}")
 
     # Check if the necessary columns exist in the DataFrame
     if not all(col in df.columns for col in [x_variable, y_variable, group]):
         missing_cols = [col for col in [x_variable, y_variable, group] if col not in df.columns]
-        logging.error(f"Missing columns in CSV file: {missing_cols}")
+        LOGGER.error(f"Missing columns in CSV file: {missing_cols}")
         raise KeyError(f"Missing columns in CSV file: {missing_cols}")
     # Extract the x and y values from the DataFrame
-    logging.debug("Extracting values from the DataFrame")
+    LOGGER.debug("Extracting values from the DataFrame")
 
     # Create the box plot
-    logging.debug("Creating box plot")
+    LOGGER.debug("Creating box plot")
     df.boxplot(column=y_variable, by=group)
 
 
     # Add labels and title
-    logging.debug("Adding labels and title")
+    LOGGER.debug("Adding labels and title")
     plt.xlabel(x_variable)
     plt.ylabel(y_variable)
     plt.title('Box Plot')
 
     #Saving the plot
-    logging.debug("Saving the plot")
+    LOGGER.debug("Saving the plot")
     plt.savefig("../results/" + output)
 
     # Display the plot
-    logging.debug("Showing box plot")
+    LOGGER.debug("Showing box plot")
     plt.show()
 
 def main(csvfile: str, group, x_variable, y_variable, output)->pd.DataFrame:
-    logging.info('Drawing box plot')
+    LOGGER.info('Drawing box plot')
     draw_boxplot(csvfile, group=group, x_variable=x_variable, y_variable=y_variable, output=output)
-    logging.info('Box plot finished')
+    LOGGER.info('Box plot finished')
 
 
 if __name__ == "__main__":
@@ -77,4 +77,5 @@ if __name__ == "__main__":
     parser.add_argument('-y', '--y_variable', type=str, help='The y variable for the box plot')
     parser.add_argument('-o', '--output', type=str, help='The output name for the box plot')
     args = parser.parse_args()
+    LOGGER = setup_logger(args.group)
     main(args.csvfile, args.group, args.x_variable, args.y_variable, args.output)
