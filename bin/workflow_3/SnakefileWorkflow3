@@ -112,7 +112,7 @@ rule trendplot:
     input:
         cmd='trendplot_w3.py',
         csv=OUTPUT_DATAPROCESSING_W3
-    output: '../../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../../results/trendplot__{y1}__{y2}_europe.png'
+    output: '../../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../../results/trendplot_{y1}__{y2}_europe.png'
     params: 
         time = config['time'],
         y1 = '{y1}',
