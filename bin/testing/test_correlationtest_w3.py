@@ -17,7 +17,7 @@ def test_process_correlationtest_w3():
     in which should be False for new_vaccinations 
     and deaths_over_cases from processed covid 19 dataset"""
     # load data:
-    filename = "../../data/owid-covid-data_processed_w3.csv"
+    filename = "../../data/owid-covid-data_processed_w3_europe_by_month.csv"
     df = pd.read_csv(filename, engine='python')
     # create fixture for case expected result == False:
     p_value_thr = 0.0
