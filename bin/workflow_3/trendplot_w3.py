@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 The script produces a trend plot of y1 and y2 against a shared x variable.
-All the variables are columns of a dataframe stored in a csvfile. 
+All the variables are columns of a dataframe stored in a csvfile.
 The scales of y1 and y2 are mantained.
 '''
 from bin.utils import set_plot_params
