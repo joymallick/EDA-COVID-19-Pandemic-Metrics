@@ -10,7 +10,7 @@ set_plot_params("configuration_plots.yaml")
 
 def setup_logger(group):
     log_filename = f'./logs/box_plot_wf1_{group}.log'
-    logging.basicConfig(filename=log_filename, filemode='w', level=logging.DEBUG,)
+    logging.basicConfig(filename=log_filename, filemode='w', level=logging.DEBUG)
     return logging.getLogger(__name__)
 
 def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
