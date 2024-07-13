@@ -1,0 +1,9 @@
+INFO:__main__:Performing Mann-Whitney U test
+DEBUG:__main__:Loading data from CSV file
+DEBUG:__main__:Extracting values from DataFrame
+DEBUG:__main__:Running Mann-Whitney U test on population_density_cat and new_cases
+DEBUG:__main__:U-statistic: 35889.00
+DEBUG:__main__:p-value: 0.0000
+DEBUG:__main__:Writing result to output file
+INFO:__main__:Mann-Whitney U test result: (35889.0, 3.0846329690622105e-06)
+INFO:__main__:Finished Mann-Whitney U test
