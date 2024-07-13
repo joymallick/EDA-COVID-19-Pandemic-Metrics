@@ -1,17 +1,19 @@
 VAR = config["outcome"]
+BOOL = config["normalize"]
+
 
 rule all:
     input:'../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_w2.csv',
-        '../results/barplot_{VAR}.png'
+        f'../data/owid-covid-data_processed_w2.csv',
+        f'../results/barplot_{VAR}_by_continent.png'
         
 
-
 rule clean:
+    shell: 'rm  ../results/{*.png,*.txt} ./logs/*.log  ../data/{*_processed*.csv,*.tmp}'
 #windows
     #shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv'
 # linux:
-    shell: 'rm  ../results/{*.png,*.txt} ./logs/*.log  ../data/{*_processed*.csv,*.tmp}'
+    
     
 
 rule dataprocessing:
@@ -26,12 +28,12 @@ rule dataprocessing_w2:
         cmd='dataprocessing_w2.py',
         csv='../data/owid-covid-data_processed.csv'
     output: '../data/owid-covid-data_processed_w2.csv'
-    shell: 'python {input.cmd} {input.csv} {output}'
+    shell: 'python {input.cmd} {input.csv} {output} --normalize {BOOL}'
 
 
 rule plotdeathscases_w2:
     input:
         cmd='plotdeathscases_w2.py',
         csv='../data/owid-covid-data_processed_w2.csv'
-    output: '../results/barplot_{VAR}.png'
-    shell: 'python {input.cmd} {input.csv} --outcome {VAR} {output}'
+    output: '../results/barplot_{VAR}_by_continent.png'
+    shell: 'python {input.cmd} {input.csv} {output} --outcome {VAR} '
