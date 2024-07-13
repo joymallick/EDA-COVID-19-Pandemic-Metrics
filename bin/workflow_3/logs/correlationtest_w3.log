@@ -1,0 +1,6 @@
+INFO:__main__:Reading data
+INFO:__main__:Performing correlation hp test with         var 1 and 2: new_vaccinations, deaths_over_cases
+INFO:__main__:Saving results
+DEBUG:__main__:Opening outfile for writing results
+INFO:__main__:Checking significance of the results
+INFO:__main__:End
