@@ -1,11 +1,10 @@
-OUTCOMES = ['total_cases', 'total_deaths']
-# read from cl wehtehr to normalize the outcomes by population and YEAR of interest
+# read from cl wehther to normalize the outcomes by population and YEAR of interest
 NORMALIZE = config["normalize"]
 YEAR = config["year"]
 # gen output names (barplots): 
-ALL_BARPLOTS = expand('../../results/barplot_{outcome}_by_continent.png', outcome=OUTCOMES)
+ALL_BARPLOTS = expand('../../results/barplot_{outcome}_by_continent_{year}.png', outcome=['total_cases', 'total_deaths'], year=YEAR)
 if NORMALIZE:
-   ALL_BARPLOTS = expand(f'../../results/barplot_{outcome}_norm_by_continent.png', outcome=OUTCOMES)
+   ALL_BARPLOTS = expand('../../results/barplot_{outcome}_norm_by_continent_{year}.png', outcome=['total_cases', 'total_deaths'], year=YEAR)
 
 
 rule all:
@@ -35,9 +34,9 @@ rule dataprocessing_w2:
     shell: 'python {input.cmd} -i {input.csv} -o {output} -n {NORMALIZE}'
 
 
-rule plotdeathscases:
+rule barplotdeathscases:
     input:
-        cmd='plotdeathscases_w2.py',
+        cmd='barplotdeathscases_w2.py',
         csv='../../data/owid-covid-data_processed_w2.csv'
-    output: expand('../../results/barplot_{outcome}_norm_by_continent.png', outcome=OUTCOMES) if NORMALIZE else expand('../../results/barplot_{outcome}_by_continent.png', outcome=OUTCOMES)
-    shell: 'python {input.cmd} -i {input.csv} -o {output} --outcome {wildcards.outcome} --YEAR {YEAR}'
+    output: '../../results/barplot_{outcome}_norm_by_continent_{year}.png' if NORMALIZE else '../../results/barplot_{outcome}_by_continent_{year}.png'
+    shell: 'python {input.cmd} -i {input.csv} -o {output} --outcome {wildcards.outcome} --year {wildcards.year}'
