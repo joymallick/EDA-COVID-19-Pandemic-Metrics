@@ -1,6 +1,3 @@
-INFO:__main__:Started producing bar plot for outcome: total_cases         and year: 2023
-INFO:__main__:Started producing bar plot for outcome: total_deaths         and year: 2023
-INFO:__main__:Saving plot
-INFO:__main__:Saving plot
+INFO:__main__:Started producing bar plot for outcome: total_deaths         and year: 2023INFO:__main__:Saving plot
 INFO:__main__:End
-INFO:__main__:End
+
