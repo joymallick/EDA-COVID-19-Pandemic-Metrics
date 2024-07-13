@@ -15,7 +15,7 @@ The results that can be derived by this workflow allow to get an overview of how
 |-----------------------------------------|--------------|---------------------------|--------------------|
 | Data processing            | csv file name, outfile name | .csv file         | own implementation  |
 | Data processing workflow 2    | csv file name, outfile name, normalize(True or False)  | .csv file   | own implementation |
-| Bar plot                   | csv file name, outfile name, event   | .png  file | own implementation |
+| Bar plot                   | csv file name, outfile name, event (total_cases or total_deaths)   | .png  file | own implementation |
 
 
 
