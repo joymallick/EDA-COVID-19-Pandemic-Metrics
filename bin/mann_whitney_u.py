@@ -6,7 +6,7 @@ import logging
 # set logging
 def setup_logger(x_variable):
     log_filename = f'./logs/mann_whitney_u_test_{x_variable}.log'
-    logging.basicConfig(filename=log_filename, filemode='w', level=logging.DEBUG,)
+    logging.basicConfig(filename=log_filename, filemode='w', level=logging.DEBUG)
     return logging.getLogger(__name__)
 
 
