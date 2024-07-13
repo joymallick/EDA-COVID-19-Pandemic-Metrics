@@ -1,65 +1,76 @@
 """
-The script performs a second preprocessing of the input dataset (processed csvfile) for W 2.
-The second preprocessing focuses in particular on feature engineering for W 2.
+The script performs a second preprocessing of the input dataset (processed csvfile) for workflow 2.
+The second preprocessing focuses in particular on feature engineering.
+In the configuraiton options it is possible to choose the year to which the analysis will be restricted
+as well as wehther to normalize_by_pop outcomes values by population.
 """
 import pandas as pd
 import argparse
 import logging
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from outcomes_utils import normalize_column
 
-# Configure logging and constants
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+
+# set logging and constants
+logging.basicConfig(filename='logs/dataprocessing_w2.log')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 COLUMNS_W2 = ['continent','location','year','total_cases','total_deaths', 'population']
 
 
-def process_csvfile_w2(csv_file_path, normalize, year)-> pd.DataFrame:
+def process_csvfile_w2(csv_file_path, normalize_by_pop):
     """The  function processes the provided csv by generating the
     outcomes of interest for  each continent and by aggregating the data by
-    year. Eventually only data for year 2023 is returned.
+    input year.
     
         Args: 
         csv_file_path (str): path to the csv.
-        normalize (bool): if True outcomes are normalized by population
+        normalize_by_pop (bool): if True outcomes are normalize_by_popd by population
     
         Returns:
         pd.core.groupby.DataFrameGroupBy: processed df.
     """
     df = pd.read_csv(csv_file_path, usecols=COLUMNS_W2)
-    if normalize:
-    # normalize outcomes by population
+    if normalize_by_pop:
+    # normalize_by_pop outcomes by population
         df['total_cases'] = normalize_column(df['total_cases'], df['population'])
         df['total_deaths'] = normalize_column(df['total_deaths'], df['population'])
-    logger.debug(f"Datased with normalized columns: {df.head()}")
+    LOGGER.debug(f"Datased with normalize_by_popd columns: {df.head()}")
     # Create outcomes for each continent and year
-    logger.debug('Grouping and aggregating by year')
+    LOGGER.debug('Grouping and aggregating by year')
     df = df.groupby(['continent','year','location']).agg('last')
     df = df.groupby(['year','continent']).agg('sum')
-    df = df.loc[year,:]
-    logger.debug(f"Final processed dataset: {df.head()}")
+    LOGGER.debug(f"Final processed dataset: {df.head()}")
     return df
 
 
-def main(csvfile: str, outfile: str, normalize=False, year:int=2023):
-    logging.basicConfig(filename='dataprocessing_w2.log')
+def main(csvfile: str, outfile: str, normalize_by_pop=False):
+    # check correct format of in and out files
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
-        message = "Provide a csv file"
-        logger.exception(message)
+        message = 'Provide a csv file'
+        LOGGER.exception(message)
         raise OSError(message)
-    logger.info('Started processing data for W2')
-    df_processed_rq1 = process_csvfile_w2(csvfile, normalize, year)
-    logger.info('Saving processed csv')
-    df_processed_rq1.to_csv(csvfile[:-4]+f"_w2_{year}.csv", index=True)
-    logger.info('Ended processing for W2')
+    LOGGER.info(f'Started processing data with \
+        normalize_by_pop by population: {normalize_by_pop}')
+    df_processed_w2 = process_csvfile_w2(csvfile, normalize_by_pop)
+    LOGGER.info('Saving processed csv')
+    df_processed_w2.to_csv(outfile, index=True)
+    LOGGER.info('End')
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='The file applies specific preprocessing steps for W 2')
-    parser.add_argument('processedcsvfile', type=str, help='first processed csvfile name')
-    parser.add_argument('outfile', type=str, help='output file')
-    parser.add_argument('--normalize', type=bool, help='if true the outcomes are normalized by population')
-    parser.add_argument('--year', type=int, default=2023, help='the year for which the test will be done. Starting from 2020.')
+    choices_year = [2020, 2021, 2022, 2023, 2024]
+    parser.add_argument('-i', '--processedcsvfile', required=True,
+                        type=str, help='first processed csvfile name')
+    parser.add_argument('-o', '--outfile', required=True,
+                        type=str, help='output file name')
+    parser.add_argument('-n', '--normalize_by_pop', type=bool,
+                        default=False, help='if true the outcomes are normalize_by_popd by population')
     args = parser.parse_args()
-    main(args.processedcsvfile, args.outfile, args.normalize, args.year)
+    main(args.processedcsvfile, args.outfile, args.normalize_by_pop)
 
 
