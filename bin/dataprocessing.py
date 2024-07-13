@@ -10,7 +10,7 @@ import datetime
 import logging
 
 # set logging
-logging.basicConfig(filename='./logs/dataprocessing.log', filemode='w')
+logging.basicConfig(filename='../logs/dataprocessing.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
