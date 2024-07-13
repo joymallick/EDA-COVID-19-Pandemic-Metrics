@@ -8,37 +8,31 @@ and bin/dataprocessing_w3.py.
 import os
 import sys
 
+import pandas as pd
 from pandas.testing import assert_frame_equal
 from mann_whitney_u import mann_whitney_u_test
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 
 
-def mock_csv_data():
-    """Fixture to create a mock CSV file."""
-    data = """x_variable,y_variable
-10,13
-12,27
-8,9
-1,31
-4,47
-"""
-    with open("../..data/mann_whitney_u_testing_data.csv", "w") as f:
-        f.write(data)
-    yield "../..data/mann_whitney_u_testing_data.csv"
-    # Cleanup after test
-    os.remove("../..data/mann_whitney_u_testing_data.csv")
+
+def create_df():
+    """Helper function to create the expected DataFrame for tests."""
+    df = pd.DataFrame({
+        'x': [10, 12, 8, 1, 4],
+        'y': [13, 27, 9, 31, 47]
+    })
+
+    return df
+
 
 def run_test(cat_column):
     """Helper function to run the test with the given parameters."""
     filename = "../../data/owid-covid-data_processed.csv"
     test_df = create_df()
     expected_u, expected_p = [2, 0.3662]
-    actual_u, actual_p = mann_whitney_u_test("../..data/mann_whitney_u_testing_data.csv", x_variable="x_variable", y_variable="y_variable", output="testing.txt")
-
-    assert expected_u == actual_u
-    assert expected_p == actual_p
-
+    actual_u, expected_p = mann_whitney_u_test(filename, x_variable=)
+    assert_frame_equal(expected_df, actual_df.iloc[:3], rtol=1e-3)
 
 
 def test_process_csvfile_w1_gdp_per_capita():
