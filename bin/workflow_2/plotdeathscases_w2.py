@@ -64,7 +64,7 @@ def main(csvfile: str, outcome:str, outfile: str):
     logger.info("Started producing bar plot")
     data_rq1 = pd.read_csv(csvfile)
     barplot_outcome = bar_plot(data_rq1, "continent", f"{outcome}",
-                               f"{outcome} by_continent (2023)", color="tab:blue")
+                               f"{outcome} by_continent", color="tab:blue")
     logger.info("Saving plot")
     barplot_outcome.savefig(outfile, bbox_inches='tight')
     logger.info("Finished producing bar plot")
