@@ -1,0 +1,35 @@
+INFO:__main__:Started processing data with year:        2023 and normalize_by_pop by population: True
+INFO:__main__:Started processing data with         normalize_by_pop by population: True
+DEBUG:__main__:Datased with normalize_by_popd columns:   continent     location  total_cases  total_deaths  population  year
+0      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+1      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+2      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+3      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+4      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+DEBUG:__main__:Grouping and aggregating by year
+DEBUG:__main__:Final processed dataset:                     total_cases  total_deaths    population
+year continent                                             
+2020 Africa            0.169502      0.002678  1.426161e+09
+     Asia              0.613112      0.006202  4.720760e+09
+     Europe            1.725391      0.033067  8.144933e+08
+     North America     0.551510      0.009463  6.003237e+08
+     Oceania           0.099946      0.001140  4.503891e+07
+INFO:__main__:Saving processed csv
+INFO:__main__:End
+INFO:__main__:Started processing data with         normalize_by_pop by population: True
+DEBUG:__main__:Datased with normalize_by_popd columns:   continent     location  total_cases  total_deaths  population  year
+0      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+1      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+2      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+3      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+4      Asia  Afghanistan          NaN           NaN  41128772.0  2020
+DEBUG:__main__:Grouping and aggregating by year
+DEBUG:__main__:Final processed dataset:                     total_cases  total_deaths    population
+year continent                                             
+2020 Africa            0.169502      0.002678  1.426161e+09
+     Asia              0.613112      0.006202  4.720760e+09
+     Europe            1.725391      0.033067  8.144933e+08
+     North America     0.551510      0.009463  6.003237e+08
+     Oceania           0.099946      0.001140  4.503891e+07
+INFO:__main__:Saving processed csv
+INFO:__main__:End

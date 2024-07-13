@@ -1,18 +1,17 @@
 # gen combinations of y variables (y1, y2) for rule trendplot
 Y1Y2 = [('new_deaths', 'new_cases'), ('new_deaths', 'new_vaccinations'), ('deaths_over_cases', 'new_vaccinations')]
 # gen outfile names:
-if (config['germany']):
-    ALL_OUTPUTS_TRENDPLOT = expand('../results/trendplot_{y1}__{y2}_germany.png', zip, 
+ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_europe.png', zip, 
                y1=[y1y2[0] for y1y2 in Y1Y2], 
                y2=[y1y2[1] for y1y2 in Y1Y2])
-    OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_germany.png'
-    ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
-else:
-    ALL_OUTPUTS_TRENDPLOT =  expand('../results/trendplot_{y1}__{y2}_europe.png', zip, 
+if(config['germany']):
+    ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_germany.png', zip, 
                y1=[y1y2[0] for y1y2 in Y1Y2], 
                y2=[y1y2[1] for y1y2 in Y1Y2])
-    OUTPUT_REGPLOT = '../results/regplot_deaths_over_cases_vaccinations_europe.png'
-    ALL_OUTPUTS_CORRTEST = expand('../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
+OUTPUT_DATAPROCESSING_W3 = expand('../../data/owid-covid-data_processed_w3_{place}_by_{time}.csv', place=['germany' if config['germany'] else 'europe'], time=[config['time']])
+OUTPUT_REGPLOT = expand('../../results/regplot_deaths_over_cases_vaccinations_{place}.png', place=['germany' if config['germany'] else 'europe'])
+ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_{place}.txt', place=['germany' if config['germany'] else 'europe'],
+significance =['', '_significance'])
 
 
 def corrtest_significance(file):
@@ -36,15 +35,15 @@ def corrtest_significance(file):
 
 rule clean:
 # windows:
-    shell: 'del  ..\\results\\*.png ..\\results\\*.txt .\\*.log  ..\\data\\*_processed*.csv'
+    shell: 'del  ..\\..\\results\\*.png ..\\..\\results\\*.txt  ..\\..\\data\\*_processed*.csv'
 # linux:
-    # shell: 'rm  ..\results\{*.png,*.txt} .\logs\*.log  ..\data\{*_processed*.csv}'
+    # shell: 'rm -f  ..\..\results\{*.png,*.txt}  ..\..\data\{*_processed*.csv}'
 
 
 rule all:
     input:
-        '../data/owid-covid-data_processed.csv',
-        '../data/owid-covid-data_processed_w3.csv',
+        '../../data/owid-covid-data_processed.csv',
+        OUTPUT_DATAPROCESSING_W3,
         ALL_OUTPUTS_CORRTEST,
         OUTPUT_REGPLOT,
         ALL_OUTPUTS_TRENDPLOT
@@ -52,9 +51,9 @@ rule all:
 
 rule dataprocessing:
     input:
-        cmd='dataprocessing.py',
-        csv= '../data/owid-covid-data.csv'
-    output: '../data/owid-covid-data_processed.csv'
+        cmd='../dataprocessing.py',
+        csv= '../../data/owid-covid-data.csv'
+    output: '../../data/owid-covid-data_processed.csv'
     shell:
         '''
         python {input.cmd} -i {input.csv} -o {output}
@@ -64,8 +63,8 @@ rule dataprocessing:
 rule dataprocessing_w3:
     input:
         cmd='dataprocessing_w3.py',
-        csv='../data/owid-covid-data_processed.csv'
-    output: '../data/owid-covid-data_processed_w3.csv'
+        csv='../../data/owid-covid-data_processed.csv'
+    output: OUTPUT_DATAPROCESSING_W3
     params: 
         time = config['time'],
         germany = config['germany']
@@ -78,7 +77,7 @@ rule dataprocessing_w3:
 rule corrtest:
     input:
         cmd='correlationtest_w3.py',
-        csv= '../data/owid-covid-data_processed_w3.csv'
+        csv= OUTPUT_DATAPROCESSING_W3
     output: ALL_OUTPUTS_CORRTEST
     params: 
         v1 = config['x'],
@@ -92,7 +91,7 @@ rule corrtest:
 rule regplot:
     input:
         cmd='regressionplot_w3.py',
-        csv= '../data/owid-covid-data_processed_w3.csv',
+        csv= OUTPUT_DATAPROCESSING_W3,
         correalationtest_res=ALL_OUTPUTS_CORRTEST[1] 
     output: OUTPUT_REGPLOT
     params: 
@@ -110,8 +109,8 @@ rule regplot:
 rule trendplot:
     input:
         cmd='trendplot_w3.py',
-        csv='../data/owid-covid-data_processed_w3.csv'
-    output: '../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../results/trendplot__{y1}__{y2}_europe.png'
+        csv=OUTPUT_DATAPROCESSING_W3
+    output: '../../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../../results/trendplot_{y1}__{y2}_europe.png'
     params: 
         time = config['time'],
         y1 = '{y1}',

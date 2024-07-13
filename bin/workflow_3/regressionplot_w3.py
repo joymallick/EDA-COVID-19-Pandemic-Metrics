@@ -3,11 +3,14 @@
 The script produces scatter+regression plot for two columns of a 
 given dataframe.
 '''
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import set_plot_params
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import pandas as pd
-from utils import set_plot_params
 import argparse
 
 
@@ -15,7 +18,7 @@ logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params
-set_plot_params("configuration_plots.yaml")
+set_plot_params("../configuration_plots.yaml")
 
 
 def reg_plot(x, y, data, title):
@@ -57,7 +60,6 @@ def main(csvfile: str, outpngfile: str, x: str, y: str):
         raise ValueError(message)
     LOGGER.info(f'Started producing reg plot with x and y: {x}, {y}')
     fig = reg_plot(x=x, y=y, data=df,
-                   xlabel=x, ylabel=y,
                    title=f'OLS for {x} and {y}')
     LOGGER.info('Saving plot')
     fig.savefig(outpngfile)
@@ -69,12 +71,12 @@ if __name__ == '__main__':
         description='The file produces a regression plot between \
         x and y columns of csvfile')
     parser.add_argument('-i', '--csvfile', required=True,
-                        type=str, help='csvfile')
+                        type=str, help='csvfile name')
     parser.add_argument('-o', '--outpngfile', required=True,
-                        type=str, help='output png file to save the plot')
-    parser.add_argument('-x', 'x', required=True,
+                        type=str, help='output png file name')
+    parser.add_argument('-x', '--x', required=True,
                         type=str, help='independent var')
-    parser.add_argument('-y', 'y', required=True,
+    parser.add_argument('-y', '--y', required=True,
                         type=str, help='dependent var')
     args = parser.parse_args()
     main(args.csvfile, args.outpngfile, args.x, args.y)
