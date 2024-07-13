@@ -1,19 +1,17 @@
 # gen combinations of y variables (y1, y2) for rule trendplot
 Y1Y2 = [('new_deaths', 'new_cases'), ('new_deaths', 'new_vaccinations'), ('deaths_over_cases', 'new_vaccinations')]
 # gen outfile names:
-OUTPUT_DATAPROCESSING_W3 = '../../data/owid-covid-data_processed_w3_eu.csv',
 ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_europe.png', zip, 
                y1=[y1y2[0] for y1y2 in Y1Y2], 
                y2=[y1y2[1] for y1y2 in Y1Y2])
-OUTPUT_REGPLOT = '../../results/regplot_deaths_over_cases_vaccinations_europe.png'
-ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
-if (config['germany']):
-    OUTPUT_DATAPROCESSING_W3 = '../../data/owid-covid-data_processed_w3_de.csv',
-    ALL_OUTPUTS_TRENDPLOT = expand('../../results/trendplot_{y1}__{y2}_germany.png', zip, 
+if(config['germany']):
+    ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_germany.png', zip, 
                y1=[y1y2[0] for y1y2 in Y1Y2], 
                y2=[y1y2[1] for y1y2 in Y1Y2])
-    OUTPUT_REGPLOT = '../../results/regplot_deaths_over_cases_vaccinations_germany.png'
-    ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
+OUTPUT_DATAPROCESSING_W3 = expand('../../data/owid-covid-data_processed_w3_{place}_by_{time}.csv', place=['germany' if config['germany'] else 'europe'], time=[config['time']])
+OUTPUT_REGPLOT = expand('../../results/regplot_deaths_over_cases_vaccinations_{place}.png', place=['germany' if config['germany'] else 'europe'])
+ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_{place}.txt', place=['germany' if config['germany'] else 'europe'],
+significance =['', '_significance'])
 
 
 def corrtest_significance(file):
