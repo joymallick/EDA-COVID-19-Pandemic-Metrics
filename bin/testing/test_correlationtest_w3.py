@@ -2,12 +2,13 @@
 """
 The script contains a unit test for the component bin/correlationtest_w3.py.
 """
-import pandas as pd
-import numpy as np
-import sys
-import os
-import io
 import contextlib
+import io
+import os
+import sys
+
+import pandas as pd
+
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 from correlationtest_w3 import correlation_hptest, check_results
