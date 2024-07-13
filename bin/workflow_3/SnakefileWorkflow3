@@ -1,18 +1,17 @@
 # gen combinations of y variables (y1, y2) for rule trendplot
 Y1Y2 = [('new_deaths', 'new_cases'), ('new_deaths', 'new_vaccinations'), ('deaths_over_cases', 'new_vaccinations')]
 # gen outfile names:
+ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_europe.png', zip, 
+               y1=[y1y2[0] for y1y2 in Y1Y2], 
+               y2=[y1y2[1] for y1y2 in Y1Y2])
+OUTPUT_REGPLOT = '../../results/regplot_deaths_over_cases_vaccinations_europe.png'
+ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
 if (config['germany']):
     ALL_OUTPUTS_TRENDPLOT = expand('../../results/trendplot_{y1}__{y2}_germany.png', zip, 
                y1=[y1y2[0] for y1y2 in Y1Y2], 
                y2=[y1y2[1] for y1y2 in Y1Y2])
     OUTPUT_REGPLOT = '../../results/regplot_deaths_over_cases_vaccinations_germany.png'
     ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_germany.txt', significance =['', '_significance'])
-else:
-    ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_europe.png', zip, 
-               y1=[y1y2[0] for y1y2 in Y1Y2], 
-               y2=[y1y2[1] for y1y2 in Y1Y2])
-    OUTPUT_REGPLOT = '../../results/regplot_deaths_over_cases_vaccinations_europe.png'
-    ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_europe.txt', significance =['', '_significance'])
 
 
 def corrtest_significance(file):
