@@ -4,16 +4,19 @@ The script produces a trend plot of y1 and y2 against a shared x variable.
 All the variables are columns of a dataframe stored in a csvfile. 
 The scales of y1 and y2 are mantained.
 '''
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import set_plot_params
 import logging
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import pandas as pd
-from utils import set_plot_params
 import argparse
 
 
 # set logging
-logging.basicConfig(filename='../logs/trendplots_w3.log', filemode='w')
+logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params

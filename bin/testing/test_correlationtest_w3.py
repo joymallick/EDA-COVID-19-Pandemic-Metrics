@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The script contains a unit test for the component bin/correlationtest_w3.py.
+The script contains a unit test for the component bin/workflow_3/correlationtest_w3.py.
 """
 from bin.workflow_3.correlationtest_w3 import correlation_hptest, check_results
 import pandas as pd

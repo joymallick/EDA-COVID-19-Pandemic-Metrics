@@ -3,11 +3,14 @@
 The script produces scatter+regression plot for two columns of a 
 given dataframe.
 '''
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import set_plot_params
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import pandas as pd
-from utils import set_plot_params
 import argparse
 
 
@@ -57,7 +60,6 @@ def main(csvfile: str, outpngfile: str, x: str, y: str):
         raise ValueError(message)
     LOGGER.info(f'Started producing reg plot with x and y: {x}, {y}')
     fig = reg_plot(x=x, y=y, data=df,
-                   xlabel=x, ylabel=y,
                    title=f'OLS for {x} and {y}')
     LOGGER.info('Saving plot')
     fig.savefig(outpngfile)
@@ -72,9 +74,9 @@ if __name__ == '__main__':
                         type=str, help='csvfile name')
     parser.add_argument('-o', '--outpngfile', required=True,
                         type=str, help='output png file name')
-    parser.add_argument('-x', 'x', required=True,
+    parser.add_argument('-x', '--x', required=True,
                         type=str, help='independent var')
-    parser.add_argument('-y', 'y', required=True,
+    parser.add_argument('-y', '--y', required=True,
                         type=str, help='dependent var')
     args = parser.parse_args()
     main(args.csvfile, args.outpngfile, args.x, args.y)

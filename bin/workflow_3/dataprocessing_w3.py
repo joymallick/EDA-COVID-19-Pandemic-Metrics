@@ -13,7 +13,7 @@ import logging
 
 
 # set logging
-logging.basicConfig(filename='../logs/dataprocessing_w3.log', filemode='w')
+logging.basicConfig(filename='./logs/dataprocessing_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 COLUMNS_W3 = ['semester', 'month', 'year', 'continent', 'location',
