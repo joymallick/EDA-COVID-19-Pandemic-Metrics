@@ -1,0 +1,4 @@
+
+ SPEARMAN CORRELATION HP TEST             - new_vaccinations and deaths_over_cases
+ pvalue: 0.40057034838119865
+ Spearman correlation coefficient: 0.16529830322933772
