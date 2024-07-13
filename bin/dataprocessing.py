@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 The script performs a general processing of the input dataset (covid-19 dataset).
-In partiular, new time columns are created.
+In particular, new time columns are created.
 '''
 
 import pandas as pd
@@ -45,14 +45,13 @@ def get_semester(date):
 def process_csvfile(filename):
     '''
     Args:
-       filename (str): the path to the file
+       filename (str): the path to the csv file
 
     Raises:
         OSError: error when file is  not a csv
 
     Returns:
        pd.DataFrame'''
-
     if (filename is None or filename[-3:] != 'csv'):
         message = 'Provide a csv file'
         LOGGER.exception(message)
