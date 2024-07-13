@@ -2,7 +2,7 @@
 """
 The script contains a unit test for the component bin/dataprocessing_w3.py
 and an integration test for the components bin/dataprocessing.py
-and bin/dataprocessing_w3.py.
+and bin/workflow_3/dataprocessing_w3.py.
 """
 from bin.workflow_3.dataprocessing_w3 import process_csvfile_w3
 from bin.dataprocessing import process_csvfile

@@ -6,7 +6,7 @@ and bin/dataprocessing_w2.py.
 """
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from bin.dataprocessing_w2 import process_csvfile_w2
+from bin.workflow_2.dataprocessing_w2 import process_csvfile_w2
 
 
 
@@ -29,7 +29,7 @@ def test_process_csvfile_w2():
     }).set_index('continent')
    
     # create actual results:
-    actual_df = process_csvfile_w2(filename,normalize=False)
+    actual_df = process_csvfile_w2(filename,normalize_by_pop=False)
 
     # check
     assert_frame_equal(expected_df, actual_df.iloc[:3], rtol=1e-3)

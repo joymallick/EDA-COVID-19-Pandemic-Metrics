@@ -22,16 +22,18 @@ def create_expected_df(cat_column):
         'median_age': [43.1, 41.4, 40.8],
         'gdp_per_capita': [57410.166, 7894.393, 39753.244],
         'life_expectancy': [83.78, 72.06, 81.32]
-    })
+    }).set_index(['month', 'location'])
 
-    cat_column_values = {
+    cat_columns = {
         'gdp_per_capita': [1, 0, 1],
         'life_expectancy': [1, 0, 1],
         'median_age': [1, 0, 0],
         'population_density': [1, 0, 1]
     }
+    
 
-    df[f'{cat_column}_cat'] = cat_column_values[cat_column]
+    df[cat_column+'_cat'] = cat_columns[cat_column]
+    df[cat_column+'_cat'] = df[cat_column+'_cat'].astype('int32')
     return df
 
 
@@ -40,7 +42,8 @@ def run_test(cat_column):
     filename = "../../data/owid-covid-data_processed.csv"
     expected_df = create_expected_df(cat_column)
     actual_df = process_csvfile_w1(filename, cat_column=cat_column, year=2021, continent='Europe')
-    assert_frame_equal(expected_df, actual_df.iloc[:3], rtol=1e-3)
+    print(expected_df.columns, actual_df.columns)
+    assert_frame_equal(expected_df, actual_df.iloc[-3:], rtol=1e-3)
 
 
 def test_process_csvfile_w1_gdp_per_capita():

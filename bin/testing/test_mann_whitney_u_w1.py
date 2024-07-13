@@ -4,14 +4,7 @@ The script contains a unit test for the component bin/dataprocessing_w3.py
 and an integration test for the components bin/dataprocessing.py
 and bin/dataprocessing_w3.py.
 """
-
-import os
-import sys
-
-from pandas.testing import assert_frame_equal
-from mann_whitney_u import mann_whitney_u_test
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
+from bin.workflow_1.mann_whitney_u import mann_whitney_u_test
 
 
 def mock_csv_data():
