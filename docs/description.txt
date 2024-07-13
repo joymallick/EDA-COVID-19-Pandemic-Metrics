@@ -1,8 +1,15 @@
-The project aims at implementing an exploratory data analysis (EDA) workflow based on the dataset Coronavirus (COVID-19) Cases. 
-The analysis focuses on the following five research questions:
+Project Objective:
+The primary objective of this project is to conduct an in-depth exploratory data analysis of the COVID-19 pandemic metrics using the data available from the Our World in Data website. The goal is to uncover insights and relationships that can help better understand the progression and impact of the pandemic across different countries.
 
-1) In which continent were the highest number of cases and deaths recorded?
-2) Has the implementation of hand washing facilities helped to reduce the number of total cases?
-3) Restricting to Germany, how is the number of deaths related to number of people vaccinated?
-4) Are the total number of deaths and life expectancy correlated?
-5) How does the population density affect the total number of cases (country level)
+Data Source:
+The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic.
+
+Workflow 1: Exploring Correlations Between Categorical Variables and COVID-19 Metrics
+
+This workflow involves using the Mann-Whitney U test to identify correlations between categorical variables and COVID-19 metrics like cases or deaths.
+
+1. Process the data to create a dataset with relevant categorical variables (e.g., country income level, population density, etc.) and COVID-19 metrics.
+2. Apply the Mann-Whitney U test to each categorical variable, comparing the COVID-19 metric values between the different categories.
+3. For categorical variables with p-values below 0.05, create box plots to visualize the difference in the COVID-19 metric between the categories.
+4. For categorical variables with p-values above 0.05, create line plots to show the trend in the COVID-19 metric over time, broken down by different categories.
+5. Analyze the results to identify any significant relationships between the categorical variables and the COVID-19 metrics.
