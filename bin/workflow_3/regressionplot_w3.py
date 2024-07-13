@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-The script produces scatter+regression plot for two columns of a 
+The script produces scatter+regression plot for two columns of a
 given dataframe.
 '''
 from bin.utils import set_plot_params
