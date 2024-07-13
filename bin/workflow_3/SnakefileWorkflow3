@@ -1,23 +1,30 @@
+from itertools import product
+
+
+# get place and time for the anlysis
+PLACE = 'germany' if config['germany'] else 'europe'
+TIME = config['time']
 # gen combinations of y variables (y1, y2) for rule trendplot
 Y1Y2 = [('new_deaths', 'new_cases'), ('new_deaths', 'new_vaccinations'), ('deaths_over_cases', 'new_vaccinations')]
+# generate combinations Y1Y2-TIME-PLACE for rule trendplot
+OUTPUTS_TRENDPLOT_COMBINATIONS =  list(product( [y1y2[0] for y1y2 in Y1Y2], [y1y2[1] for y1y2 in Y1Y2],
+    [TIME], [PLACE]))
 # gen outfile names:
-ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_europe.png', zip, 
-               y1=[y1y2[0] for y1y2 in Y1Y2], 
-               y2=[y1y2[1] for y1y2 in Y1Y2])
-if(config['germany']):
-    ALL_OUTPUTS_TRENDPLOT =  expand('../../results/trendplot_{y1}__{y2}_germany.png', zip, 
-               y1=[y1y2[0] for y1y2 in Y1Y2], 
-               y2=[y1y2[1] for y1y2 in Y1Y2])
-OUTPUT_DATAPROCESSING_W3 = expand('../../data/owid-covid-data_processed_w3_{place}_by_{time}.csv', place=['germany' if config['germany'] else 'europe'], time=[config['time']])
-OUTPUT_REGPLOT = expand('../../results/regplot_deaths_over_cases_vaccinations_{place}.png', place=['germany' if config['germany'] else 'europe'])
-ALL_OUTPUTS_CORRTEST = expand('../../results/correlationtest_results{significance}_{place}.txt', place=['germany' if config['germany'] else 'europe'],
+ALL_OUTPUTS_TRENDPLOT =  expand('../../results/workflow_3/trendplot_{y1}__{y2}_by_{time}_{place}.png', zip, 
+               y1=[comb[0] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS], 
+               y2=[comb[1] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS],
+               place=[comb[2] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS],
+               time=[comb[3] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS])
+OUTPUT_DATAPROCESSING_W3 = expand('../../data/owid-covid-data_processed_w3_{place}_by_{time}.csv', place=PLACE, time=TIME)
+OUTPUT_REGPLOT = expand('../../results/workflow_3/regplot_deaths_over_cases_vaccinations_by_{time}_{place}.png', place=PLACE, time=TIME)
+ALL_OUTPUTS_CORRTEST = expand('../../results/workflow_3/correlationtest_results_{significance}_by_{time}_{place}.txt', place=PLACE,  time=TIME,
 significance =['', '_significance'])
 
 
 def corrtest_significance(file):
     """Helper function for rule regplot.
     The function reads file, that
-    contains either 'True' (= significant correlation hp test results
+    contains either 'True' (= significant correlation hp test results/workflow_3
     and regplot is produced) or 'False', and returns the corresponding boolean value.
     params:
         file (str): .txt filename
@@ -35,9 +42,9 @@ def corrtest_significance(file):
 
 rule clean:
 # windows:
-    shell: 'del  ..\\..\\results\\*.png ..\\..\\results\\*.txt  ..\\..\\data\\*_processed*.csv'
+    shell: 'del  ..\\..\\results/workflow_3\\*.png ..\\..\\results/workflow_3\\*.txt  ..\\..\\data\\*_processed*.csv'
 # linux:
-    # shell: 'rm -f  ..\..\results\{*.png,*.txt}  ..\..\data\{*_processed*.csv}'
+    # shell: 'rm -f  ..\..\results/workflow_3\{*.png,*.txt}  ..\..\data\{*_processed*.csv}'
 
 
 rule all:
@@ -66,7 +73,7 @@ rule dataprocessing_w3:
         csv='../../data/owid-covid-data_processed.csv'
     output: OUTPUT_DATAPROCESSING_W3
     params: 
-        time = config['time'],
+        time = TIME,
         germany = config['germany']
     shell: 
         '''
@@ -110,13 +117,11 @@ rule trendplot:
     input:
         cmd='trendplot_w3.py',
         csv=OUTPUT_DATAPROCESSING_W3
-    output: '../../results/trendplot_{y1}__{y2}_germany.png' if config['germany'] else '../../results/trendplot_{y1}__{y2}_europe.png'
+    output: '../../results/workflow_3/trendplot_{y1}__{y2}_by_{time}_{place}.png'
     params: 
-        time = config['time'],
-        y1 = '{y1}',
-        y2 = '{y2}'
+        time = TIME
     shell:
         '''
-        python {input.cmd} -i {input.csv} -o {output} -y1 {params.y1} -y2 {params.y2} -x {params.time}
+        python {input.cmd} -i {input.csv} -o {output} -y1 {wildcards.y1} -y2 {wildcards.y2} -x {params.time}
         '''
 
