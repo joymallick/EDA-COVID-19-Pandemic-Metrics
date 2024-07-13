@@ -11,9 +11,9 @@ from outcomes_utils import normalize_column
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 COLUMNS_W2 = ['continent','location','year','total_cases','total_deaths', 'population']
-YEAR = 2023
 
-def process_csvfile_w2(csv_file_path, normalize):
+
+def process_csvfile_w2(csv_file_path, normalize, year)-> pd.DataFrame:
     """The  function processes the provided csv by generating the
     outcomes of interest for  each continent and by aggregating the data by
     year. Eventually only data for year 2023 is returned.
@@ -35,21 +35,21 @@ def process_csvfile_w2(csv_file_path, normalize):
     logger.debug('Grouping and aggregating by year')
     df = df.groupby(['continent','year','location']).agg('last')
     df = df.groupby(['year','continent']).agg('sum')
-    df = df.loc[YEAR,:]
+    df = df.loc[year,:]
     logger.debug(f"Final processed dataset: {df.head()}")
     return df
 
 
-def main(csvfile: str, outfile: str, normalize=False):
+def main(csvfile: str, outfile: str, normalize=False, year:int=2023):
     logging.basicConfig(filename='dataprocessing_w2.log')
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
         message = "Provide a csv file"
         logger.exception(message)
         raise OSError(message)
     logger.info('Started processing data for W2')
-    df_processed_rq1 = process_csvfile_w2(csvfile, normalize)
+    df_processed_rq1 = process_csvfile_w2(csvfile, normalize, year)
     logger.info('Saving processed csv')
-    df_processed_rq1.to_csv(csvfile[:-4]+"_w2.csv", index=True)
+    df_processed_rq1.to_csv(csvfile[:-4]+f"_w2_{year}.csv", index=True)
     logger.info('Ended processing for W2')
 
 if __name__ == "__main__":
@@ -58,7 +58,8 @@ if __name__ == "__main__":
     parser.add_argument('processedcsvfile', type=str, help='first processed csvfile name')
     parser.add_argument('outfile', type=str, help='output file')
     parser.add_argument('--normalize', type=bool, help='if true the outcomes are normalized by population')
+    parser.add_argument('--year', type=int, default=2023, help='the year for which the test will be done. Starting from 2020.')
     args = parser.parse_args()
-    main(args.processedcsvfile, args.outfile, args.normalize)
+    main(args.processedcsvfile, args.outfile, args.normalize, args.year)
 
 
