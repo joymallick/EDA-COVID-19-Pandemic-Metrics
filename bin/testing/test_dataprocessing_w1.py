@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
 """
-The script contains a unit test for the component bin/dataprocessing_w3.py
+The script contains a unit test for the component bin/dataprocessing_w1.py
 and an integration test for the components bin/dataprocessing.py
-and bin/dataprocessing_w3.py.
+and bin/dataprocessing_w1.py.
 """
-
-import os
-import sys
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from dataprocessing_w1 import process_csvfile_w1
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
+from bin.workflow_1.dataprocessing_w1 import process_csvfile_w1
 
 
 
