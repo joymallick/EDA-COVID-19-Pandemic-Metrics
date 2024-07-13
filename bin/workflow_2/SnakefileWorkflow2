@@ -1,41 +1,43 @@
-VAR = config["outcome"]
-BOOL = config["normalize"]
+OUTCOMES = ['total_cases', 'total_deaths']
+# read from cl wehtehr to normalize the outcomes by population and YEAR of interest
+NORMALIZE = config["normalize"]
 YEAR = config["year"]
+# gen output names (barplots): 
+ALL_BARPLOTS = expand('../../results/barplot_{outcome}_by_continent.png', outcome=OUTCOMES)
+if NORMALIZE:
+   ALL_BARPLOTS = expand(f'../../results/barplot_{outcome}_norm_by_continent.png', outcome=OUTCOMES)
 
 
 rule all:
-    input:'../data/owid-covid-data_processed.csv',
-        f'../data/owid-covid-data_processed_w2_{YEAR}.csv',
-        f'../results/barplot_{VAR}_by_continent{YEAR}.png'
-        
+    input:
+        '../../data/owid-covid-data_processed.csv',
+        '../../data/owid-covid-data_processed_w2.csv',
+        ALL_BARPLOTS
+
 
 rule clean:
-# linux:
-    shell: 'rm  ../results/{*.png,*.txt} ./logs/*.log  ../data/{*_processed*.csv,*.tmp}'
-#windows
-    #shell: 'del  ..\\results\\*.png ..\\results\\*.txt ..\\results\\*.log  ..\\data\\*_processed*.csv'
+    shell: 'rm  ../../results/{*.png,*.txt}  ../../data/{*_processed*.csv,*.tmp}'
 
-    
-    
 
 rule dataprocessing:
     input:
         cmd='dataprocessing.py',
-        csv='../data/owid-covid-data.csv'
-    output: '../data/owid-covid-data_processed.csv'
+        csv='../../data/owid-covid-data.csv'
+    output: '../../data/owid-covid-data_processed.csv'
     shell: 'python {input.cmd} -i {input.csv} -o {output}'
+
 
 rule dataprocessing_w2:
     input:
         cmd='dataprocessing_w2.py',
-        csv='../data/owid-covid-data_processed.csv'
-    output: '../data/owid-covid-data_processed_w2_{YEAR}.csv'
-    shell: 'python {input.cmd} {input.csv} {output} --normalize {BOOL} --year {YEAR}'
+        csv='../../data/owid-covid-data_processed.csv'
+    output: '../../data/owid-covid-data_processed_w2.csv'
+    shell: 'python {input.cmd} -i {input.csv} -o {output} -n {NORMALIZE}'
 
 
-rule plotdeathscases_w2:
+rule plotdeathscases:
     input:
         cmd='plotdeathscases_w2.py',
-        csv='../data/owid-covid-data_processed_w2_{YEAR}.csv'
-    output: '../results/barplot_{VAR}_by_continent{YEAR}.png'
-    shell: 'python {input.cmd} {input.csv} {output} --outcome {VAR} '
+        csv='../../data/owid-covid-data_processed_w2.csv'
+    output: expand('../../results/barplot_{outcome}_norm_by_continent.png', outcome=OUTCOMES) if NORMALIZE else expand('../../results/barplot_{outcome}_by_continent.png', outcome=OUTCOMES)
+    shell: 'python {input.cmd} -i {input.csv} -o {output} --outcome {wildcards.outcome} --YEAR {YEAR}'
