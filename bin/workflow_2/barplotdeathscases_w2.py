@@ -13,7 +13,7 @@ from utils import set_plot_params
 
 
 # Configure logging and constants
-logging.basicConfig(filename=f'./barplotdeathscases_w2.log')
+logging.basicConfig(filename=f'./logs/barplotdeathscases_w2.log')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plotting params:
