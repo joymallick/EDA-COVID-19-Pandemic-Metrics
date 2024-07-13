@@ -48,6 +48,7 @@ def save_results(outfile, pvalue, coeff, var1, var2):
 
     Returns:
         None.'''
+    # check correct extension for outfile
     if (outfile[-3:] != 'txt'):
         message = 'Provide a txt file as outfile'
         LOGGER.exception(message)
@@ -111,9 +112,9 @@ if __name__ == '__main__':
         description='The file performs a correlation hp test and states \
             significance of the results')
     parser.add_argument('-i', '--csvfile', required=True,
-                        type=str, help='csvfile')
+                        type=str, help='csvfile name')
     parser.add_argument('-o', '--outfile', required=True, type=str,
-                        help='txt output file to save results of hp test')
+                        help='txt output file name to save results of hp test')
     parser.add_argument('-v1', '--var1', required=True,
                         type=str, help='first variable (col of csv)')
     parser.add_argument('-v2', '--var2', required=True,

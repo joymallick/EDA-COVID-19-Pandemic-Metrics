@@ -21,7 +21,7 @@ COLUMNS_W3 = ['semester', 'month', 'year', 'continent', 'location',
 
 
 def process_csvfile_w3(filename, time='month', germany=False):
-    '''The function performs a second preprocessing for RQ 3.
+    '''The function performs a second preprocessing for wprkflow 3.
 
     Args:
          filename (str): the path to the first
@@ -66,7 +66,7 @@ def process_csvfile_w3(filename, time='month', germany=False):
     return collapsed_df
 
 
-def main(csvfile: str, outfile: str, time: 'str', germany: bool):
+def main(csvfile: str, outfile: str, time: str, germany: bool):
     # check correct format of in and out files
     if ((csvfile[-3:] != 'csv') or (outfile[-3:] != 'csv')):
         message = 'Provide a csv file'
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--processedcsvfile', required=True,
                         type=str, help='first processed csvfile name')
     parser.add_argument('-o', '--outfile', required=True,
-                        type=str, help='output file')
+                        type=str, help='output file name')
     parser.add_argument('--time', type=str, default='month',
                         choices=choices_time,
                         help='time period by which data is aggregated')

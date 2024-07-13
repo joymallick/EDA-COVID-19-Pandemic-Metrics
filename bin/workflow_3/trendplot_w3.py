@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-This component plots the trend of y1 and y2 over a shared x variable.
+The script produces a trend plot of y1 and y2 against a shared x variable.
 All the variables are columns of a dataframe stored in a csvfile. 
 The scales of y1 and y2 are mantained.
 '''
@@ -17,7 +17,7 @@ logging.basicConfig(filename='../logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params
-set_plot_params("configuration_plots.yaml")
+set_plot_params("../configuration_plots.yaml")
 
 
 def label_plot_trends(ax1, ax2, xlabel, y1label, y2label, title):
@@ -102,15 +102,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='The file produces a trend plot for y1 vs y2 over x')
     parser.add_argument('-i', '--csvfile', required=True,
-                        type=str, help='csvfile')
+                        type=str, help='csvfile name')
     parser.add_argument('-o', '--outpngfile',
-                        type=str, help='output png file to save plot')
+                        type=str, help='output png file name')
     parser.add_argument('-y1', '--y1', required=True,
                         type=str, help='first y variable')
     parser.add_argument('-y2', '--y2', required=True,
                         type=str, help='second y variable')
     parser.add_argument('-x', '--x',  required=True, type=str,
-                        help='x variable of the plot')
+                        help='x variable')
     args = parser.parse_args()
     main(args.csvfile,
          args.outpngfile, args.y1, args.y2, args.x)

@@ -15,7 +15,7 @@ logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # set plot params
-set_plot_params("configuration_plots.yaml")
+set_plot_params("../configuration_plots.yaml")
 
 
 def reg_plot(x, y, data, title):
@@ -69,9 +69,9 @@ if __name__ == '__main__':
         description='The file produces a regression plot between \
         x and y columns of csvfile')
     parser.add_argument('-i', '--csvfile', required=True,
-                        type=str, help='csvfile')
+                        type=str, help='csvfile name')
     parser.add_argument('-o', '--outpngfile', required=True,
-                        type=str, help='output png file to save the plot')
+                        type=str, help='output png file name')
     parser.add_argument('-x', 'x', required=True,
                         type=str, help='independent var')
     parser.add_argument('-y', 'y', required=True,
