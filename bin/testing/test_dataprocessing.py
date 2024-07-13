@@ -5,14 +5,9 @@ The choice of the regression test lies in the fact that the output of the
 processing function has many columns,
 thus it's difficult to create a fixture by hand.
 """
+from bin.dataprocessing import process_csvfile
 from pandas.testing import assert_frame_equal
 import pandas as pd
-import numpy as np
-import sys
-import os
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
-from dataprocessing import process_csvfile
 
 
 def test_regression():

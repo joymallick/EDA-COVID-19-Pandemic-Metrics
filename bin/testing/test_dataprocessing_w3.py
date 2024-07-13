@@ -4,15 +4,11 @@ The script contains a unit test for the component bin/dataprocessing_w3.py
 and an integration test for the components bin/dataprocessing.py
 and bin/dataprocessing_w3.py.
 """
+from bin.workflow_3.dataprocessing_w3 import process_csvfile_w3
+from bin.dataprocessing import process_csvfile
 import pandas as pd
 import numpy as np
 from pandas.testing import assert_frame_equal
-import sys
-import os
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
-from dataprocessing_w3 import process_csvfile_w3
-from dataprocessing import process_csvfile
 
 
 def test_process_csvfile_w3():
@@ -31,7 +27,7 @@ def test_process_csvfile_w3():
                        62444.0],
         'new_vaccinations': [314069.0, 18163220.0,
                              28072652.0],
-        'deaths_vs_cases': [0.014071, 0.032676,
+        'deaths_over_cases': [0.014071, 0.032676,
                             0.02857]
     }).set_index('month')
     expected_df_de = pd.DataFrame({
@@ -42,7 +38,7 @@ def test_process_csvfile_w3():
                        6653.0],
         'new_vaccinations': [182500.0, 2340328.0,
                              3799647.0],
-        'deaths_vs_cases': [np.nan, 0.042430,
+        'deaths_over_cases': [np.nan, 0.042430,
                             0.029687]
     }).set_index('month')
     # create actual results:
@@ -68,7 +64,7 @@ def test_integration():
                        62444.0],
         'new_vaccinations': [314069.0, 18163220.0,
                              28072652.0],
-        'deaths_vs_cases': [0.014071, 0.032676,
+        'deaths_over_cases': [0.014071, 0.032676,
                             0.02857]
     }).set_index('month')
     expected_df_de = pd.DataFrame({
@@ -79,7 +75,7 @@ def test_integration():
                        6653.0],
         'new_vaccinations': [182500.0, 2340328.0,
                              3799647.0],
-        'deaths_vs_cases': [np.nan, 0.042430,
+        'deaths_over_cases': [np.nan, 0.042430,
                             0.029687]
     }).set_index('month')
     # create actual results:

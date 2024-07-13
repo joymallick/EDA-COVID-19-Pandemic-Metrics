@@ -1,48 +1,46 @@
 #!/usr/bin/env python3
 '''
-The script produces scatter and regression line for Workflow 3 (RQ 3).
+The script produces scatter+regression plot for two columns of a 
+given dataframe.
 '''
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 import pandas as pd
-from utils import set_plot_params, load_config
+from utils import set_plot_params
 import argparse
 
 
 logging.basicConfig(filename='./logs/regressionplot_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
-# load configuration for workflow 3:
-CONFIG = load_config("configuration_w3.yaml")
 # set plot params
 set_plot_params("configuration_plots.yaml")
 
 
-def reg_plot(x, y, data, xlabel, ylabel, title):
+def reg_plot(x, y, data, title):
     '''The function produces a regression+scatter plot
     using seaborn for x and y columns of data.
     Args:
         x (str) : independent var
         y (str): dependent var
         data (pd.DataFrame): dataframe
-        xlabel (str): label for x axis
-        ylabel (str): label for y axis
         title (str): title  of the plot
     Returns:
         figure (matplotlib.figure.Figure)
     '''
     fig, ax = plt.subplots()
     sns.regplot(x=x, y=y, data=data, fit_reg=True, ax=ax)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
+    ax.set_xlabel(x)
+    ax.set_ylabel(y)
     ax.set_title(title)
     fig.tight_layout()
     return fig
 
 
-def main(processedcsvfile_w3: str, outpngfile: str):
-    if (processedcsvfile_w3[-3:] != 'csv'):
+def main(csvfile: str, outpngfile: str, x: str, y: str):
+    # check correct format of in and out files
+    if (csvfile[-3:] != 'csv'):
         message = 'Provide a csv file as infile'
         LOGGER.exception(message)
         raise OSError(message)
@@ -51,11 +49,16 @@ def main(processedcsvfile_w3: str, outpngfile: str):
         LOGGER.exception(message)
         raise OSError(message)
     LOGGER.info('Reading data')
-    df_w3 = pd.read_csv(processedcsvfile_w3)
-    LOGGER.info('Started producing reg plot')
-    fig = reg_plot(x='new_vaccinations', y='deaths_vs_cases', data=df_w3,
-                   xlabel='new vaccinations', ylabel='deaths/cases',
-                   title=f'OLS for new vaccinations and deaths over cases')
+    df = pd.read_csv(csvfile)
+    # check that x and y are existing columns of the input
+    if (x not in df.columns or y not in df.columns):
+        message = 'x and y must be columns of the provided df'
+        LOGGER.exception(message)
+        raise ValueError(message)
+    LOGGER.info(f'Started producing reg plot with x and y: {x}, {y}')
+    fig = reg_plot(x=x, y=y, data=df,
+                   xlabel=x, ylabel=y,
+                   title=f'OLS for {x} and {y}')
     LOGGER.info('Saving plot')
     fig.savefig(outpngfile)
     LOGGER.info('End')
@@ -63,11 +66,15 @@ def main(processedcsvfile_w3: str, outpngfile: str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='The file produces a regression plot \
-            for Workflow 3 (RQ 3)')
-    parser.add_argument('-i', '--processedcsvfile_w3', required=True,
-                        type=str, help='processed csvfile')
+        description='The file produces a regression plot between \
+        x and y columns of csvfile')
+    parser.add_argument('-i', '--csvfile', required=True,
+                        type=str, help='csvfile')
     parser.add_argument('-o', '--outpngfile', required=True,
                         type=str, help='output png file to save the plot')
+    parser.add_argument('-x', 'x', required=True,
+                        type=str, help='independent var')
+    parser.add_argument('-y', 'y', required=True,
+                        type=str, help='dependent var')
     args = parser.parse_args()
-    main(args.processedcsvfile_w3, args.outpngfile)
+    main(args.csvfile, args.outpngfile, args.x, args.y)
