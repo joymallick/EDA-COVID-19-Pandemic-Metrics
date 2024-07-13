@@ -3,10 +3,7 @@
 The script produces scatter+regression plot for two columns of a 
 given dataframe.
 '''
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils import set_plot_params
+from bin.utils import set_plot_params
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
