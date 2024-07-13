@@ -1,5 +1,5 @@
 # restrict analysis to Germany:
-'germany': True
+'germany': False
 # time period by which aggregating the data:
 'time': 'month'
 # correlation test and regression plot variables:
