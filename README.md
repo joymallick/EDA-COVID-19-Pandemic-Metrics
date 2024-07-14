@@ -60,6 +60,8 @@ To produce just a single output run the above code with the name of the output f
 
 When changing the configuration the files are not overwritten, the new files will be added together with the existing ones. 
 
+#### Outputs:
+
 ## Run workflow 2
 Workflow 2 refers to research point 2 and it allows to configure the following parameters:
 - *normalize* : can be either True (outcomes are normalized by population) or False. The default option is False.
@@ -84,6 +86,8 @@ To **delete all** the outputs run:
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
 When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
+
+#### Outputs:
 
 ### Run workflow 3
 Workflow 3 refers to research point 3 and it allows to configure the following parameters:
@@ -110,9 +114,17 @@ To **delete all** the outputs run:
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
 When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
+
+
 #### Outputs:
-The 
- 
+Given a chosen configuration for workflow 3, which will be of the form: {germany, time, x, y}, from "germany" (it's bool) we derive the wildcard  {place}, which will be either "europe" or "germany". Then, the produeced outputs in `results\workflow_3` will be:
+- correlationtest_results__by_{time}_{place}.txt :  contains results of correlation hp test for x and y (values are calculated according to the chosen {time} and {place})
+- correlationtest_results__significance_by_{time}_{place}.txt: contains either True (= pvalue and correlation coefficient of the test are meaningful) or False. It's used to activate (or not) the rule to get the below regression  plot.
+- regplot_deaths_over_cases_vaccinations_by_{time}_{place}.png: either empty .png file (if above output is False) or .png file with regression and scatter plot of x and y (if above output is True).
+- trendplot_deaths_over_cases__new_cases_by_{time}_{place}.png : trend plot for deaths over cases vs new cases against {time}. For {place}. 
+- trendplot_deaths_over_cases__new_vaccinations_by_{time}_{place}.png : trend plot for deaths over cases vs new vaccinations against {time}. For {place}. 
+- trendplot_new_deaths__new_cases_by_{time}_{place}.png : trend plot for new deaths vs new cases against {time}. For {place}.
+- trendplot_new_deaths__new_vaccinations_by_{time}_{place}.png : trend plot for new deaths vs new vaccinations against {time}. For {place}.
 
 ## Contributing
 
