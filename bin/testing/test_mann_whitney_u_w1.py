@@ -10,9 +10,11 @@ import logging
 
 
 # setting up test logger
-logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
+logging.basicConfig(filename='./logs/test.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
+
+
 def mock_csv_data():
     """Fixture to create a mock CSV file."""
     data = [['x_variable', 'y_variable'],
@@ -25,7 +27,6 @@ def mock_csv_data():
 
     with open(filename, "w") as f:
         writer = csv.writer(f)
-        # f.write(data)
         writer.writerows(data)
     return filename
 
