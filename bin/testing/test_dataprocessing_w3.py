@@ -2,7 +2,7 @@
 """
 The script contains a unit test for the component bin/dataprocessing_w3.py
 and an integration test for the components bin/dataprocessing.py
-and bin/dataprocessing_w3.py.
+and bin/workflow_3/dataprocessing_w3.py.
 """
 from bin.workflow_3.dataprocessing_w3 import process_csvfile_w3
 from bin.dataprocessing import process_csvfile
@@ -28,7 +28,7 @@ def test_process_csvfile_w3():
         'new_vaccinations': [314069.0, 18163220.0,
                              28072652.0],
         'deaths_over_cases': [0.014071, 0.032676,
-                            0.02857]
+                              0.02857]
     }).set_index('month')
     expected_df_de = pd.DataFrame({
         'month': ['2020-12', '2021-01', '2021-02'],
@@ -39,7 +39,7 @@ def test_process_csvfile_w3():
         'new_vaccinations': [182500.0, 2340328.0,
                              3799647.0],
         'deaths_over_cases': [np.nan, 0.042430,
-                            0.029687]
+                              0.029687]
     }).set_index('month')
     # create actual results:
     actual_df_eu = process_csvfile_w3(filename, germany=False)
@@ -65,7 +65,7 @@ def test_integration():
         'new_vaccinations': [314069.0, 18163220.0,
                              28072652.0],
         'deaths_over_cases': [0.014071, 0.032676,
-                            0.02857]
+                              0.02857]
     }).set_index('month')
     expected_df_de = pd.DataFrame({
         'month': ['2020-12', '2021-01', '2021-02'],
@@ -76,7 +76,7 @@ def test_integration():
         'new_vaccinations': [182500.0, 2340328.0,
                              3799647.0],
         'deaths_over_cases': [np.nan, 0.042430,
-                            0.029687]
+                              0.029687]
     }).set_index('month')
     # create actual results:
     # first processing

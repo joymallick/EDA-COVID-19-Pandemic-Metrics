@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''
-The script performs a correlation hypothesis test between two columns of the input dataset.
+The script performs a correlation hypothesis test between
+two columns of the input dataset.
 The results of the test are labeled as significant or not basing on
 configurable thresholds for pvalue and correlation absolute value.
 '''
@@ -40,7 +41,7 @@ def save_results(outfile, pvalue, coeff, var1, var2):
         outfile (str): output file name
         pvalue (float): result of hp test
         coeff (float): result of hp test
-        var1 (str): first variable 
+        var1 (str): first variable
         var2 (str): second variable
 
     Raises:
@@ -124,4 +125,5 @@ if __name__ == '__main__':
     parser.add_argument('--pvalthr',
                         type=float, default=0.0, help='pvalue threshold')
     args = parser.parse_args()
-    main(args.csvfile, args.outfile, args.var1, args.var2, args.corrthr, args.pvalthr)
+    main(args.csvfile, args.outfile, args.var1, args.var2,
+         args.corrthr, args.pvalthr)

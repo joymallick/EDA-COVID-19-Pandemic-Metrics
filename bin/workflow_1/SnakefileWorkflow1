@@ -1,6 +1,6 @@
 # Define the variable from the configuration file
 configfile: "configuration_w1.yaml"
-GROUPS =  ["life_expectancy", "gdp_per_capita", "median_age", "population_density"]
+GROUPS = ["life_expectancy", "gdp_per_capita", "median_age", "population_density"]
 
 # Rule to specify the expected output files for the chosen variable
 rule all:
@@ -15,15 +15,15 @@ rule clean:
 
 rule dataprocessing:
     input:
-        cmd='../dataprocessing.py',
-        csv='../../data/owid-covid-data.csv'
+        cmd = '../dataprocessing.py',
+        csv = '../../data/owid-covid-data.csv'
     output: '../../data/owid-covid-data_processed.csv'
     shell: 'python {input.cmd} -i {input.csv} -o {output}'
 
 rule dataprocessingw1:
     input:
-        cmd='dataprocessing_w1.py',
-        csv='../../data/owid-covid-data_processed.csv'
+        cmd = 'dataprocessing_w1.py',
+        csv = '../../data/owid-covid-data_processed.csv'
     output: '../../data/owid-covid-data_processed_{group}.csv'
     params:
         continent = config['continent'],
@@ -32,8 +32,8 @@ rule dataprocessingw1:
 
 rule mannwhitneyu:
     input:
-        cmd='mann_whitney_u.py',
-        csv='../../data/owid-covid-data_processed_{group}.csv'
+        cmd = 'mann_whitney_u_w1.py',
+        csv = '../../data/owid-covid-data_processed_{group}.csv'
     output: '../../results/workflow_1/mannwhitneyu_{group}.txt'
     params:
         y = config['y']
@@ -42,16 +42,15 @@ rule mannwhitneyu:
 rule plot:
     input:
         mannwhitneyu_test = '../../results/workflow_1/mannwhitneyu_{group}.txt',
-        csv='../../data/owid-covid-data_processed_{group}.csv'
+        csv = '../../data/owid-covid-data_processed_{group}.csv'
     output:
         plot = '../../results/workflow_1/plot_{group}.png'
     params:
-        x = config['x'],
         y = config['y']
     run:
         with open(input.mannwhitneyu_test, 'r') as f:
             result = f.read().strip()
         if result == 'True':
-            shell('python box_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python box_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -y "{params.y}" -o {output.plot}')
         else:
-            shell('python line_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python line_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "month" -y "{params.y}" -o {output.plot}')
