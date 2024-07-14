@@ -3,14 +3,17 @@
 ## Project Description
 The primary objective of this project is to conduct an automated exploratory data analysis of the [COVID-19 dataset](https://ourworldindata.org/coronavirus) from Our World in Data.
 The analysis focuses on the following 3 main research point:
-1. Explore the influence of factors such as life expectancy, GDP per capita, population density and median age on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
-2. Understand how the number of cases and deaths differ across continents on a yearly level.
-3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
+1. Explore the influence of life expectancy, median age, GDP per capita and population density on COVID-19 metrics for a given year and continent.
+   Given one of the just mentioned factors, compare the average number of new cases/deaths between countries with values of the factor above
+   the median (of the continent) and those with values below the median. Is there a difference?
+2. Understand how the number of total cases and deaths differs across continents on a yearly level.
+3. Explore the relationship between new deaths, cases and vaccinations for covid-19, given a time period level (months or semesters).
+   Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
 
 For point 3., due to missing values reasons, we restrict the analysis to Europe.
 
 For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. For each workflow, by changing the configurable parameters (see below for details), it's possible to get insights on different declinations of each research point. For example, given point 2., it's possible to choose as outcome of interest either the total number of cases or the total number of deaths per continent and to choose the year of interest starting from 2020 up to 2024. <br>
-For detailed information on the comonents of the workflows refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refer to the Usage section below.
+For detailed information on the components of the workflows refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refer to the Usage section below.
 All the workflows are based on the workflow management system [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 
 ### Data Source:
@@ -29,7 +32,7 @@ To use this project, follow these steps:
     $env:PYTHONPATH = (Get-Location).Path 
     set PYTHONPATH=%cd%
  ``` 
-This is necessary otherwise you will get import errors: no module named bin.
+This is necessary otherwise you will get import errors (no module named bin).
 
 6. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below) by setting
 yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `bin\workflow_3`.
@@ -65,7 +68,7 @@ When changing the configuration the files are not overwritten, the new files wil
 
 ### Run workflow 2
 Workflow 2 refers to research point 2 and it allows to configure the following parameters:
-- *normalize* : can be either True (outcomes are normalized by population) or False. The default option is False.
+- *normalize* : can be either True (= outcomes are normalized by population) or False. The default option is False.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2023.
 
 Here the above parameters are edited directly from the CL as shown below. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
@@ -81,14 +84,23 @@ The produced files will be stored in  `results\workflow_2`, except for the proce
 To **delete all** the outputs run:
 
 ```shell
- snakemake -s SnakefileWorkflow1 --cores all clean
+ snakemake -s SnakefileWorkflow2 --cores all clean
  ```
 
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
-When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
-
 #### Outputs:
+Given a chosen configuration for workflow 2, which will be of the form: {normalize, year}, the produeced outputs in `results\workflow_2` will be:
+
+normalize == True:
+- <ins>barplot_total_cases_norm_by_continent_{year}.png</ins>: bar plot showing total cases in the chosen year for each continent. For each continent, total cases is normalized by the population of that continent.
+-  <ins>barplot_total_deaths_norm_by_continent_{year}.png</ins>: bar plot showing total deaths in the chosen year for each continent. For each continent, total deaths is normalized by the population of that continent.
+
+normalize == False:
+-  <ins>barplot_total_cases_by_continent_{year}.png</ins>: bar plot showing total cases in the chosen year for each continent.
+-  <ins>barplot_total_deaths_by_continent_{year}.png</ins>: bar plot showing total deaths in the chosen year for each continent.
+
+When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
 
 ### Run workflow 3
 Workflow 3 refers to research point 3 and it allows to configure the following parameters:
@@ -114,18 +126,15 @@ To **delete all** the outputs run:
 
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
-When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
-
-
 #### Outputs:
 Given a chosen configuration for workflow 3, which will be of the form: {germany, time, x, y}, from "germany" (it's bool) we derive the wildcard  {place}, which will be either "europe" or "germany". Then, the produeced outputs in `results\workflow_3` will be:
-- correlationtest_results__by_{time}_{place}.txt :  contains results of correlation hp test for x and y (values are calculated according to the chosen {time} and {place})
-- correlationtest_results__significance_by_{time}_{place}.txt: contains either True (= pvalue and correlation coefficient of the test are meaningful) or False. It's used to activate (or not) the rule to get the below regression  plot.
-- regplot_deaths_over_cases_vaccinations_by_{time}_{place}.png: either empty .png file (if above output is False) or .png file with regression and scatter plot of x and y (if above output is True).
-- trendplot_deaths_over_cases__new_cases_by_{time}_{place}.png : trend plot for deaths over cases vs new cases against {time}. For {place}. 
-- trendplot_deaths_over_cases__new_vaccinations_by_{time}_{place}.png : trend plot for deaths over cases vs new vaccinations against {time}. For {place}. 
-- trendplot_new_deaths__new_cases_by_{time}_{place}.png : trend plot for new deaths vs new cases against {time}. For {place}.
-- trendplot_new_deaths__new_vaccinations_by_{time}_{place}.png : trend plot for new deaths vs new vaccinations against {time}. For {place}.
+-  <ins>correlationtest_results__by_{time}_{place}.txt</ins> :  contains results of correlation hp test for x and y (values are calculated according to the chosen {time} and {place})
+-  <ins>correlationtest_results__significance_by_{time}_{place}.txt</ins>: contains either True (= pvalue and correlation coefficient of the test are meaningful) or False. It's used to activate (or not) the rule to get the below regression  plot.
+-  <ins>regplot_deaths_over_cases_new_vaccinations_by_{time}_{place}.png</ins>: either empty .png file (if above output is False) or .png file with regression and scatter plot of x and y (if above output is True).
+-  <ins>trendplot_deaths_over_cases__new_cases_by_{time}_{place}.png</ins> : trend plot for deaths over cases vs new cases against {time}. For {place}. 
+- <ins>trendplot_deaths_over_cases__new_vaccinations_by_{time}_{place}.png</ins> : trend plot for deaths over cases vs new vaccinations against {time}. For {place}. 
+-  <ins>trendplot_new_deaths__new_cases_by_{time}_{place}.png</ins> : trend plot for new deaths vs new cases against {time}. For {place}.
+-  <ins>trendplot_new_deaths__new_vaccinations_by_{time}_{place}.png </ins> : trend plot for new deaths vs new vaccinations against {time}. For {place}.
 
 ## Contributing
 
