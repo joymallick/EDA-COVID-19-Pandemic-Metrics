@@ -40,7 +40,7 @@ yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `
 
 ### Run workflow 1
 Workflow 1 refers to research point 1 and it allows to configure the following parameters:
-- *continent* : can be one of ['Europe', 'Asia', 'Africa', 'America', 'Oceania']. The default option is Europe.
+- *continent* : can be one of ['Europe', 'Asia', 'Africa', 'North America', 'South America', 'Oceania']. The default option is Europe.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2021.
 - *y* : the outcome plotted on y-axis of the line and box plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
 
@@ -64,7 +64,7 @@ To produce just a single output run the above code with the name of the output f
 
 #### Outputs:
 
-Given a chosen configuration for workflow 1, which will be of the form: {continent, year, x, y}. Then, the produced outputs in `results\workflow_1` will be:
+Given a chosen configuration for workflow 1, which will be of the form: {continent, year, x, y}, the produced outputs in `results\workflow_1` will be:
 
 The results of the Mann-Whitney-U test for each categorical variable. The .txt files only contain a boolean statement (True or False) for the significance level of 0.05.
 -  <ins>mannwhitneyu_gdp_per_capita.txt</ins> 
