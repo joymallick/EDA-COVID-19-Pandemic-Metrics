@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 The script contains unit tests for the component bin/dataprocessing_w2.py
-and an integration test for the components bin/dataprocessing.py
-and bin/dataprocessing_w2.py.
+and an integration test for the components
+bin/dataprocessing.py and bin/workflow_2/dataprocessing_w2.py.
 """
 import pandas as pd
 from pandas.testing import assert_frame_equal
@@ -21,7 +21,9 @@ def test_process_csvfile_w2():
         {
             "year": [2020, 2020, 2020],
             "continent": ["Africa", "Asia", "Europe"],
-            "total_cases": [0.16950236006485567, 0.6131116080538463, 1.725391104595939],
+            "total_cases": [0.16950236006485567,
+                            0.6131116080538463,
+                            1.725391104595939],
             "total_deaths": [
                 0.0026781997214313518,
                 0.006201783192489134,
@@ -61,7 +63,9 @@ def test_integration():
         {
             "year": [2020, 2020, 2020],
             "continent": ["Africa", "Asia", "Europe"],
-            "total_cases": [0.16950236006485567, 0.6131116080538463, 1.725391104595939],
+            "total_cases": [0.16950236006485567,
+                            0.6131116080538463,
+                            1.725391104595939],
             "total_deaths": [
                 0.0026781997214313518,
                 0.006201783192489134,
@@ -86,8 +90,10 @@ def test_integration():
     actual_df_first = process_csvfile(filename)
     actual_df_first.to_csv(filename_processed, index=False)
     # processing for w3
-    actual_df_ = process_csvfile_w2(filename_processed, normalize_by_pop=False)
-    actual_df_n_ = process_csvfile_w2(filename_processed, normalize_by_pop=True)
+    actual_df_ = process_csvfile_w2(filename_processed,
+                                    normalize_by_pop=False)
+    actual_df_n_ = process_csvfile_w2(filename_processed,
+                                      normalize_by_pop=True)
     # check
     assert_frame_equal(expected_df_, actual_df_.iloc[:3], rtol=1e-3)
     assert_frame_equal(expected_df_n_, actual_df_n_.iloc[:3], rtol=1e-3)

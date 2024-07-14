@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-The script contains a unit test for the component bin/workflow_3/correlationtest_w3.py.
+The script contains a unit test for the component
+bin/workflow_3/correlationtest_w3.py.
 """
 from bin.workflow_3.correlationtest_w3 import correlation_hptest, check_results
 import pandas as pd
@@ -14,7 +15,7 @@ GET_STDOUT = io.StringIO()
 def test_process_correlationtest_w3():
     """Unit test for correlation test component.
     Check case in which expected res should be True and case
-    in which should be False for new_vaccinations 
+    in which should be False for new_vaccinations
     and deaths_over_cases from processed covid 19 dataset"""
     # load data:
     filename = "../../data/owid-covid-data_processed_w3_europe_by_month.csv"
