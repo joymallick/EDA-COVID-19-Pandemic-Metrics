@@ -13,7 +13,7 @@ def setup_logger(x_variable):
 
 
 def mann_whitney_u_test(file_path, x_variable,
-                        y_variable, output, logger=False):
+                        y_variable, output, LOGGER):
     """
     Runs the Mann-Whitney U test on the data in the specified file.
 
@@ -25,9 +25,7 @@ def mann_whitney_u_test(file_path, x_variable,
         float: The U-statistic of the Mann-Whitney U test.
         float: The p-value of the Mann-Whitney U test.
     """
-    if (logger):
-        # needed for testing
-        LOGGER = setup_logger(x_variable)
+
     try:
         # Load the data
         LOGGER.debug("Loading data from CSV file")
@@ -78,7 +76,7 @@ def main(csvfile: str, x_col: str, y_col: str, output: str):
 
     LOGGER.info('Performing Mann-Whitney U test')
     try:
-        result = mann_whitney_u_test(csvfile, x_col, y_col, output)
+        result = mann_whitney_u_test(csvfile, x_col, y_col, output, LOGGER)
         LOGGER.info(f'Mann-Whitney U test result: {result}')
     except Exception as e:
         LOGGER.error(f'Failed to perform Mann-Whitney U test: {e}')
