@@ -43,8 +43,10 @@ def process_csvfile_w2(csv_file_path, normalize_by_pop):
     df = pd.read_csv(csv_file_path, usecols=COLUMNS_W2)
     if normalize_by_pop:
         # normalize_by_pop outcomes by population
-        df["total_cases"] = normalize_column(df["total_cases"], df["population"])
-        df["total_deaths"] = normalize_column(df["total_deaths"], df["population"])
+        df["total_cases"] = normalize_column(df["total_cases"],
+                                             df["population"])
+        df["total_deaths"] = normalize_column(df["total_deaths"],
+                                              df["population"])
     LOGGER.debug(f"Datased with normalize_by_popd columns: {df.head()}")
     # Create outcomes for each continent and year
     LOGGER.debug("Grouping and aggregating by year")
