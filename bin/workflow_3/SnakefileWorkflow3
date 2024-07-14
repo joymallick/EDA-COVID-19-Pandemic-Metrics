@@ -49,10 +49,7 @@ def corrtest_significance(file):
 
 
 rule clean:
-    # windows:
-    shell: 'del  ..\\..\\results\\workflow_3\\*.png ..\\..\\results\\workflow_3\\*.txt  ..\\..\\data\\*_processed*.csv'
-    # linux:
-    # shell: 'rm -f  ..\..\results/workflow_3\{*.png,*.txt}  ..\..\data\{*_processed*.csv}'
+    shell: 'rm -f  ../../results/workflow_3/{*.png,*.txt}'
 
 
 rule all:
