@@ -150,6 +150,8 @@ Given a chosen configuration for workflow 3, which will be of the form: {germany
 -  <ins>trendplot_new_deaths__new_cases_by_{time}_{place}.png</ins> : trend plot for new deaths vs new cases against {time}. For {place}.
 -  <ins>trendplot_new_deaths__new_vaccinations_by_{time}_{place}.png </ins> : trend plot for new deaths vs new vaccinations against {time}. For {place}.
 
+When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
+
 ## Contributing
 
 We welcome contributions from the community! For detailed guidelines on how to get involved, please refer to our [Contribution Guidelines](CONTRIBUTING.md).
