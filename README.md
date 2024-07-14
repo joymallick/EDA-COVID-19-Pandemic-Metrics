@@ -131,15 +131,15 @@ Given a chosen configuration for workflow 3, which will be of the form: {germany
 
 We welcome contributions from the community! For detailed guidelines on how to get involved, please refer to our [Contribution Guidelines](CONTRIBUTING.md).
 
-### Code of Conduct
+## Code of Conduct
 
 All contributors are expected to follow the project's [Code of Conduct](CONDUCT.md). Please read it carefully before participating.
 
-### Questions and Support
+## Questions and Support
 
 If you have any questions or need assistance, please open an issue on the project's GitHub repository so we can discuss the question together. Otherwise 
 
-### Contact information
+## Contact information
 
 Email addresses: [corona@uni-potsdam.de](mailto:corona@uni-potsdam.de), [nick.thomas@uni-potsdam.de](mailto:nick.thomas@uni-potsdam.de), [joy.md@uni-potsdam.de](mailto:joy.md@uni-potsdam.de), [omar.shindy@uni-potsdam.de](mailto:omar.shindy@uni-potsdam.de) .
 
