@@ -1,6 +1,7 @@
 # Workflow 2: Exploring total deaths and cases by continent on a yearly level.
 The results that can be derived by this workflow allow to get an overview of how the total number of deaths or cases (w.r.t a fixed year) differed by continents. The workflow has 3 components, which are all tailored to the covid-19 dataset. 
 
+## Abstract workflow
 ### Uml activity diagram
 ![Alt text](./Workflow2ActivityDiagram.png)
 ### Explanation

@@ -1,10 +1,11 @@
-### Workflow 1: Exploring influence of life expectancy, median age, GDP per capita and population density on COVID-19 metrics 
+# Workflow 1: Exploring influence of life expectancy, median age, GDP per capita and population density on COVID-19 metrics 
 
 Restricting to a given year and continent, this workflow involves using the Mann-Whitney U test to identify a difference in mean of chosen covid-19 metrics within countries with the factor of interest (life expectancy, median age, ecc..) above the median and below the median. The median is computed w.r.t the continent.
 
 The used metric can be chosen when running this workflow as either 'new_cases' or 'new_deaths' as parameters. The categorical variables that are currently running in this workflow are 'median_age', 'gdp_per_capita', 'life_expectancy' and 'population_density'.
 Furthermore, this workflow needs a specific year (from 2020 to 2024) and a continent as input. All parameters can be adjusted in the respective configuration file. 
 It has 5 components, among which 2 are tailored to the covid-19 dataset (components 1 and 2). 
+## Abstract workflow
 ### Uml activity diagram
 ![Alt text](./Workflow1ActivityDiagram.png)
 ### Explanation
