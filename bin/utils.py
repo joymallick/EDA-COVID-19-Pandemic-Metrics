@@ -1,6 +1,7 @@
 import yaml
 import matplotlib.pyplot as plt
 
+
 def load_config(config_file):
     """The function loads configuration parameters
     stored in config_file (.yaml).
