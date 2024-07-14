@@ -30,11 +30,12 @@ To use this project, follow these steps:
     set PYTHONPATH=%cd%
  ``` 
 This is necessary otherwise you will get import errors: no module named bin.
-5. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below) by setting
-yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `bin\workflow_3`.
-6. Check the analysis results in the `results` directory. For the processed datasets see  `data`.
 
-## Run workflow 1
+6. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below) by setting
+yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `bin\workflow_3`.
+7. Check the analysis results in the `results` directory. For the processed datasets see  `data`.
+
+### Run workflow 1
 Workflow 1 refers to research point 1 and it allows to configure the following parameters:
 - *continent* : can be one of ['Europe', 'Asia', 'Africa', 'America', 'Oceania']. The default option is Europe.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2021.
@@ -60,9 +61,9 @@ To produce just a single output run the above code with the name of the output f
 
 When changing the configuration the files are not overwritten, the new files will be added together with the existing ones. 
 
-#### Outputs:
+##### Outputs:
 
-## Run workflow 2
+### Run workflow 2
 Workflow 2 refers to research point 2 and it allows to configure the following parameters:
 - *normalize* : can be either True (outcomes are normalized by population) or False. The default option is False.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2023.
