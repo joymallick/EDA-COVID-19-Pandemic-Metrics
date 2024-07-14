@@ -6,8 +6,13 @@ bin/workflow_1/mann_whitney_u_w1.py.
 from bin.workflow_1.mann_whitney_u_w1 import mann_whitney_u_test
 import os
 import csv
+import logging
 
 
+# setting up test logger
+logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 def mock_csv_data():
     """Fixture to create a mock CSV file."""
     data = [['x_variable', 'y_variable'],
@@ -31,7 +36,7 @@ def test_mann_whitney_u_test():
     expected_u, expected_p = [1, 0.4]
     actual_u, actual_p = mann_whitney_u_test(filename, x_variable="x_variable",
                                              y_variable="y_variable",
-                                             output="testing.txt", logger=True)
+                                             output="testing.txt", LOGGER=LOGGER)
     assert expected_u == actual_u
     assert expected_p == actual_p
     os.remove(filename)
