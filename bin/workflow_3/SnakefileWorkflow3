@@ -49,7 +49,7 @@ def corrtest_significance(file):
 
 
 rule clean:
-    shell: 'rm -f  ../../results/workflow_3/{*.png,*.txt}'
+    shell: 'rm -f  ../../results/workflow_3/*.png  ../../results/workflow_3/*.txt'
 
 
 rule all:
