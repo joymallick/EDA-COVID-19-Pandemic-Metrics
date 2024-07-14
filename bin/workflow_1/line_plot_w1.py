@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 import logging
 import argparse
 from matplotlib.ticker import MaxNLocator
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import set_plot_params
-
 # set plot params
-set_plot_params("configuration_plots.yaml")
+set_plot_params("../configuration_plots.yaml")
 
 def setup_logger(group):
     log_filename = f'./logs/line_plot_wf1_{group}.log'

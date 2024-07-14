@@ -2,11 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import logging
 import argparse
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import set_plot_params
-
-
 # set plot params
-set_plot_params("configuration_plots.yaml")
+set_plot_params("../configuration_plots.yaml")
 
 def setup_logger(group):
     log_filename = f'./logs/box_plot_wf1_{group}.log'
@@ -57,7 +58,7 @@ def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
 
     #Saving the plot
     LOGGER.debug("Saving the plot")
-    plt.savefig("../results/" + output)
+    plt.savefig(output)
 
     # Display the plot
     LOGGER.debug("Showing box plot")
