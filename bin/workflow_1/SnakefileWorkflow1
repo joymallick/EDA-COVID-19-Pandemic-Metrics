@@ -32,7 +32,7 @@ rule dataprocessingw1:
 
 rule mannwhitneyu:
     input:
-        cmd='mann_whitney_u.py',
+        cmd='mann_whitney_u_w1.py',
         csv='../../data/owid-covid-data_processed_{group}.csv'
     output: '../../results/workflow_1/mannwhitneyu_{group}.txt'
     params:

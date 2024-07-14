@@ -36,9 +36,9 @@ def process_csvfile_w1(filename: str, cat_column: str, year: int, continent: str
 
     Args:
         filename (str): path to the csv file
-        continents (str): _description_
         cat_column (str): name of the column to turn into categorical
-
+        year (int): year that is going to be filtered
+        continent (str): continent that is going to be filtered
     Raises:
         ValueError: error when csv hasn't general preprocessing
 
@@ -81,12 +81,14 @@ def main(csvfile: str, outfile: str, cat_column: str, year: int, continent: str)
 
 if __name__ == "__main__":
     cat_columns = ['median_age', 'gdp_per_capita', 'life_expectancy', 'population_density']
+    years = [2020, 2021, 2022, 2023, 2024]
+    continents = ['Europe', 'Asia', 'Africa', 'North America', 'Oceania', 'South America']
     parser = argparse.ArgumentParser(
-        description='The file applies specific preprocessing steps to the csv file for RQ 2,4,5')
-    parser.add_argument('-i', '--processedcsvfile', type=str, help='first processed csv file name')
+        description='The file applies specific preprocessing steps to the csv file for the first workflow')
+    parser.add_argument('-i', '--processedcsvfile', type=str, help='first general processed csv file name')
     parser.add_argument('-o', '--outfile', type=str, help ='csv outfilename')
-    parser.add_argument('-c', '--cat_column', type=str, choices= cat_columns, help='variable that will be turned into a categorical variable')
-    parser.add_argument('-y', '--year', type=int, help='the year for which the test will be done. Starting from 2020.')
-    parser.add_argument('--continent', type=str, help='the continent to which the test will be restricted.')
+    parser.add_argument('-c', '--cat_column', type=str, choices=cat_columns, help='variable that will be turned into a categorical variable')
+    parser.add_argument('-y', '--year', type=int, choices=years, help='the year for which the test will be done. Starting from 2020.')
+    parser.add_argument('--continent', type=str, choices=continents, help='the continent to which the test will be restricted.')
     args = parser.parse_args()
     main(args.processedcsvfile, args.outfile, args.cat_column, args.year, args.continent)

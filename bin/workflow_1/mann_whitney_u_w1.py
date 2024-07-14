@@ -57,7 +57,7 @@ def mann_whitney_u_test(file_path, x_variable, y_variable, output):
         # Write the result to the output file
         LOGGER.debug("Writing result to output file")
 
-        with open("../results/" + output, "w") as file:
+        with open(output, "w") as file:
             file.write("True" if p_value < 0.05 else "False")
     except Exception as e:
         LOGGER.error(f"Error writing to output file: {e}")
