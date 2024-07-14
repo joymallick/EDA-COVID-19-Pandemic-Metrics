@@ -27,7 +27,7 @@ To use this project, follow these steps:
 2. Install [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 3. Activate snakemake environment.
 4. Ensure you have all required dependencies installed (see `docs/requirements.txt`).
-5. Add the project root (rse-project2) to the PYTHONPATH. On windows set yourself in the project root, then do:
+5. Add the project root (rse-project2) to the PYTHONPATH. For example, from Anaconda Powerhsell (windows) set yourself in the project root, then do:
 ```shell
     $env:PYTHONPATH = (Get-Location).Path 
     set PYTHONPATH=%cd%
@@ -42,7 +42,7 @@ yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `
 Workflow 1 refers to research point 1 and it allows to configure the following parameters:
 - *continent* : can be one of ['Europe', 'Asia', 'Africa', 'America', 'Oceania']. The default option is Europe.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2021.
-- *y* : the outcome plotted on y-axis of the line plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
+- *y* : the outcome plotted on y-axis of the line and box plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
 
 All the above parameters can be edited in the file `bin\workflow_1\configuration_w1.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or misspellings you will receive an error. 
 
@@ -62,9 +62,7 @@ To **delete all** the outputs run:
 
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
-When changing the configuration the files are not overwritten, the new files will be added together with the existing ones. 
-
-##### Outputs:
+#### Outputs:
 
 Given a chosen configuration for workflow 1, which will be of the form: {continent, year, x, y}. Then, the produced outputs in `results\workflow_1` will be:
 
@@ -79,6 +77,8 @@ Furthermore, for each categorical variable a plot will be generated. Depending o
 -  <ins>plot_life_expectancy.png</ins> 
 -  <ins>plot_median_age.png</ins> 
 -  <ins>plot_population_density.png </ins> 
+
+When changing the configuration the files are overwritten.
 
 ### Run workflow 2
 Workflow 2 refers to research point 2, and it allows to configure the following parameters:
