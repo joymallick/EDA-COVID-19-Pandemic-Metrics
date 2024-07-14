@@ -52,7 +52,7 @@ def draw_boxplot(csv_file_path, group, x_variable, y_variable, output):
 
     # Add labels and title
     LOGGER.debug("Adding labels and title")
-    plt.xlabel(x_variable)
+    plt.xlabel(group)
     plt.ylabel(y_variable)
     plt.title('Box Plot')
 

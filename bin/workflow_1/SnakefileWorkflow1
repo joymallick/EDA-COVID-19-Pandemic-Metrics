@@ -46,12 +46,11 @@ rule plot:
     output:
         plot = '../../results/workflow_1/plot_{group}.png'
     params:
-        x = config['x'],
         y = config['y']
     run:
         with open(input.mannwhitneyu_test, 'r') as f:
             result = f.read().strip()
         if result == 'True':
-            shell('python box_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python box_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "month" -y "{params.y}" -o {output.plot}')
         else:
-            shell('python line_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "{params.x}" -y "{params.y}" -o {output.plot}')
+            shell('python line_plot_w1.py {input.csv} -g "{wildcards.group}_cat" -x "month" -y "{params.y}" -o {output.plot}')
