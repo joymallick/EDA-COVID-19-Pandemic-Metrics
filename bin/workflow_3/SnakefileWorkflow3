@@ -14,7 +14,7 @@ OUTPUTS_TRENDPLOT_COMBINATIONS = list(product([y1y2[0] for y1y2 in Y1Y2],
                                               [y1y2[1] for y1y2 in Y1Y2],
                                               [TIME], [PLACE]))
 # gen outfile names:
-ALL_OUTPUTS_TRENDPLOT = expand('../../results/workflow_3/trendplot_{y1}__{y2}_by_{place}_{time}.png', zip,
+ALL_OUTPUTS_TRENDPLOT = expand('../../results/workflow_3/trendplot_{y1}__{y2}_by_{time}_{place}.png', zip,
                                y1=[comb[0] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS],
                                y2=[comb[1] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS],
                                time=[comb[2] for comb in OUTPUTS_TRENDPLOT_COMBINATIONS],
@@ -24,7 +24,7 @@ OUTPUT_DATAPROCESSING_W3 = expand('../../data/owid-covid-data_processed_w3_{plac
 OUTPUT_REGPLOT = expand('../../results/workflow_3/regplot_deaths_over_cases_vaccinations_by_{time}_{place}.png',
                         place=PLACE, time=TIME)
 ALL_OUTPUTS_CORRTEST = expand('../../results/workflow_3/correlationtest_results_{significance}_by_{time}_{place}.txt',
-                              place=PLACE,  time=TIME, significance=['', '_significance'])
+                              place=PLACE,  time=TIME, significance=['', 'significance'])
 
 
 def corrtest_significance(file):
@@ -125,7 +125,7 @@ rule trendplot:
     input:
         cmd = 'trendplot_w3.py',
         csv = OUTPUT_DATAPROCESSING_W3
-    output: '../../results/workflow_3/trendplot_{y1}__{y2}_by_{place}_{time}.png'
+    output: '../../results/workflow_3/trendplot_{y1}__{y2}_by_{time}_{place}.png'
     params:
         time = TIME
     shell:
