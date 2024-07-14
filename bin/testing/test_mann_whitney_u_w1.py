@@ -13,6 +13,8 @@ import logging
 logging.basicConfig(filename='./logs/trendplots_w3.log', filemode='w')
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
+
+
 def mock_csv_data():
     """Fixture to create a mock CSV file."""
     data = [['x_variable', 'y_variable'],
@@ -25,7 +27,6 @@ def mock_csv_data():
 
     with open(filename, "w") as f:
         writer = csv.writer(f)
-        # f.write(data)
         writer.writerows(data)
     return filename
 
@@ -36,7 +37,8 @@ def test_mann_whitney_u_test():
     expected_u, expected_p = [1, 0.4]
     actual_u, actual_p = mann_whitney_u_test(filename, x_variable="x_variable",
                                              y_variable="y_variable",
-                                             output="testing.txt", LOGGER=LOGGER)
+                                             output="testing.txt",
+                                             LOGGER=LOGGER)
     assert expected_u == actual_u
     assert expected_p == actual_p
     os.remove(filename)
