@@ -3,14 +3,14 @@
 ## Project Description
 The primary objective of this project is to conduct an automated exploratory data analysis of the [COVID-19 dataset](https://ourworldindata.org/coronavirus) from Our World in Data.
 The analysis focuses on the following 3 main research point:
-1. Understand how the number of cases and deaths differ across continents on a yearly level.
-2. Explore the influence of factors such as life expectancy, GDP per capita, and population density on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
+1. Explore the influence of factors such as life expectancy, GDP per capita, population density and median age on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
+2. Understand how the number of cases and deaths differ across continents on a yearly level.
 3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
 
 For point 3., due to missing values reasons, we restrict the analysis to Europe.
 
-For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. <br>
-For detailed information on the structure refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refere to the Usage section below.
+For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. For each workflow, by changing the configurable parameters (see below for details), it's possible to get insights on different declinations of each research point. For example, given point 2., it's possible to choose as outcome of interest either the total number of cases or the total number of deaths per continent and to choose the year of interest starting from 2020 up to 2024. <br>
+For detailed information on the comonents of the workflows refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refer to the Usage section below.
 All the workflows are based on the workflow management system [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 
 ### Data Source:
@@ -24,33 +24,95 @@ To use this project, follow these steps:
 2. Install [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 3. Activate snakemake environment.
 4. Ensure you have all required dependencies installed (see `docs/requirements.txt`).
-5. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below).
-6. Check the analysis results in the `results` directory. For the processed datasets see  `data`. When running all the 3 workflows, the `results` directory (with the default configuration for all the workflows) will have the following structure:
-**add tree for results with all the results inside**.
-### Workflow 3
+5. Add the project root (rse-project2) to the PYTHONPATH. On windows set yourself in the project root, then do:
+```shell
+    $env:PYTHONPATH = (Get-Location).Path 
+    set PYTHONPATH=%cd%
+ ``` 
+This is necessary otherwise you will get import errors: no module named bin.
+5. Run the workflows (or just the one of interest) by running the corresponding Snakefile with the desired configuration (see below) by setting
+yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `bin\workflow_3`.
+6. Check the analysis results in the `results` directory. For the processed datasets see  `data`.
+
+## Run workflow 1
+Workflow 1 refers to research point 1 and it allows to configure the following parameters:
+- *continent* : can be one of ['Europe', 'Asia', 'Africa', 'America', 'Oceania']. The default option is Europe.
+- *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2021.
+- *y* : the outcome plotted on y axis of the line plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
+
+All the above parameters can be edited in the file `bin\workflow_1\configuration_w1.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
+
+After choosing the desired configuration, make sure to be inside `bin\workflow_1` and run `SnakefileWorkflow1` this way to **get all** the outputs:
+
+```shell
+snakemake -s SnakefileWorkflow1 --cores all all
+```
+
+The produced files will be stored in  `results\workflow_1`, except for the processed datasets that will be stored in `data`.
+
+To **delete all** the outputs run:
+
+```shell
+ snakemake -s SnakefileWorkflow1 --cores all clean
+ ```
+
+To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
+
+When changing the configuration the files are not overwritten, the new files will be added together with the existing ones. 
+
+## Run workflow 2
+Workflow 2 refers to research point 2 and it allows to configure the following parameters:
+- *normalize* : can be either True (outcomes are normalized by population) or False. The default option is False.
+- *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2023.
+
+Here the above parameters are edited directly from the CL as shown below. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
+
+After choosing the desired configuration (in the example we use the default one), make sure to be inside `bin\workflow_2` and run `SnakefileWorkflow2` this way to **get all** the outputs:
+
+```shell
+snakemake -s SnakefileWorkflow2 --cores all all --config normalize=False year=2023
+```
+
+The produced files will be stored in  `results\workflow_2`, except for the processed datasets that will be stored in `data`.
+
+To **delete all** the outputs run:
+
+```shell
+ snakemake -s SnakefileWorkflow1 --cores all clean
+ ```
+
+To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
+
+When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
+
+### Run workflow 3
 Workflow 3 refers to research point 3 and it allows to configure the following parameters:
 - *germany* : can be either True (= restrict the analysis to Germany) or False (= consider whole Europe). The default option is False.
 - *time* : choose the time period by which the data is aggregated, can be either 'month' or 'semester'. The default option is 'month'.
 - *x*  and *y* : the variables for which the correlation is tested and for which the regression plot is produced (**only if** the hypothesis test results are significant). We used *x*='new_vaccinations' and *y*='deaths_over_cases'. Both *x* an *y* can be changed by choosing in the set ['new_vaccinations', 'new_deaths', 'new_cases', deaths_over_cases', 'month'], but keep in mind that other couples probably won't make a lot of sense (for example: it's obvious that new cases and new deaths are positively correlated).
 
-All the above parameters can be edited in the file `configuration_w3.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
+All the above parameters can be edited in the file `bin\workflow_3\configuration_w3.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
 
-After choosing the desired configuration run `SnakefileWorkflow3` this way to **get all** the outputs:
+After choosing the desired configuration, make sure to be inside `bin\workflow_3` and run `SnakefileWorkflow3` this way to **get all** the outputs:
 
 ```shell
-snakemake -s SnakefileWorkflow3 --cores all all --configfile configuration_w3.yaml
+snakemake -s SnakefileWorkflow3 --cores all all
 ```
 
-The produced files will be stored in  `results\results_w3`, except for the processed datasets that will be stored in `data`.
+The produced files will be stored in  `results\workflow_3`, except for the processed datasets that will be stored in `data`.
 
 To **delete all** the outputs run:
 
 ```shell
- snakemake -s SnakefileWorkflow3 --cores all clean --configfile configuration_w3.yaml
+ snakemake -s SnakefileWorkflow3 --cores all clean
  ```
 
-To produce just a single output run the above code with the name of the output file instead of the rule name.
+To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
+When changing the configuration the files are not overwritten, the new files will be added together with the existing ones.
+#### Outputs:
+The 
+ 
 
 ## Contributing
 
