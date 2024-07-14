@@ -12,7 +12,7 @@ The analysis focuses on the following 3 main research point:
 
 For point 3., due to missing values reasons, we restrict the analysis to Europe.
 
-For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. For each workflow, by changing the configurable parameters (see below for details), it's possible to get insights on different declinations of each research point. For example, given point 2., it's possible to choose as outcome of interest either the total number of cases or the total number of deaths per continent and to choose the year of interest starting from 2020 up to 2024. <br>
+For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2 and workflow 3 point 3. For each workflow, by changing the configurable parameters (see below for details), it's possible to get insights on different declinations of each research point.
 For detailed information on the components of the workflows refer to the corresponding `requirements.md` files in the `docs` folder, while for details on how to launch each workflow and on the produced outputs, as well as configuration options, refer to the Usage section below.
 All the workflows are based on the workflow management system [Snakemake](https://snakemake.readthedocs.io/en/v6.15.5/getting_started/installation.html).
 
