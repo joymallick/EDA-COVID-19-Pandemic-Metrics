@@ -1,15 +1,17 @@
-abstract: 
+abstract: data analysis workflow for covid-19 dataset
 authors:
-  - family-names: Md Nazmul
-    given-names: Joy Mallick
+  - family-names: Md Nazmul, Thomas, Shindy, Corona
+    given-names: Joy Mallick, Nick, Omar, Margherita Lea
 cff-version: 1.2.0
-date-released: 
+date-released: 14/07/2024
 identifiers:
     type: doi
     value: 10.5281/zenodo.123456
 keywords:
   - research
   - EDA
+  - Snakemake
+  - workflowss
 license: MIT 
 message: "If you use this software, please cite it using these metadata."
 repository-code: https://gitup.uni-potsdam.de/corona/rse-project2
