@@ -25,7 +25,7 @@ For each categorical variable and both outcomes new deaths and new cases:
 | data processing            | csv file name, outfile name                                                   | .csv file  | own implementation |
 | data processing workflow 1 | csv file name, outfile name, continent, year | .csv file  | own implementation |
 | mann whitney u test        | csv file name, outfile name, categorical variable, y                          | .txt file  | own implementation |
-| box plot                   | csv file, x, y, outfile name                                                  | .png file  | own implementation |
-| line plot                  | csv file name, x, y, outfile name                                             | .png file  | own implementation |
+| box plot                   | csv file, y (variable to plot), g (variable by which group by), outfile name                                                  | .png file  | own implementation |
+| line plot                  | csv file name, x, y, g (variable by which group by), outfile name                                             | .png file  | own implementation |
 
 
