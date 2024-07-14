@@ -1,25 +1,35 @@
 Data Source:
-The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus). This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses, and more, for 207 countries over the course of the pandemic. Cases, deaths, and vaccinations are recorded on a daily level.
+The project will utilize the COVID-19 dataset available on the "Our World in Data" website (https://ourworldindata.org/coronavirus).
+This comprehensive dataset includes various metrics such as confirmed cases, deaths, testing, hospitalizations, vaccinations, policy responses,
+and more, for 207 countries over the course of the pandemic. Cases, deaths, and vaccinations are recorded on a daily level.
 
 Project Objective:
-The primary objective of this project is to build a data analysis workflow/s for the COVID-19 dataset.
-The research goal is to investigate the following 3 main points:
-1. Understand how the number of cases and deaths differ across continents on a yearly level.
-2. Explore the influence of factors such as life expectancy, GDP per capita, and population density on the number of cases and deaths. Given one of the just mentioned factors, compare the average number of cases/deaths between countries with values of the factor above the median and those with values below the median.
-3. Explore the relationship between deaths, cases and vaccinations. Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
+The primary objective of this project is to conduct an automated exploratory data analysis of the [COVID-19 dataset](https://ourworldindata.org/coronavirus) from Our World in Data.
+The analysis focuses on the following 3 main research point:
+1. Explore the influence of life expectancy, median age, GDP per capita and population density on COVID-19 metrics for a given year and continent.
+   Given one of the just mentioned factors, compare the average number of new cases/deaths between countries with values of the factor above
+   the median (of the continent) and those with values below the median. Is there a difference?
+2. Understand how the number of total cases and deaths differs across continents on a yearly level.
+3. Explore the relationship between new deaths, cases and vaccinations for covid-19, given a time period level (months or semesters).
+   Are deaths and vaccinations correlated? How did all these metrics evolve in time? 
+
 For point 3., due to missing values reasons, we restrict the analysis to Europe.
+
+For each of the above research questions we provide 3 workflows enumerated accordingly, i.e workflow 1 tackles point 1, workflow 2 point 2
+and workflow 3 point 3. For each workflow, by changing the configurable parameters (see below for details), it's possible to get insights on
+different declinations of each research point. For example, given point 2., it's possible to choose as outcome of interest either
+the total number of cases or the total number of deaths per continent and to choose the year of interest starting from 2020 up to 2024.
 
 The workflows:
 Given the research aim of the project, we have thought about implementing 3 workflows, each targeting one of the research questions.
-All the workflows have configurable parameters that allow to get insights on different declinations of the research points. For additional and detailed information see the readme and the requirements.md files.
-
-
-Workflow 1: Exploring Correlations Between Categorical Variables and COVID-19 Metrics
-
-This workflow involves using the Mann-Whitney U test to identify correlations between categorical variables and COVID-19 metrics like cases or deaths.
-
-1. Process the data to create a dataset with relevant categorical variables (e.g., country income level, population density, etc.) and COVID-19 metrics.
-2. Apply the Mann-Whitney U test to each categorical variable, comparing the COVID-19 metric values between the different categories.
-3. For categorical variables with p-values below 0.05, create box plots to visualize the difference in the COVID-19 metric between the categories.
-4. For categorical variables with p-values above 0.05, create line plots to show the trend in the COVID-19 metric over time, broken down by different categories.
-5. Analyze the results to identify any significant relationships between the categorical variables and the COVID-19 metrics.
+All the workflows have configurable parameters that allow to get insights on different declinations of the research points.
+For additional and detailed information see README.md and the requirements.md files.
+Here follows a short overview of each workflow:
+1. Workflow 1 tackles research question 1 and, for each factor of interest, involves using the Mann-Whitney U test to identify whether there is a difference in mean
+   in the outcomes: new deaths and new cases, by a given continent-location and year, with respect to two groups created strating from the factor of interrest.
+   The factor is turned into a categorical binary variable indexed by continent-location-month (MM-YY) which is 1 when the factor is above the median for the continent
+   and 0 when it's below. The statistical analysis is sided by a visual analysis chosen (type of plot) basing on the results of the hypothesis test.
+2. Workflow 2 tackles research question 2 and it allows to get, given a chosen year, an overview of the total number of cases or deaths by continent.
+3. Workflow 3 tackles research question 3 and it allows to get insights on the relationship between cases, deaths and vaccinations for the specific case of Europe.
+   It involes performing a correlation hp test, optionally producing a regression plot, and produced trend plots for comparing the evolution of the 
+   outcomes of interest over time. 
