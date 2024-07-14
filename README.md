@@ -42,9 +42,9 @@ yourself in the corresponding directory: `bin\workflow_1`, `bin\workflow_2` or `
 Workflow 1 refers to research point 1 and it allows to configure the following parameters:
 - *continent* : can be one of ['Europe', 'Asia', 'Africa', 'America', 'Oceania']. The default option is Europe.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2021.
-- *y* : the outcome plotted on y axis of the line plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
+- *y* : the outcome plotted on y-axis of the line plot. It can be either "new_cases" or "new_deaths". We used *y*="new_cases".
 
-All the above parameters can be edited in the file `bin\workflow_1\configuration_w1.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or mispellings you will receive an error. 
+All the above parameters can be edited in the file `bin\workflow_1\configuration_w1.yaml`. Consistency checks are made within the workflow components, in case of invalid choices or misspellings you will receive an error. 
 
 After choosing the desired configuration, make sure to be inside `bin\workflow_1` and run `SnakefileWorkflow1` this way to **get all** the outputs:
 
@@ -66,8 +66,22 @@ When changing the configuration the files are not overwritten, the new files wil
 
 ##### Outputs:
 
+Given a chosen configuration for workflow 1, which will be of the form: {continent, year, x, y}. Then, the produced outputs in `results\workflow_1` will be:
+
+The results of the Mann-Whitney-U test for each categorical variable. The .txt files only contain a boolean statement (True or False) for the significance level of 0.05.
+-  <ins>mannwhitneyu_gdp_per_capita.txt</ins> 
+-  <ins>mannwhitneyu_life_expectancy.txt</ins>
+-  <ins>mannwhitneyu_median_age.txt</ins>
+-  <ins>mannwhitneyu_population_density.txt</ins> 
+
+Furthermore, for each categorical variable a plot will be generated. Depending on the result of the Mann-Whitney-U test it will either be a barplot (True) or a lineplot (False).
+-  <ins>plot_gdp_per_capita.png</ins> 
+-  <ins>plot_life_expectancy.png</ins> 
+-  <ins>plot_median_age.png</ins> 
+-  <ins>plot_population_density.png </ins> 
+
 ### Run workflow 2
-Workflow 2 refers to research point 2 and it allows to configure the following parameters:
+Workflow 2 refers to research point 2, and it allows to configure the following parameters:
 - *normalize* : can be either True (= outcomes are normalized by population) or False. The default option is False.
 - *year* : the year to which analysis is restricted, from 2020 to 2024. The default option is 2023.
 
@@ -90,7 +104,7 @@ To **delete all** the outputs run:
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
 #### Outputs:
-Given a chosen configuration for workflow 2, which will be of the form: {normalize, year}, the produeced outputs in `results\workflow_2` will be:
+Given a chosen configuration for workflow 2, which will be of the form: {normalize, year}, the produced outputs in `results\workflow_2` will be:
 
 normalize == True:
 - <ins>barplot_total_cases_norm_by_continent_{year}.png</ins>: bar plot showing total cases in the chosen year for each continent. For each continent, total cases is normalized by the population of that continent.
@@ -127,7 +141,7 @@ To **delete all** the outputs run:
 To produce just a single output run the above code with the name of the output file instead of the rule name (for this you will have to look inside the Snakefile how the output names are generated).
 
 #### Outputs:
-Given a chosen configuration for workflow 3, which will be of the form: {germany, time, x, y}, from "germany" (it's bool) we derive the wildcard  {place}, which will be either "europe" or "germany". Then, the produeced outputs in `results\workflow_3` will be:
+Given a chosen configuration for workflow 3, which will be of the form: {germany, time, x, y}, from "germany" (it's bool) we derive the wildcard  {place}, which will be either "europe" or "germany". Then, the produced outputs in `results\workflow_3` will be:
 -  <ins>correlationtest_results__by_{time}_{place}.txt</ins> :  contains results of correlation hp test for x and y (values are calculated according to the chosen {time} and {place})
 -  <ins>correlationtest_results__significance_by_{time}_{place}.txt</ins>: contains either True (= pvalue and correlation coefficient of the test are meaningful) or False. It's used to activate (or not) the rule to get the below regression  plot.
 -  <ins>regplot_deaths_over_cases_new_vaccinations_by_{time}_{place}.png</ins>: either empty .png file (if above output is False) or .png file with regression and scatter plot of x and y (if above output is True).
