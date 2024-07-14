@@ -77,7 +77,7 @@ def main(csvfile: str, outfile: str, cat_column: str,
          year: int, continent: str):
     if not csvfile.endswith('.csv'):
         raise OSError("Provide a CSV file")
-    logging.basicConfig(filename='../logs/dataprocessing_w1.log', filemode='w')
+    logging.basicConfig(filename=f'./logs/dataprocessing_w1.log', filemode='w')
     LOGGER.info('Started processing')
     df_processed = process_csvfile_w1(csvfile, cat_column, year, continent)
     LOGGER.info('Saving processed CSV')

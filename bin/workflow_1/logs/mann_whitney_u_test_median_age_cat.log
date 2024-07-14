@@ -1,9 +1,9 @@
 INFO:__main__:Performing Mann-Whitney U test
 DEBUG:__main__:Loading data from CSV file
 DEBUG:__main__:Extracting values from DataFrame
-DEBUG:__main__:Running Mann-Whitney U test on median_age_cat and new_cases
+DEBUG:__main__:Running Mann-Whitney U test on             median_age_cat and new_cases
 DEBUG:__main__:U-statistic: 31285.00
 DEBUG:__main__:p-value: 0.1020
 DEBUG:__main__:Writing result to output file
-INFO:__main__:Mann-Whitney U test result: (np.float64(31285.0), np.float64(0.10202688224232505))
+INFO:__main__:Mann-Whitney U test result: (31285.0, 0.10202688224232505)
 INFO:__main__:Finished Mann-Whitney U test
